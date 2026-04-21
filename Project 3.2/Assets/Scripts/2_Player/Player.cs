@@ -4,6 +4,7 @@ public class Player : MonoBehaviour
     public static Player Instance { get; private set; }
 
     [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private PlayerCombat playerCombat;
     [SerializeField] private PlayerAnimationController animationController;
     [Space]
     [SerializeField] private LayerMask groundLayer;
@@ -36,6 +37,7 @@ public class Player : MonoBehaviour
 
         // Player Components
         playerMovement.Initialize();
+        playerCombat.Initialize();
         animationController.Initialize();
     }
 
@@ -52,22 +54,39 @@ public class Player : MonoBehaviour
         var movementInput = new MovementInput
         {
             Movement        = _inputEnabled ? input.Move.ReadValue<Vector2>() : Vector2.zero,
-            Roll           = _inputEnabled && input.Roll.WasPressedThisFrame(),
+            Roll            = _inputEnabled && input.Roll.WasPressedThisFrame(),
             MousePosition   = _inputEnabled ? _mousePosition : Vector3.zero
         };
         playerMovement.UpdateInput(movementInput);
+
+        // Combat Input
+        var combatInput = new CombatInput
+        {
+            Ranged          = _inputEnabled && input.Mouse1.IsPressed(),
+            Melee           = _inputEnabled && input.Mouse2.WasPressedThisFrame(),
+            Parry           = _inputEnabled && input.Parry.WasPressedThisFrame(),
+            MousePosition   = _inputEnabled ? _mousePosition : Vector3.zero
+        };
+        playerCombat.UpdateInput(combatInput);
     }
 
     /// <summary>
     /// * Updates...
     ///     - Player Rotation
+    ///     - Player Combat Action
     ///     - Animation Controller
     /// </summary>
     void LateUpdate()
     {
         var deltaTime = Time.deltaTime;
 
+        // Update character rotation
         playerMovement.UpdateRotation(deltaTime);
+
+        // Update combat action
+        playerCombat.UpdateCombatAction(deltaTime);
+
+        // Update Animator
         animationController.UpdateAnimator();
     }
 
@@ -79,4 +98,10 @@ public class Player : MonoBehaviour
     }
 
     void OnDisable() => _input.Dispose();
+
+
+    #region *--- Public Getters --------------------------------------------------*
+    public MovementAction GetCurrentMovementAction() => playerMovement.GetState().CurrentAction;
+    public CombatAction GetCurrentCombatAction() => playerCombat.GetState().CurrentAction;
+    #endregion
 }

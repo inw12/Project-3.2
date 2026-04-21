@@ -561,6 +561,7 @@ GameObject:
   - component: {fileID: 7342995621927287682}
   - component: {fileID: 1754191947011916880}
   - component: {fileID: 4917362367304789355}
+  - component: {fileID: 465282853641004578}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -623,6 +624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Player::Player
   playerMovement: {fileID: 4917362367304789355}
+  playerCombat: {fileID: 465282853641004578}
   animationController: {fileID: 237403034597020557}
   groundLayer:
     serializedVersion: 2
@@ -646,6 +648,18 @@ MonoBehaviour:
   rollSpeed: 12
   rollAcceleration: 20
   rollDuration: 0.6
+--- !u!114 &465282853641004578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3338105584848229232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0171239230a4a454e8b3df8c3f59723a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::PlayerCombat
 --- !u!1 &3522149854722336805
 GameObject:
   m_ObjectHideFlags: 0
