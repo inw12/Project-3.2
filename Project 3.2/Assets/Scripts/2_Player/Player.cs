@@ -4,6 +4,8 @@ public class Player : MonoBehaviour
     public static Player Instance { get; private set; }
 
     [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private PlayerAnimationController animationController;
+    [Space]
     [SerializeField] private LayerMask groundLayer;
 
     // Player Input
@@ -34,6 +36,7 @@ public class Player : MonoBehaviour
 
         // Player Components
         playerMovement.Initialize();
+        animationController.Initialize();
     }
 
     void Update()
@@ -58,12 +61,14 @@ public class Player : MonoBehaviour
     /// <summary>
     /// * Updates...
     ///     - Player Rotation
+    ///     - Animation Controller
     /// </summary>
     void LateUpdate()
     {
         var deltaTime = Time.deltaTime;
 
         playerMovement.UpdateRotation(deltaTime);
+        animationController.UpdateAnimator();
     }
 
     // Updates Player Movement

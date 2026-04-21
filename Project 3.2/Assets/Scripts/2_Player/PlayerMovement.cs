@@ -194,4 +194,10 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     #endregion
+
+
+    #region *--- Public Getters ----------------------------------------------------*
+    public MovementState GetState() => _state;
+    public MovementState GetPrevState() => _prevState;
+    #endregion
 }
