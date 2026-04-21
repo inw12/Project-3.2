@@ -3,10 +3,15 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
 
+    [Header("Core Components")]
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private PlayerCombat playerCombat;
+
+    [Header("Animation")]
     [SerializeField] private PlayerAnimationController animationController;
-    [Space]
+    [SerializeField] private PlayerAnimationRig animationRig;
+
+    [Header("Misc")]
     [SerializeField] private LayerMask groundLayer;
 
     // Player Input
@@ -35,10 +40,13 @@ public class Player : MonoBehaviour
         _input.Enable();
         _inputEnabled = true;
 
-        // Player Components
+        // Core Components
         playerMovement.Initialize();
         playerCombat.Initialize();
+
+        // Animation
         animationController.Initialize();
+        animationRig.Initialize();
     }
 
     void Update()
@@ -75,6 +83,7 @@ public class Player : MonoBehaviour
     ///     - Player Rotation
     ///     - Player Combat Action
     ///     - Animation Controller
+    ///     - Animation Rig
     /// </summary>
     void LateUpdate()
     {
@@ -86,8 +95,9 @@ public class Player : MonoBehaviour
         // Update combat action
         playerCombat.UpdateCombatAction(deltaTime);
 
-        // Update Animator
+        // Update Animations
         animationController.UpdateAnimator();
+        animationRig.UpdateRig();
     }
 
     // Updates Player Movement

@@ -105,7 +105,7 @@ public class PlayerCombat : MonoBehaviour
     }
     private void OnRangedAttack(float deltaTime)
     {
-        
+        _state.CurrentAction = !_requestedRanged ? CombatAction.None : _state.CurrentAction;
     }
     #endregion
 

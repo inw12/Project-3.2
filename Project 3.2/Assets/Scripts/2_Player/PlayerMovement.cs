@@ -149,8 +149,19 @@ public class PlayerMovement : MonoBehaviour
     // LateUpdate()
     public void UpdateRotation(float deltaTime)
     {
-        // Rotate towards direction of movement
-        if (_requestedMovement.sqrMagnitude > 0f)
+        // (A) Rotate towards mouse position during Ranged Attack
+        if (Player.Instance.GetCurrentCombatAction() is CombatAction.Ranged)
+        {
+            var targetRotation = Quaternion.LookRotation(_requestedMousePosition);
+            transform.rotation = Quaternion.Lerp
+            (
+                transform.rotation,
+                targetRotation,
+                1f - Mathf.Exp(-moveRotation * deltaTime)
+            );
+        }
+        // (B) Rotate towards direction of movement while not Attacking
+        else if (_requestedMovement.sqrMagnitude > 0f)
         {
             var targetRotation = Quaternion.LookRotation(_requestedMovement);
             transform.rotation = Quaternion.Lerp
