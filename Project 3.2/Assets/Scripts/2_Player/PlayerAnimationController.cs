@@ -14,12 +14,15 @@ public class PlayerAnimationController : MonoBehaviour
 {
     [Header("Components Requiring Animation Control")]
     [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private PlayerCombat playerCombat;
 
     private Animator _animator;
 
     // Action States
     private MovementState _moveState;
     private MovementState _prevMoveState;
+    private CombatState _combatState;
+    private CombatState _prevCombatState;
 
     public void Initialize()
     {
@@ -34,6 +37,7 @@ public class PlayerAnimationController : MonoBehaviour
     public void UpdateAnimator()
     {
         _moveState = playerMovement.GetState();
+        _combatState = playerCombat.GetState();
 
         // Update Velocity
         var velocity = transform.InverseTransformDirection(_moveState.Velocity.normalized);
@@ -45,7 +49,13 @@ public class PlayerAnimationController : MonoBehaviour
             _animator.SetInteger("MovementAction", (int)_moveState.CurrentAction);
         }
 
+        // Combat Action
+        if (_prevCombatState.CurrentAction != _combatState.CurrentAction) {
+            _animator.SetInteger("CombatAction", (int)_combatState.CurrentAction);
+        }
+
         _prevMoveState = _moveState;
+        _prevCombatState = _combatState;
     }
 
     public void TriggerMeleeAnimation(int combo)

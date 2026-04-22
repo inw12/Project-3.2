@@ -22,14 +22,21 @@ public struct CombatInput
 
 public class PlayerCombat : MonoBehaviour
 {
+    public bool ShowDebug;
+
     [Header("Player Attacks")]
     [SerializeField] private RangedAttack rangedAttack;
+    [SerializeField] private MeleeAttack meleeAttack;
 
     [Header("Ranged Attack Components")]
     [SerializeField] private ProjectilePool projectilePool;
     [SerializeField] private Transform projectileSpawn;
 
     [Header("Melee Attack Components")]
+    [SerializeField] private PlayerAnimationController animationController;
+    [SerializeField] private Transform meleeHitbox;
+    [SerializeField] private float meleeHitboxRadius = 1f;
+    private bool _meleeStarted;
 
     // Requested Inputs
     private bool _requestedRanged;
@@ -42,10 +49,19 @@ public class PlayerCombat : MonoBehaviour
     private CombatState _state;
     private CombatState _prevState;
 
+    void OnDrawGizmos()
+    {
+        if (!ShowDebug) return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(meleeHitbox.position, meleeHitboxRadius);
+    }
+
     // Start()
     public void Initialize()
     {
         rangedAttack.Initialize(projectilePool, projectileSpawn);
+        meleeAttack.Initialize(animationController, meleeHitbox, meleeHitboxRadius);
 
         _combatInputEnabled = true;
 
