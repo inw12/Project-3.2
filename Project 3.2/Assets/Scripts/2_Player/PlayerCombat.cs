@@ -128,7 +128,21 @@ public class PlayerCombat : MonoBehaviour
     }
     private void OnMeleeAttack(float deltaTime)
     {
-        
+        meleeAttack.Attack(ref _state, ref _meleeStarted, ref _combatInputEnabled, deltaTime);
+
+        // Melee Combo START
+        if (!_meleeStarted && _state.CurrentAction is CombatAction.Melee)
+        {
+            _meleeStarted = true;
+            Player.Instance.MovementInputEnabled(false);
+            meleeAttack.TriggerAttack();
+        }
+
+        // Melee Combo CONTINUE
+        if (_requestedMelee)
+        {
+            meleeAttack.TriggerAttack();
+        }
     }
     private void OnRangedAttack(float deltaTime)
     {
@@ -158,6 +172,14 @@ public class PlayerCombat : MonoBehaviour
 
 
     #region *--- Public Methods to Influence Player Combat Actions ------------------------------*
+    public void CombatInputEnabled(bool b)
+    {
+        if (!b)
+            _combatInputEnabled = _requestedMelee = _requestedRanged = _requestedParry = false;
+        else 
+            _combatInputEnabled = b;
+    }
+    public void MeleeHitboxEnabled(bool b) => meleeAttack.HitboxEnabled(b);
     /// * Enable/Disable ATTACK inputs
     /// * Enable/Disable PARRY inputs
     /// * Enable/Disable ALL COMBAT inputs

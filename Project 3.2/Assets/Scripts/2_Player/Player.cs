@@ -114,4 +114,14 @@ public class Player : MonoBehaviour
     public MovementAction GetCurrentMovementAction() => playerMovement.GetState().CurrentAction;
     public CombatAction GetCurrentCombatAction() => playerCombat.GetState().CurrentAction;
     #endregion
+
+
+    #region *--- Public Methods for Player Component Access ----------------------*
+    // Toggle Movement Input
+    public void MovementInputEnabled(bool b) => playerMovement.MovementInputEnabled(b);
+    // Toggle Combat Input 
+    public void CombatInputEnabled(bool b) => playerCombat.CombatInputEnabled(b);
+    // Toggle Melee Hitbox
+    public void MeleeHitboxEnabled(bool b) => playerCombat.MeleeHitboxEnabled(b);
+    #endregion
 }

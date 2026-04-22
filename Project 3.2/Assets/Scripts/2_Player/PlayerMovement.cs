@@ -211,4 +211,24 @@ public class PlayerMovement : MonoBehaviour
     public MovementState GetState() => _state;
     public MovementState GetPrevState() => _prevState;
     #endregion
+
+
+    #region *--- Public Methods used by other classes to influence Player movement -----*
+    public void MovementInputEnabled(bool b)
+    {
+        if (!b)
+        {
+            // Disable Input
+            _movementInputEnabled = b;
+
+            // Stop any character movement
+            _requestedMovement = _state.Velocity = Vector3.zero;
+            _state.CurrentAction = MovementAction.Idle;
+        }
+        else
+        {
+            _movementInputEnabled = b;
+        }
+    }
+    #endregion
 }
