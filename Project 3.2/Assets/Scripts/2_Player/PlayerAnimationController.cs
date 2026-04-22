@@ -3,6 +3,9 @@
 ///     - xVelocity             (float)
 ///     - yVelocity             (float)
 ///     - MovementAction        (int)
+///     - CombatAction          (int)
+///     - MeleeTrigger          (Trigger)
+///     - ComboCount            (int)
 /// ************************************************
 
 using UnityEngine;
@@ -26,6 +29,8 @@ public class PlayerAnimationController : MonoBehaviour
         _animator.SetInteger("MovementAction", (int)_moveState.CurrentAction);
     }
 
+    /// 'Player.cs'
+    ///     L LateUpdate()
     public void UpdateAnimator()
     {
         _moveState = playerMovement.GetState();
@@ -41,5 +46,11 @@ public class PlayerAnimationController : MonoBehaviour
         }
 
         _prevMoveState = _moveState;
+    }
+
+    public void TriggerMeleeAnimation(int combo)
+    {
+        _animator.SetTrigger("MeleeTrigger");
+        _animator.SetInteger("ComboCount", combo);
     }
 }
