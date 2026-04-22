@@ -25,6 +25,9 @@ public class MeleeAttack : ScriptableObject
     private readonly Collider[] _hits = new Collider[10];   // 'OverlapSphereNonAlloc' buffer
     private readonly HashSet<Collider> _alreadyHit = new(); // records hitbox collisions as they happen (avoids duplicate collision effects)
 
+    // Movement/Rotation during melee
+    private bool _rotationTriggered;
+
     public void Initialize(PlayerAnimationController animator, Transform meleeHitbox, float hitboxRadius)
     {
         ResetCombo();
@@ -37,12 +40,12 @@ public class MeleeAttack : ScriptableObject
 
     public void TriggerAttack()
     {
-        // Clear recorded collisions
-        _alreadyHit.Clear();
 
-        // Reset Timers
+        // Reset Everything
         _comboTimer = 0f;
         //_dashTimer = 0f;
+        _alreadyHit.Clear();
+        _rotationTriggered = false;
 
         // Update Combo Counter
         _comboCounter = _comboCounter == MaxCombo ? 0 : _comboCounter;
@@ -64,11 +67,16 @@ public class MeleeAttack : ScriptableObject
             Player.Instance.MovementInputEnabled(true);
         }
 
-        // Input buffers should only update when able to input
-        if (inputEnabled)
+        // Only increment timer while inputs are enabled
+        // (inputs are disabled during melee animation and enabled afterwards)
+        if (inputEnabled) _comboTimer += deltaTime;
+
+        // Update Player Rotation
+        var direction = (state.Target - _hitboxSpawn).normalized;
+        if (!_rotationTriggered)
         {
-            // Increment Timers
-            _comboTimer += deltaTime;
+            _rotationTriggered = true;
+            Player.Instance.SetRotation(Quaternion.LookRotation(direction));
         }
 
         UpdateHitbox(deltaTime);

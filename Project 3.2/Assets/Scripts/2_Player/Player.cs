@@ -116,9 +116,16 @@ public class Player : MonoBehaviour
     #endregion
 
 
-    #region *--- Public Methods for Player Component Access ----------------------*
+    #region *--- 'PlayerMovement' Access ----------------------*
     // Toggle Movement Input
     public void MovementInputEnabled(bool b) => playerMovement.MovementInputEnabled(b);
+    // Set Velocity
+    public void SetVelocity(Vector3 velocity, float acceleration) => playerMovement.SetVelocity(velocity, acceleration);
+    // Set Rotation
+    public void SetRotation(Quaternion rotation) => playerMovement.SetRotation(rotation);
+    #endregion
+
+    #region *--- 'PlayerCombat' Access ----------------------*
     // Toggle Combat Input 
     public void CombatInputEnabled(bool b) => playerCombat.CombatInputEnabled(b);
     // Toggle Melee Hitbox

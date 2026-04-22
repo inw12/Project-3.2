@@ -160,7 +160,10 @@ public class PlayerMovement : MonoBehaviour
                 1f - Mathf.Exp(-moveRotation * deltaTime)
             );
         }
-        // (B) Rotate towards direction of movement while not Attacking
+        // (B) Do nothing. Rotation directly set from 'MeleeAttack.cs'
+        else if (Player.Instance.GetCurrentCombatAction() is CombatAction.Melee)
+        {}
+        // (C) Rotate towards direction of movement while not Attacking
         else if (_requestedMovement.sqrMagnitude > 0f)
         {
             var targetRotation = Quaternion.LookRotation(_requestedMovement);
@@ -230,5 +233,15 @@ public class PlayerMovement : MonoBehaviour
             _movementInputEnabled = b;
         }
     }
+    public void SetVelocity(Vector3 velocity, float acceleration)
+    {
+        _state.Velocity = Vector3.Lerp
+        (
+            _state.Velocity,
+            velocity,
+            1f - Mathf.Exp(-acceleration * Time.fixedDeltaTime)
+        );
+    }
+    public void SetRotation(Quaternion rotation) => transform.rotation = rotation;
     #endregion
 }

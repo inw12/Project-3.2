@@ -6,6 +6,8 @@
 ///     - CombatAction          (int)
 ///     - MeleeTrigger          (Trigger)
 ///     - ComboCount            (int)
+///     - HitstunActive         (bool)
+///     - ParryTrigger          (Trigger)
 /// ************************************************
 
 using UnityEngine;
@@ -58,9 +60,16 @@ public class PlayerAnimationController : MonoBehaviour
         _prevCombatState = _combatState;
     }
 
+    // Triggers Melee attack animation & updates "ComboCount"
     public void TriggerMeleeAnimation(int combo)
     {
         _animator.SetTrigger("MeleeTrigger");
         _animator.SetInteger("ComboCount", combo);
+    }
+
+    // Toggles "HitstunActive" bool
+    public void HitstunEnabled(bool b)
+    {
+        _animator.SetBool("HitstunActive", b);
     }
 }
