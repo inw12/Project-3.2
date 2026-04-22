@@ -22,6 +22,15 @@ public struct CombatInput
 
 public class PlayerCombat : MonoBehaviour
 {
+    [Header("Player Attacks")]
+    [SerializeField] private RangedAttack rangedAttack;
+
+    [Header("Ranged Attack Components")]
+    [SerializeField] private ProjectilePool projectilePool;
+    [SerializeField] private Transform projectileSpawn;
+
+    [Header("Melee Attack Components")]
+
     // Requested Inputs
     private bool _requestedRanged;
     private bool _requestedMelee;
@@ -36,6 +45,8 @@ public class PlayerCombat : MonoBehaviour
     // Start()
     public void Initialize()
     {
+        rangedAttack.Initialize(projectilePool, projectileSpawn);
+
         _combatInputEnabled = true;
 
         _state.CurrentAction = CombatAction.None;
@@ -105,6 +116,10 @@ public class PlayerCombat : MonoBehaviour
     }
     private void OnRangedAttack(float deltaTime)
     {
+        // Trigger Attack
+        rangedAttack.Attack(ref _state, deltaTime);
+
+        // Update Combat State
         _state.CurrentAction = !_requestedRanged ? CombatAction.None : _state.CurrentAction;
     }
     #endregion

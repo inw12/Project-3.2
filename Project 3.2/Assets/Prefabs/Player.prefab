@@ -683,6 +683,7 @@ GameObject:
   - component: {fileID: 1754191947011916880}
   - component: {fileID: 4917362367304789355}
   - component: {fileID: 465282853641004578}
+  - component: {fileID: 4910632923978228084}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -783,6 +784,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0171239230a4a454e8b3df8c3f59723a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Player::PlayerCombat
+  rangedAttack: {fileID: 11400000, guid: 48462d103fd984c2db342521bbc786b5, type: 2}
+  projectilePool: {fileID: 4910632923978228084}
+  projectileSpawn: {fileID: 2329475436920951345}
+--- !u!114 &4910632923978228084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3338105584848229232}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adc7cac9624ae4e03a9c732117db9402, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Resources::ProjectilePool
+  projectile: {fileID: 1860350838970000365, guid: 66d224f10d2674607bb1966ee0993681, type: 3}
+  defaultCapacity: 50
+  maxCapacity: 100
 --- !u!1 &3522149854722336805
 GameObject:
   m_ObjectHideFlags: 0

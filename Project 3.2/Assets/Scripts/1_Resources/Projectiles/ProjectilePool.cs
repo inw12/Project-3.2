@@ -26,7 +26,7 @@ public class ProjectilePool : MonoBehaviour
 
     private GameObject CreateProjectile()
     {
-        var p = Instantiate(projectile, transform);
+        var p = Instantiate(projectile, null);
         return p;
     }
 
