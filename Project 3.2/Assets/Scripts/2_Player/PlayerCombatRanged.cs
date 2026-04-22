@@ -1,23 +1,24 @@
 using UnityEngine;
-[CreateAssetMenu(fileName = "RangedAttack", menuName = "Player Attacks/Ranged")]
-public class RangedAttack : ScriptableObject
+[RequireComponent(typeof(ProjectilePool))]
+public class PlayerCombatRanged : MonoBehaviour
 {
     [Header("Stats")]
     [SerializeField] private float damage = 1f;
     [SerializeField] private float fireRate = 0.4f;
     [SerializeField] private float projectileSpeed = 40f;
     [SerializeField] private float projectileRange = 75f;
-    private float _fireTimer;
-    private Vector3 _projectileDirection;
+    [Space]
+    [SerializeField] private Transform projectileSpawn;
 
     private ProjectilePool _pool;
-    private Transform _projectileSpawn;
+    private LayerMask _targetLayer;
+    private float _fireTimer;
 
-    public void Initialize(ProjectilePool pool, Transform spawn)
+    // Start()
+    public void Initialize(LayerMask targetLayer)
     {
-        _pool = pool;
-        _projectileSpawn = spawn;
-
+        _pool = GetComponent<ProjectilePool>();
+        _targetLayer = targetLayer;
         _fireTimer = fireRate;
     }
 
@@ -28,8 +29,8 @@ public class RangedAttack : ScriptableObject
         _fireTimer += deltaTime;
 
         // Calculate Projectile Direction
-        var source = Vector3.ProjectOnPlane(_projectileSpawn.position, Vector3.up);
-        _projectileDirection = (state.Target - source).normalized;
+        var source = Vector3.ProjectOnPlane(projectileSpawn.position, Vector3.up);
+        var direction = (state.Target - source).normalized;
 
         // Fire Projectile
         if (_fireTimer >= fireRate)
@@ -39,9 +40,9 @@ public class RangedAttack : ScriptableObject
                 Damage = damage,
                 Speed = projectileSpeed,
                 Range = projectileRange,
-                Direction = _projectileDirection
+                Direction = direction
             };
-            _pool.Get(stats, _projectileSpawn);
+            _pool.Get(stats, projectileSpawn, _targetLayer);
 
             _fireTimer = 0f;
         }

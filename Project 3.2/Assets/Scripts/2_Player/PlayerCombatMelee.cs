@@ -1,12 +1,24 @@
 using UnityEngine;
 using System.Collections.Generic;
-[CreateAssetMenu(fileName = "MeleeAttack", menuName = "Player Attacks/Melee")]
-public class MeleeAttack : ScriptableObject
+public class PlayerCombatMelee : MonoBehaviour
 {
+    public bool ShowDebug;
+
+    [Header("Required Components")]
+    [SerializeField] private PlayerAnimationController animationController;
+    private LayerMask _targetLayer;
+
     [Header("Stats")]
     [SerializeField] private float damage = 5f;
     [SerializeField] private float meleeOuterRange = 8f;    // distance from player in which player will "chase" the target when performing melee
     [SerializeField] private float meleeInnerRange = 2.5f;  // distance from player in which to stop moving
+
+    [Header("Hitbox")]
+    [SerializeField] private Transform hitboxSpawn;
+    [SerializeField] private float hitboxRadius;
+    private bool _hitboxEnabled;
+    private readonly Collider[] _hits = new Collider[10];   // 'OverlapSphereNonAlloc' buffer
+    private readonly HashSet<Collider> _alreadyHit = new(); // records hitbox collisions as they happen (avoids duplicate collision effects)
 
     [Header("Combo")]
     [SerializeField] private float comboBuffer = 0.4f;
@@ -14,33 +26,31 @@ public class MeleeAttack : ScriptableObject
     private int _comboCounter;
     private float _comboTimer;
 
-    [SerializeField] private LayerMask targetLayer;
-
-    private PlayerAnimationController _animationController;
-
-    // Hitbox variables
-    private Vector3 _hitboxSpawn;
-    private float _hitboxRadius;
-    private bool _hitboxEnabled;
-    private readonly Collider[] _hits = new Collider[10];   // 'OverlapSphereNonAlloc' buffer
-    private readonly HashSet<Collider> _alreadyHit = new(); // records hitbox collisions as they happen (avoids duplicate collision effects)
-
     // Movement/Rotation during melee
     private bool _rotationTriggered;
 
-    public void Initialize(PlayerAnimationController animator, Transform meleeHitbox, float hitboxRadius)
+
+    void OnDrawGizmos()
+    {
+        if (!ShowDebug) return;
+
+        if (_hitboxEnabled)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(hitboxSpawn.position, hitboxRadius);
+        }
+    }
+
+
+    public void Initialize(LayerMask targetLayer)
     {
         ResetCombo();
 
-        _animationController = animator;
-
-        _hitboxSpawn = meleeHitbox.position;
-        _hitboxRadius = hitboxRadius;
+        _targetLayer = targetLayer;
     }
 
     public void TriggerAttack()
     {
-
         // Reset Everything
         _comboTimer = 0f;
         //_dashTimer = 0f;
@@ -53,7 +63,7 @@ public class MeleeAttack : ScriptableObject
         _comboCounter = Mathf.Clamp(_comboCounter, 0, MaxCombo);
 
         // Update Animation Controller
-        _animationController.TriggerMeleeAnimation(_comboCounter);
+        animationController.TriggerMeleeAnimation(_comboCounter);
     }
 
     public void Attack(ref CombatState state, ref bool meleeStarted, ref bool inputEnabled, float deltaTime)
@@ -72,7 +82,7 @@ public class MeleeAttack : ScriptableObject
         if (inputEnabled) _comboTimer += deltaTime;
 
         // Update Player Rotation
-        var direction = (state.Target - _hitboxSpawn).normalized;
+        var direction = (state.Target - transform.position).normalized;
         if (!_rotationTriggered)
         {
             _rotationTriggered = true;
@@ -89,10 +99,10 @@ public class MeleeAttack : ScriptableObject
             // Scan for collisions
             var hits = Physics.OverlapSphereNonAlloc
             (
-                _hitboxSpawn,
-                _hitboxRadius,
+                hitboxSpawn.position,
+                hitboxRadius,
                 _hits,
-                targetLayer
+                _targetLayer
             );
 
             // Trigger hit 

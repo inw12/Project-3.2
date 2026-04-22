@@ -8,10 +8,10 @@ public struct ProjectileStats
 }
 public abstract class Projectile : MonoBehaviour
 {
-    [SerializeField] protected LayerMask hitLayers;
     [SerializeField] protected float hitboxRadius;
 
     protected ProjectileStats _stats;
+    protected LayerMask _targetLayer;
 
     protected ProjectilePool _pool;
     protected ProjectilePool _poolSecondary;
@@ -25,7 +25,7 @@ public abstract class Projectile : MonoBehaviour
 
     #region *--- Initialization Methods --------------------------------------------------*
     // (A) Simple Projectiles
-    public virtual void Initialize(ProjectilePool pool, ProjectileStats stats, Transform spawn)
+    public virtual void Initialize(ProjectilePool pool, ProjectileStats stats, Transform spawn, LayerMask targetLayer)
     {
         // Object Pool
         _pool = pool;
@@ -39,7 +39,7 @@ public abstract class Projectile : MonoBehaviour
         _distanceTraveled = 0f;
     }
     // (B) Projectiles that spawn other projectiles
-    public virtual void Initialize(ProjectilePool pool, ProjectilePool poolSecondary, ProjectileStats stats, Transform spawn)
+    public virtual void Initialize(ProjectilePool pool, ProjectilePool poolSecondary, ProjectileStats stats, Transform spawn, LayerMask targetLayer)
     {
         // Object Pools
         _pool = pool;
@@ -54,7 +54,7 @@ public abstract class Projectile : MonoBehaviour
         _distanceTraveled = 0f;
     }
     // (C) Projectiles that track a target
-    public virtual void Initialize(ProjectilePool pool, ProjectileStats stats, Transform spawn, Transform target)
+    public virtual void Initialize(ProjectilePool pool, ProjectileStats stats, Transform spawn, LayerMask targetLayer, Transform target)
     {
         // Object Pools
         _pool = pool;
@@ -71,7 +71,7 @@ public abstract class Projectile : MonoBehaviour
         _distanceTraveled = 0f;
     }
     // (D) Projectiles that track a target AND spawn other projectiles
-    public virtual void Initialize(ProjectilePool pool, ProjectilePool poolSecondary, ProjectileStats stats, Transform spawn, Transform target)
+    public virtual void Initialize(ProjectilePool pool, ProjectilePool poolSecondary, ProjectileStats stats, Transform spawn, Transform target, LayerMask targetLayer)
     {
         // Object Pools
         _pool = pool;
@@ -99,15 +99,12 @@ public abstract class Projectile : MonoBehaviour
             transform.position,
             hitboxRadius,
             _hits,
-            hitLayers
+            _targetLayer
         );
 
         // Handle hit if detected
         if (hits > 0) OnHit(_hits[0]);
     }
-
-    // Projectile Movement
-    protected virtual void FixedUpdate() => Move();
 
     public virtual void OnHit(Collider other)
     {
@@ -118,5 +115,7 @@ public abstract class Projectile : MonoBehaviour
         }
     }
 
+    // Projectile Movement
+    protected virtual void FixedUpdate() => Move();
     protected abstract void Move();
 }

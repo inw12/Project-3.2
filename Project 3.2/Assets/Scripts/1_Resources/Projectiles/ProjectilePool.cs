@@ -43,39 +43,39 @@ public class ProjectilePool : MonoBehaviour
     private void OnDestroyProjectile(GameObject item) => Destroy(item);
 
     // (A) Simple Projectiles
-    public void Get(ProjectileStats stats, Transform spawn)
+    public void Get(ProjectileStats stats, Transform spawn, LayerMask targetLayer)
     {
         GameObject item = _pool.Get();
         if (item.TryGetComponent(out Projectile p))
         {
-            p.Initialize(this, stats, spawn);
+            p.Initialize(this, stats, spawn, targetLayer);
         }
     }
     // (B) Projectiles that spawn other projectiles
-    public void Get(ProjectileStats stats, Transform spawn, ProjectilePool secondaryPool)
+    public void Get(ProjectileStats stats, Transform spawn, ProjectilePool secondaryPool, LayerMask targetLayer)
     {
         GameObject item = _pool.Get();
         if (item.TryGetComponent(out Projectile p))
         {
-            p.Initialize(this, secondaryPool, stats, spawn);
+            p.Initialize(this, secondaryPool, stats, spawn, targetLayer);
         }
     }
     // (C) Projectiles that track a target
-    public void Get(ProjectileStats stats, Transform spawn, Transform target)
+    public void Get(ProjectileStats stats, Transform spawn, Transform target, LayerMask targetLayer)
     {
         GameObject item = _pool.Get();
         if (item.TryGetComponent(out Projectile p))
         {
-            p.Initialize(this, stats, spawn, target);
+            p.Initialize(this, stats, spawn, targetLayer, target);
         }
     }
     // (D) Projectiles that track a target AND spawn other projectiles
-    public void Get(ProjectileStats stats, Transform spawn, ProjectilePool secondaryPool, Transform target)
+    public void Get(ProjectileStats stats, Transform spawn, ProjectilePool secondaryPool, Transform target, LayerMask targetLayer)
     {
         GameObject item = _pool.Get();
         if (item.TryGetComponent(out Projectile p))
         {
-            p.Initialize(this, secondaryPool, stats, spawn, target);
+            p.Initialize(this, secondaryPool, stats, spawn, target, targetLayer);
         }
     }
     

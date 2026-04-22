@@ -19,49 +19,39 @@ public struct CombatInput
     public bool Parry;
     public Vector3 MousePosition;
 }
-
+[RequireComponent(typeof(PlayerCombatRanged), typeof(PlayerCombatMelee))]
 public class PlayerCombat : MonoBehaviour
 {
-    public bool ShowDebug;
+    [SerializeField] private LayerMask targetLayer;
 
-    [Header("Player Attacks")]
-    [SerializeField] private RangedAttack rangedAttack;
-    [SerializeField] private MeleeAttack meleeAttack;
+    // Combat Components
+    private PlayerCombatRanged _rangedAttack;
+    private PlayerCombatMelee _meleeAttack;
 
-    [Header("Ranged Attack Components")]
-    [SerializeField] private ProjectilePool projectilePool;
-    [SerializeField] private Transform projectileSpawn;
-
-    [Header("Melee Attack Components")]
-    [SerializeField] private PlayerAnimationController animationController;
-    [SerializeField] private Transform meleeHitbox;
-    [SerializeField] private float meleeHitboxRadius = 1f;
-    private bool _meleeStarted;
+    private bool _combatInputEnabled;
 
     // Requested Inputs
     private bool _requestedRanged;
     private bool _requestedMelee;
     private bool _requestedParry;
     private Vector3 _requestedMousePosition;
-    private bool _combatInputEnabled;
 
     // State Machine
     private CombatState _state;
     private CombatState _prevState;
 
-    void OnDrawGizmos()
-    {
-        if (!ShowDebug) return;
+    // Melee tracker
+    private bool _meleeStarted;
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(meleeHitbox.position, meleeHitboxRadius);
-    }
 
     // Start()
     public void Initialize()
     {
-        rangedAttack.Initialize(projectilePool, projectileSpawn);
-        meleeAttack.Initialize(animationController, meleeHitbox, meleeHitboxRadius);
+        _rangedAttack = GetComponent<PlayerCombatRanged>();
+        _meleeAttack = GetComponent<PlayerCombatMelee>();
+
+        _rangedAttack.Initialize(targetLayer);
+        _meleeAttack.Initialize(targetLayer);
 
         _combatInputEnabled = true;
 
@@ -128,26 +118,26 @@ public class PlayerCombat : MonoBehaviour
     }
     private void OnMeleeAttack(float deltaTime)
     {
-        meleeAttack.Attack(ref _state, ref _meleeStarted, ref _combatInputEnabled, deltaTime);
+        _meleeAttack.Attack(ref _state, ref _meleeStarted, ref _combatInputEnabled, deltaTime);
 
         // Melee Combo START
         if (!_meleeStarted && _state.CurrentAction is CombatAction.Melee)
         {
             _meleeStarted = true;
             Player.Instance.MovementInputEnabled(false);
-            meleeAttack.TriggerAttack();
+            _meleeAttack.TriggerAttack();
         }
 
         // Melee Combo CONTINUE
         if (_requestedMelee)
         {
-            meleeAttack.TriggerAttack();
+            _meleeAttack.TriggerAttack();
         }
     }
     private void OnRangedAttack(float deltaTime)
     {
         // Trigger Attack
-        rangedAttack.Attack(ref _state, deltaTime);
+        _rangedAttack.Attack(ref _state, deltaTime);
 
         // Update Combat State
         _state.CurrentAction = !_requestedRanged ? CombatAction.None : _state.CurrentAction;
@@ -179,7 +169,7 @@ public class PlayerCombat : MonoBehaviour
         else 
             _combatInputEnabled = b;
     }
-    public void MeleeHitboxEnabled(bool b) => meleeAttack.HitboxEnabled(b);
+    public void MeleeHitboxEnabled(bool b) => _meleeAttack.HitboxEnabled(b);
     /// * Enable/Disable ATTACK inputs
     /// * Enable/Disable PARRY inputs
     /// * Enable/Disable ALL COMBAT inputs
