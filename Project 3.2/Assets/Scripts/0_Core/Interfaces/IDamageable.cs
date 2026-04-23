@@ -5,5 +5,4 @@ public interface IDamageable
 
     void DecreaseHealth(float amount);
     void IncreaseHealth(float amount);
-    void OnDeath();
 }

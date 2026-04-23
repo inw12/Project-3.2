@@ -792,7 +792,7 @@ MonoBehaviour:
   parrybox: {fileID: 1809640018907596579}
   targetLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 1024
 --- !u!114 &8743551827149125588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -829,7 +829,7 @@ MonoBehaviour:
   acceleration: 20
   duration: 0.1
   meleeOuterRange: 8
-  meleeInnerRange: 2.5
+  meleeInnerRange: 2
   trackingSpeedMultiplier: 1.5
   hitboxSpawn: {fileID: 5869960100772479584}
   hitboxRadius: 1
