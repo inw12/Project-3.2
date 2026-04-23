@@ -57,7 +57,6 @@ public class Player : MonoBehaviour
         playerMovement.Initialize(hurtbox);
         playerCombat.Initialize(animationController, hurtbox);
 
-
         // Animation
         animationController.Initialize();
         animationRig.Initialize();
@@ -144,5 +143,7 @@ public class Player : MonoBehaviour
     public void CombatInputEnabled(bool b) => playerCombat.CombatInputEnabled(b);
     // Toggle Melee Hitbox
     public void MeleeHitboxEnabled(bool b) => playerCombat.MeleeHitboxEnabled(b);
+    // Combat Action Setter
+    public void SetCurrentCombatAction(CombatAction action) => playerCombat.SetCurrentCombatAction(action);
     #endregion
 }

@@ -602,18 +602,6 @@ BlendTree:
   m_UseAutomaticThresholds: 1
   m_NormalizedBlendValues: 0
   m_BlendType: 1
---- !u!114 &-4880115974242905608
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59275eeab36394ee48e7d11305f8fbcc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Player::ToggleInput
 --- !u!114 &-4778845186180566582
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -971,7 +959,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: 7681384293391619539}
   m_StateMachineBehaviours:
-  - {fileID: -4880115974242905608}
+  - {fileID: -327892901265566946}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -1328,6 +1316,18 @@ AnimatorStateTransition:
   m_InterruptionSource: 2
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &-327892901265566946
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdddd7be76c5341b4a2be525f648d13f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::ParryBehavior
 --- !u!1102 &-317311546071987694
 AnimatorState:
   serializedVersion: 6
@@ -1550,9 +1550,6 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 6
-    m_ConditionEvent: CombatAction
-    m_EventTreshold: 3
   - m_ConditionMode: 1
     m_ConditionEvent: ParryTrigger
     m_EventTreshold: 0
@@ -1789,9 +1786,6 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 6
-    m_ConditionEvent: CombatAction
-    m_EventTreshold: 3
   - m_ConditionMode: 1
     m_ConditionEvent: ParryTrigger
     m_EventTreshold: 0
@@ -2452,7 +2446,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.02
+  m_TransitionDuration: 0.3
   m_TransitionOffset: 0
   m_ExitTime: 0
   m_HasExitTime: 1

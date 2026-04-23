@@ -3,7 +3,9 @@ using UnityEngine;
 public class PlayerParrybox : MonoBehaviour
 {
     [SerializeField] private float parryDuration = 0.5f;
+    [SerializeField] private float parryCooldown = 1f;
     private float _parryTimer;
+    private float _cooldownTimer;
 
     private CapsuleCollider _parrybox;
     private CapsuleCollider _hurtbox;
@@ -13,6 +15,7 @@ public class PlayerParrybox : MonoBehaviour
     public void Initialize(PlayerAnimationController animationController, CapsuleCollider hurtbox)
     {
         _parryTimer = 0f;
+        _cooldownTimer = 0f;
 
         _parrybox = GetComponent<CapsuleCollider>();
         _parrybox.enabled = false;
@@ -24,6 +27,8 @@ public class PlayerParrybox : MonoBehaviour
 
     public void UpdateParrybox(ref bool parryStarted, float deltaTime)
     {
+        _cooldownTimer += deltaTime;
+
         // Start counting when parrybox is active
         if (_parrybox.enabled)
         {
@@ -39,10 +44,22 @@ public class PlayerParrybox : MonoBehaviour
     }
 
     #region *--- Public Methods to Enable/Disable/Trigger Parry ----------*
+    public bool CanParry() => _cooldownTimer > parryCooldown;
     public void ParryboxEnabled(bool active)
     {
-        _parrybox.enabled = active;
-        _hurtbox.enabled = !active;
+        // Parrybox ON
+        if (active)
+        {
+            _parrybox.enabled = true;
+            _hurtbox.enabled = false;
+            _cooldownTimer = 0f;
+        }
+        // Parrybox OFF
+        else
+        {
+            _parrybox.enabled = false;
+            _hurtbox.enabled = true;
+        }
     }
     public void TriggerParry()
     {

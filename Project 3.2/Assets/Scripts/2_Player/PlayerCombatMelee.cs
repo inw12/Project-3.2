@@ -36,9 +36,14 @@ public class PlayerCombatMelee : MonoBehaviour
 
         if (_hitboxEnabled)
         {
-            Gizmos.color = Color.red;
+            Gizmos.color = Color.teal;
             Gizmos.DrawWireSphere(hitboxSpawn.position, hitboxRadius);
         }
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, meleeOuterRange);
+        Gizmos.color = Color.orange;
+        Gizmos.DrawWireSphere(transform.position, meleeInnerRange);
     }
 
 

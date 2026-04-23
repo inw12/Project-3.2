@@ -749,10 +749,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04b1fde635d544d95a90d92f514a3623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Player::Player
+  ShowDebug: 0
   playerMovement: {fileID: 4917362367304789355}
   playerCombat: {fileID: 465282853641004578}
   animationController: {fileID: 237403034597020557}
   animationRig: {fileID: 7784359779279616290}
+  hurtbox: {fileID: 9194126192834368291}
+  parrybox: {fileID: 9101396590835421816}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -771,7 +774,6 @@ MonoBehaviour:
   moveSpeed: 10
   moveAcceleration: 20
   moveRotation: 15
-  hurtbox: {fileID: 9194126192834368291}
   rollSpeed: 12
   rollAcceleration: 20
   rollDuration: 0.6
@@ -787,6 +789,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0171239230a4a454e8b3df8c3f59723a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Player::PlayerCombat
+  parrybox: {fileID: 1809640018907596579}
   targetLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -819,7 +822,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f013d93859cae4d5da5aa50cccdbe7c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Player::MeleeAttack
-  ShowDebug: 1
+  ShowDebug: 0
   animationController: {fileID: 237403034597020557}
   damage: 5
   meleeOuterRange: 8
@@ -2631,6 +2634,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7052670003506372717}
   - component: {fileID: 9101396590835421816}
+  - component: {fileID: 1809640018907596579}
   m_Layer: 8
   m_Name: Parrybox
   m_TagString: Untagged
@@ -2676,6 +2680,20 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &1809640018907596579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9100845367133516999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6dc518e81a2f4c269778aab7e467b78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::PlayerParrybox
+  parryDuration: 0.3
+  parryCooldown: 1
 --- !u!1 &9142379217341286987
 GameObject:
   m_ObjectHideFlags: 0
