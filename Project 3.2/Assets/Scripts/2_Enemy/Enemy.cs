@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
     // Animator Parameters
     private static readonly int KnockbackTrigger = Animator.StringToHash("KnockbackTrigger");
+    private static readonly int Hitstun = Animator.StringToHash("InHitstun");
 
     // Hitstun 
     private float _timeScale;
@@ -57,6 +58,8 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
         _currentHealth = Mathf.Clamp(_currentHealth, 0f, maxHealth);
 
         if (hitFeedback) hitFeedback.TriggerHitFeedback();
+
+        Debug.Log($"Current HP: {_currentHealth} / {maxHealth}");
     }
     public void IncreaseHealth(float amount)
     {
@@ -84,10 +87,11 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     private IEnumerator KnockbackRoutine(Vector3 direction, float force, float duration)
     {
         var elapsed = 0f;
-        var deltaTime = Time.deltaTime * _timeScale;
 
         while (elapsed < duration)
         {
+            var deltaTime = Time.deltaTime * _timeScale;
+
             elapsed += deltaTime;
             var progress = elapsed / duration;
 
@@ -113,9 +117,11 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     {
         _timeScale = 0f;
         _inHitstun = true;
+        animator.SetBool(Hitstun, _inHitstun);
         yield return new WaitForSeconds(duration);
         _timeScale = 1f;
         _inHitstun = false;
+        animator.SetBool(Hitstun, _inHitstun);
     }
     #endregion
 

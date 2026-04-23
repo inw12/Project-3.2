@@ -832,9 +832,12 @@ MonoBehaviour:
   meleeInnerRange: 2
   trackingSpeedMultiplier: 1.5
   hitboxSpawn: {fileID: 5869960100772479584}
-  hitboxRadius: 1
-  knockbackStrength: 50
-  knockbackDuration: 0.08
+  hitboxRadius: 1.25
+  knockbackDuration: 0.05
+  knockbackStrength: 75
+  finalHitKnockbackMultiplier: 3
+  hitstunDuration: 0.08
+  finalHitHitstunMultiplier: 1.5
   comboBuffer: 0.4
 --- !u!114 &4910632923978228084
 MonoBehaviour:

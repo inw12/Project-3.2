@@ -184,14 +184,7 @@ public class PlayerCombatMelee : MonoBehaviour
                         e.DecreaseHealth(damage);
                     }
 
-                    // 2. Try applying knockback
-                    if (hit.TryGetComponent(out IKnockable k))
-                    {
-                        var targetKnockback = _comboCounter == 4 ? knockbackStrength * finalHitKnockbackMultiplier : knockbackStrength;
-                        k.TriggerKnockback(transform.forward, targetKnockback, knockbackDuration);
-                    }
-
-                    // 3. Try applying hitstun
+                    // 2. Try applying hitstun
                     if (hit.TryGetComponent(out IHitstunnable h))
                     {
                         _hitstunActive = true;
@@ -201,6 +194,13 @@ public class PlayerCombatMelee : MonoBehaviour
                         var targetDuration = _comboCounter == 4 ? hitstunDuration * finalHitHitstunMultiplier : hitstunDuration;
 
                         StartCoroutine(h.TriggerHitstun(targetDuration));
+                    }
+
+                    // 3. Try applying knockback
+                    if (hit.TryGetComponent(out IKnockable k))
+                    {
+                        var targetKnockback = _comboCounter == 4 ? knockbackStrength * finalHitKnockbackMultiplier : knockbackStrength;
+                        k.TriggerKnockback(transform.forward, targetKnockback, knockbackDuration);
                     }
                 }
             }
