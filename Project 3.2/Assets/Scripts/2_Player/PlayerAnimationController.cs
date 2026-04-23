@@ -72,4 +72,10 @@ public class PlayerAnimationController : MonoBehaviour
     {
         _animator.SetBool("HitstunActive", b);
     }
+
+    // Triggers "ParryTrigger"
+    public void TriggerParry()
+    {
+        _animator.SetTrigger("ParryTrigger");
+    }
 }

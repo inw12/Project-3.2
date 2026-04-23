@@ -28,7 +28,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float moveRotation = 15f;
 
     [Header("Roll")]
-    [SerializeField] private CapsuleCollider hurtbox;
     [SerializeField] private float rollSpeed = 12;
     [SerializeField] private float rollAcceleration = 20f;
     [SerializeField] private float rollDuration = 0.5f;
@@ -46,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
     private MovementState _prevState;
 
     // Roll Variables
+    private CapsuleCollider _hurtbox;
     private struct RollData
     {
         public Vector3 Direction;
@@ -56,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     // Start()
-    public void Initialize()
+    public void Initialize(CapsuleCollider hurtbox)
     {
         _controller = GetComponent<CharacterController>();
 
@@ -66,6 +66,8 @@ public class PlayerMovement : MonoBehaviour
         _state.Velocity = Vector3.zero;
         _state.IsGrounded = _controller.isGrounded;
         _prevState = _state;
+
+        _hurtbox = hurtbox;
     }
 
     // Update()
@@ -108,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 _rollData.Triggered = false;
                 _movementInputEnabled = true;
-                hurtbox.enabled = true;
+                _hurtbox.enabled = true;
             }
         }
         // Regular Movement
@@ -201,7 +203,7 @@ public class PlayerMovement : MonoBehaviour
             _rollData.Timer = 0f;
 
             // Disable hurtbox
-            hurtbox.enabled = false;
+            _hurtbox.enabled = false;
 
             // Disable player inputs
             _movementInputEnabled = false;

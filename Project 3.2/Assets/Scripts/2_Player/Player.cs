@@ -3,6 +3,8 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
 
+    public bool ShowDebug;
+
     [Header("Core Components")]
     [SerializeField] private PlayerMovement playerMovement;
     [SerializeField] private PlayerCombat playerCombat;
@@ -12,6 +14,8 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerAnimationRig animationRig;
 
     [Header("Misc")]
+    [SerializeField] private CapsuleCollider hurtbox;
+    [SerializeField] private CapsuleCollider parrybox;
     [SerializeField] private LayerMask groundLayer;
 
     // Player Input
@@ -19,6 +23,15 @@ public class Player : MonoBehaviour
     private bool _inputEnabled;
 
     private Vector3 _mousePosition;
+
+
+    void OnGUI()
+    {
+        if (!ShowDebug) return;
+        GUILayout.Label($"Movement Action: {GetCurrentMovementAction()}");
+        GUILayout.Label($"Combat Action: {GetCurrentCombatAction()}");
+    }
+
 
     // Singleton Initialization
     void Awake()
@@ -41,8 +54,9 @@ public class Player : MonoBehaviour
         _inputEnabled = true;
 
         // Core Components
-        playerMovement.Initialize();
-        playerCombat.Initialize();
+        playerMovement.Initialize(hurtbox);
+        playerCombat.Initialize(animationController, hurtbox);
+
 
         // Animation
         animationController.Initialize();

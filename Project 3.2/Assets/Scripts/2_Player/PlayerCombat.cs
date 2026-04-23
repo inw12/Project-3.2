@@ -22,6 +22,9 @@ public struct CombatInput
 [RequireComponent(typeof(PlayerCombatRanged), typeof(PlayerCombatMelee))]
 public class PlayerCombat : MonoBehaviour
 {
+    public bool ShowDebug;
+    [Space]
+    [SerializeField] private PlayerParrybox parrybox;
     [SerializeField] private LayerMask targetLayer;
 
     // Combat Components
@@ -40,18 +43,28 @@ public class PlayerCombat : MonoBehaviour
     private CombatState _state;
     private CombatState _prevState;
 
-    // Melee tracker
+    // Action trackers
     private bool _meleeStarted;
+    private bool _parryStarted;
 
+    void OnGUI()
+    {
+        if (!ShowDebug) return;
+
+        GUILayout.Label($"Ranged: {_requestedRanged}");
+        GUILayout.Label($"Melee: {_requestedMelee}");
+        GUILayout.Label($"Parry: {_requestedParry}");
+    }
 
     // Start()
-    public void Initialize()
+    public void Initialize(PlayerAnimationController animationController, CapsuleCollider hurtbox)
     {
         _rangedAttack = GetComponent<PlayerCombatRanged>();
         _meleeAttack = GetComponent<PlayerCombatMelee>();
 
         _rangedAttack.Initialize(targetLayer);
         _meleeAttack.Initialize(targetLayer);
+        parrybox.Initialize(animationController, hurtbox);
 
         _combatInputEnabled = true;
 
@@ -67,7 +80,7 @@ public class PlayerCombat : MonoBehaviour
         {
             // Parry should only be available if the button is pressed
             //  AND we're not performing a melee attack
-            _requestedParry = input.Parry && _state.CurrentAction is not CombatAction.Melee;
+            _requestedParry = (input.Parry && _state.CurrentAction is not CombatAction.Melee) || _requestedParry;
 
             // Melee attack should only be available if the button is pressed
             //  AND we're not performing a parry
@@ -91,12 +104,19 @@ public class PlayerCombat : MonoBehaviour
     {
         _state.Target = _requestedMousePosition;
 
+        // Check for Parry
+        if (_requestedParry && !_parryStarted)
+        {
+            _requestedParry = false;
+            _parryStarted = true;
+
+            parrybox.ParryboxEnabled(true);
+        }
+        parrybox.UpdateParrybox(ref _parryStarted, deltaTime);
+
         // State Machine Control
         switch (_state.CurrentAction)
         {
-            case CombatAction.Parry:
-                OnParry();
-                break;
             case CombatAction.Melee:
                 OnMeleeAttack(deltaTime);
                 break;
@@ -114,7 +134,11 @@ public class PlayerCombat : MonoBehaviour
     #region *--- Combat Action Functions ------------------------------*
     private void OnParry()
     {
-        
+        if (!_parryStarted)
+        {
+            _parryStarted = true;
+            parrybox.ParryboxEnabled(true);
+        }
     }
     private void OnMeleeAttack(float deltaTime)
     {
@@ -148,9 +172,8 @@ public class PlayerCombat : MonoBehaviour
     #region *--- Helper Functions -------------------------------------*
     private void TryEnterNewState()
     {
-        _state.CurrentAction = _requestedParry ? CombatAction.Parry
-                                : _requestedMelee ? CombatAction.Melee
-                                    : _requestedRanged ? CombatAction.Ranged : CombatAction.None;
+        _state.CurrentAction = _requestedMelee ? CombatAction.Melee
+                                : _requestedRanged ? CombatAction.Ranged : CombatAction.None;
     }
     #endregion
 
