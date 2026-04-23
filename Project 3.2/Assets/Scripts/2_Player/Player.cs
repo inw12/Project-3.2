@@ -3,9 +3,19 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
 
+    public bool ShowDebug;
+
+    [Header("Core Components")]
     [SerializeField] private PlayerMovement playerMovement;
+    [SerializeField] private PlayerCombat playerCombat;
+
+    [Header("Animation")]
     [SerializeField] private PlayerAnimationController animationController;
-    [Space]
+    [SerializeField] private PlayerAnimationRig animationRig;
+
+    [Header("Misc")]
+    [SerializeField] private CapsuleCollider hurtbox;
+    [SerializeField] private CapsuleCollider parrybox;
     [SerializeField] private LayerMask groundLayer;
 
     // Player Input
@@ -13,6 +23,15 @@ public class Player : MonoBehaviour
     private bool _inputEnabled;
 
     private Vector3 _mousePosition;
+
+
+    void OnGUI()
+    {
+        if (!ShowDebug) return;
+        GUILayout.Label($"Movement Action: {GetCurrentMovementAction()}");
+        GUILayout.Label($"Combat Action: {GetCurrentCombatAction()}");
+    }
+
 
     // Singleton Initialization
     void Awake()
@@ -34,9 +53,13 @@ public class Player : MonoBehaviour
         _input.Enable();
         _inputEnabled = true;
 
-        // Player Components
-        playerMovement.Initialize();
+        // Core Components
+        playerMovement.Initialize(hurtbox);
+        playerCombat.Initialize(animationController, hurtbox);
+
+        // Animation
         animationController.Initialize();
+        animationRig.Initialize();
     }
 
     void Update()
@@ -52,23 +75,42 @@ public class Player : MonoBehaviour
         var movementInput = new MovementInput
         {
             Movement        = _inputEnabled ? input.Move.ReadValue<Vector2>() : Vector2.zero,
-            Roll           = _inputEnabled && input.Roll.WasPressedThisFrame(),
+            Roll            = _inputEnabled && input.Roll.WasPressedThisFrame(),
             MousePosition   = _inputEnabled ? _mousePosition : Vector3.zero
         };
         playerMovement.UpdateInput(movementInput);
+
+        // Combat Input
+        var combatInput = new CombatInput
+        {
+            Ranged          = _inputEnabled && input.Mouse1.IsPressed(),
+            Melee           = _inputEnabled && input.Mouse2.WasPressedThisFrame(),
+            Parry           = _inputEnabled && input.Parry.WasPressedThisFrame(),
+            MousePosition   = _inputEnabled ? _mousePosition : Vector3.zero
+        };
+        playerCombat.UpdateInput(combatInput);
     }
 
     /// <summary>
     /// * Updates...
     ///     - Player Rotation
+    ///     - Player Combat Action
     ///     - Animation Controller
+    ///     - Animation Rig
     /// </summary>
     void LateUpdate()
     {
         var deltaTime = Time.deltaTime;
 
+        // Update character rotation
         playerMovement.UpdateRotation(deltaTime);
+
+        // Update combat action
+        playerCombat.UpdateCombatAction(deltaTime);
+
+        // Update Animations
         animationController.UpdateAnimator();
+        animationRig.UpdateRig();
     }
 
     // Updates Player Movement
@@ -79,4 +121,29 @@ public class Player : MonoBehaviour
     }
 
     void OnDisable() => _input.Dispose();
+
+
+    #region *--- Public Getters --------------------------------------------------*
+    public MovementAction GetCurrentMovementAction() => playerMovement.GetState().CurrentAction;
+    public CombatAction GetCurrentCombatAction() => playerCombat.GetState().CurrentAction;
+    #endregion
+
+
+    #region *--- 'PlayerMovement' Access ----------------------*
+    // Toggle Movement Input
+    public void MovementInputEnabled(bool b) => playerMovement.MovementInputEnabled(b);
+    // Set Velocity
+    public void SetVelocity(Vector3 velocity, float acceleration) => playerMovement.SetVelocity(velocity, acceleration);
+    // Set Rotation
+    public void SetRotation(Quaternion rotation) => playerMovement.SetRotation(rotation);
+    #endregion
+
+    #region *--- 'PlayerCombat' Access ----------------------*
+    // Toggle Combat Input 
+    public void CombatInputEnabled(bool b) => playerCombat.CombatInputEnabled(b);
+    // Toggle Melee Hitbox
+    public void MeleeHitboxEnabled(bool b) => playerCombat.MeleeHitboxEnabled(b);
+    // Combat Action Setter
+    public void SetCurrentCombatAction(CombatAction action) => playerCombat.SetCurrentCombatAction(action);
+    #endregion
 }

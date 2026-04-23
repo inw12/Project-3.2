@@ -28,7 +28,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float moveRotation = 15f;
 
     [Header("Roll")]
-    [SerializeField] private CapsuleCollider hurtbox;
     [SerializeField] private float rollSpeed = 12;
     [SerializeField] private float rollAcceleration = 20f;
     [SerializeField] private float rollDuration = 0.5f;
@@ -46,6 +45,7 @@ public class PlayerMovement : MonoBehaviour
     private MovementState _prevState;
 
     // Roll Variables
+    private CapsuleCollider _hurtbox;
     private struct RollData
     {
         public Vector3 Direction;
@@ -56,7 +56,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     // Start()
-    public void Initialize()
+    public void Initialize(CapsuleCollider hurtbox)
     {
         _controller = GetComponent<CharacterController>();
 
@@ -66,6 +66,8 @@ public class PlayerMovement : MonoBehaviour
         _state.Velocity = Vector3.zero;
         _state.IsGrounded = _controller.isGrounded;
         _prevState = _state;
+
+        _hurtbox = hurtbox;
     }
 
     // Update()
@@ -108,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 _rollData.Triggered = false;
                 _movementInputEnabled = true;
-                hurtbox.enabled = true;
+                _hurtbox.enabled = true;
             }
         }
         // Regular Movement
@@ -149,8 +151,22 @@ public class PlayerMovement : MonoBehaviour
     // LateUpdate()
     public void UpdateRotation(float deltaTime)
     {
-        // Rotate towards direction of movement
-        if (_requestedMovement.sqrMagnitude > 0f)
+        // (A) Rotate towards mouse position during Ranged Attack
+        if (Player.Instance.GetCurrentCombatAction() is CombatAction.Ranged)
+        {
+            var targetRotation = Quaternion.LookRotation(_requestedMousePosition);
+            transform.rotation = Quaternion.Lerp
+            (
+                transform.rotation,
+                targetRotation,
+                1f - Mathf.Exp(-moveRotation * deltaTime)
+            );
+        }
+        // (B) Do nothing. Rotation directly set from 'MeleeAttack.cs'
+        else if (Player.Instance.GetCurrentCombatAction() is CombatAction.Melee)
+        {}
+        // (C) Rotate towards direction of movement while not Attacking
+        else if (_requestedMovement.sqrMagnitude > 0f)
         {
             var targetRotation = Quaternion.LookRotation(_requestedMovement);
             transform.rotation = Quaternion.Lerp
@@ -187,7 +203,7 @@ public class PlayerMovement : MonoBehaviour
             _rollData.Timer = 0f;
 
             // Disable hurtbox
-            hurtbox.enabled = false;
+            _hurtbox.enabled = false;
 
             // Disable player inputs
             _movementInputEnabled = false;
@@ -199,5 +215,35 @@ public class PlayerMovement : MonoBehaviour
     #region *--- Public Getters ----------------------------------------------------*
     public MovementState GetState() => _state;
     public MovementState GetPrevState() => _prevState;
+    #endregion
+
+
+    #region *--- Public Methods used by other classes to influence Player movement -----*
+    public void MovementInputEnabled(bool b)
+    {
+        if (!b)
+        {
+            // Disable Input
+            _movementInputEnabled = b;
+
+            // Stop any character movement
+            _requestedMovement = _state.Velocity = Vector3.zero;
+            _state.CurrentAction = MovementAction.Idle;
+        }
+        else
+        {
+            _movementInputEnabled = b;
+        }
+    }
+    public void SetVelocity(Vector3 velocity, float acceleration)
+    {
+        _state.Velocity = Vector3.Lerp
+        (
+            _state.Velocity,
+            velocity,
+            1f - Mathf.Exp(-acceleration * Time.fixedDeltaTime)
+        );
+    }
+    public void SetRotation(Quaternion rotation) => transform.rotation = rotation;
     #endregion
 }
