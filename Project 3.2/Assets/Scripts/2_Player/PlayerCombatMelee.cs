@@ -28,6 +28,17 @@ public class PlayerCombatMelee : MonoBehaviour
     [SerializeField] private float hitboxRadius;
     private bool _hitboxEnabled;
     private readonly HashSet<Collider> _alreadyHit = new(); // records hitbox collisions as they happen (avoids duplicate collision effects)
+    
+    [Header("Knockback")]
+    [SerializeField] private float knockbackDuration = 0.2f;
+    [SerializeField] private float knockbackStrength = 10f;
+    [SerializeField] [Range(1f, 10f)] private float finalHitKnockbackMultiplier = 5f;
+
+    [Header("Hitstun")]
+    [SerializeField] private float hitstunDuration = 0.2f;
+    [SerializeField] [Range(1f, 10f)] private float finalHitHitstunMultiplier = 2f;
+    private bool _hitstunActive;
+    private float _hitstunTimer;
 
     [Header("Combo")]
     [SerializeField] private float comboBuffer = 0.4f;
@@ -165,16 +176,44 @@ public class PlayerCombatMelee : MonoBehaviour
             if (hits > 0)
             {
                 var hit = _hits[0];
-                
-                if (hit.TryGetComponent(out IDamageable e))
+
+                if (_alreadyHit.Add(hit))
                 {
-                    // 1. Apply Damage
-                    e.DecreaseHealth(damage);
+                    // 1. Try applying damage
+                    if (hit.TryGetComponent(out IDamageable e)) {
+                        e.DecreaseHealth(damage);
+                    }
 
-                    // 2. Try applying Hitstun
+                    // 2. Try applying hitstun
+                    if (hit.TryGetComponent(out IHitstunnable h))
+                    {
+                        _hitstunActive = true;
+                        _hitstunTimer = 0f;
+                        animationController.HitstunActive(_hitstunActive);
 
-                    // 3. Try applying Knockback
+                        var targetDuration = _comboCounter == 4 ? hitstunDuration * finalHitHitstunMultiplier : hitstunDuration;
+
+                        StartCoroutine(h.TriggerHitstun(targetDuration));
+                    }
+
+                    // 3. Try applying knockback
+                    if (hit.TryGetComponent(out IKnockable k))
+                    {
+                        var targetKnockback = _comboCounter == 4 ? knockbackStrength * finalHitKnockbackMultiplier : knockbackStrength;
+                        k.TriggerKnockback(transform.forward, targetKnockback, knockbackDuration);
+                    }
                 }
+            }
+        }
+
+        // Update hitstun timer
+        if (_hitstunActive)
+        {
+            _hitstunTimer += deltaTime;
+            if (_hitstunTimer >= hitstunDuration)
+            {
+                _hitstunActive = false;
+                animationController.HitstunActive(_hitstunActive);
             }
         }
     }

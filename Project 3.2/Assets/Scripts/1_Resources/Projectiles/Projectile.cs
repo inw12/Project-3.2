@@ -27,16 +27,11 @@ public abstract class Projectile : MonoBehaviour
     // (A) Simple Projectiles
     public virtual void Initialize(ProjectilePool pool, ProjectileStats stats, Transform spawn, LayerMask targetLayer)
     {
-        // Object Pool
         _pool = pool;
-
-        // Projectile Stats
         _stats = stats;
-
-        // Spawn Position
         transform.position = spawn.position;
-
         _distanceTraveled = 0f;
+        _targetLayer = targetLayer;
     }
     // (B) Projectiles that spawn other projectiles
     public virtual void Initialize(ProjectilePool pool, ProjectilePool poolSecondary, ProjectileStats stats, Transform spawn, LayerMask targetLayer)
