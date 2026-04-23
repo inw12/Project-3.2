@@ -10,14 +10,23 @@ public class PlayerCombatMelee : MonoBehaviour
 
     [Header("Stats")]
     [SerializeField] private float damage = 5f;
-    [SerializeField] private float meleeOuterRange = 8f;    // distance from player in which player will "chase" the target when performing melee
-    [SerializeField] private float meleeInnerRange = 2.5f;  // distance from player in which to stop moving
+
+    [Header("Movement | Stats")]
+    [SerializeField] private float speed = 10f;
+    [SerializeField] private float acceleration = 20f;
+    [SerializeField] private float duration = 0.1f;
+    private Vector3 _velocity;
+    private float _movementTimer;
+
+    [Header("Movement | Enemy Tracking")]
+    [SerializeField] private float meleeOuterRange = 8f;                            // distance from player in which player will "track" the target when performing melee
+    [SerializeField] private float meleeInnerRange = 2.5f;                          // distance from player in which to stop "tracking"
+    [SerializeField] [Range(1f, 5f)] private float trackingSpeedMultiplier = 1.5f;   // speed multiplier used when "tracking" a target
 
     [Header("Hitbox")]
     [SerializeField] private Transform hitboxSpawn;
     [SerializeField] private float hitboxRadius;
     private bool _hitboxEnabled;
-    private readonly Collider[] _hits = new Collider[10];   // 'OverlapSphereNonAlloc' buffer
     private readonly HashSet<Collider> _alreadyHit = new(); // records hitbox collisions as they happen (avoids duplicate collision effects)
 
     [Header("Combo")]
@@ -26,9 +35,14 @@ public class PlayerCombatMelee : MonoBehaviour
     private int _comboCounter;
     private float _comboTimer;
 
-    // Movement/Rotation during melee
-    private bool _rotationTriggered;
+    // 'OverlapSphereNonAlloc' buffers
+    private readonly Collider[] _hits   = new Collider[10];   
+    private readonly Collider[] _outer  = new Collider[10];   
+    private readonly Collider[] _inner  = new Collider[10];   
 
+    // Movement/Rotation during melee
+    private bool _directionCaptured;
+    private bool _rotationTriggered;
 
     void OnDrawGizmos()
     {
@@ -46,11 +60,9 @@ public class PlayerCombatMelee : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, meleeInnerRange);
     }
 
-
     public void Initialize(LayerMask targetLayer)
     {
         ResetCombo();
-
         _targetLayer = targetLayer;
     }
 
@@ -58,8 +70,10 @@ public class PlayerCombatMelee : MonoBehaviour
     {
         // Reset Everything
         _comboTimer = 0f;
-        //_dashTimer = 0f;
+        _movementTimer = 0f;
+
         _alreadyHit.Clear();
+        _directionCaptured = false;
         _rotationTriggered = false;
 
         // Update Combo Counter
@@ -71,6 +85,7 @@ public class PlayerCombatMelee : MonoBehaviour
         animationController.TriggerMeleeAnimation(_comboCounter);
     }
 
+    // Update()
     public void Attack(ref CombatState state, ref bool meleeStarted, ref bool inputEnabled, float deltaTime)
     {
         // Exit Melee State once timer exceeds combo input buffer
@@ -85,9 +100,45 @@ public class PlayerCombatMelee : MonoBehaviour
         // Only increment timer while inputs are enabled
         // (inputs are disabled during melee animation and enabled afterwards)
         if (inputEnabled) _comboTimer += deltaTime;
+        
+        _movementTimer += deltaTime;
 
-        // Update Player Rotation
-        var direction = (state.Target - transform.position).normalized;
+
+        #region *- Target Tracking Implementation ----------*
+        // "Where are we moving towards?"
+        var outerHits = Physics.OverlapSphereNonAlloc
+        (
+            transform.position,
+            meleeOuterRange,
+            _outer,
+            _targetLayer
+        );
+        var innerHits = Physics.OverlapSphereNonAlloc
+        (
+            transform.position,
+            meleeInnerRange,
+            _inner,
+            _targetLayer
+        );
+        // * tracking logic goes here *
+        #endregion
+
+
+        // Snapshot target direction
+        var direction = transform.forward;
+        if (!_directionCaptured)
+        {
+            _directionCaptured = true;
+            direction = (state.Target - transform.position).normalized;
+        }
+
+        // Update Velocity
+        _velocity = direction * speed;
+        _velocity = _movementTimer < duration ? _velocity : Vector3.zero;   // reset velocity if duration is up
+        _velocity = innerHits == 0 ? _velocity : Vector3.zero;              // reset velocity if target reached inner range
+        Player.Instance.SetVelocity(_velocity, acceleration);
+
+        // Apply Rotation
         if (!_rotationTriggered)
         {
             _rotationTriggered = true;
@@ -132,7 +183,7 @@ public class PlayerCombatMelee : MonoBehaviour
     {
         _comboCounter   = 0;
         _comboTimer     = 0f;
-        //_dashTimer      = 0f;
+        _movementTimer  = 0f;
     }
 
     public void HitboxEnabled(bool b) => _hitboxEnabled = b;
