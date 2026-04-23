@@ -68,7 +68,7 @@ public class PlayerAnimationController : MonoBehaviour
     }
 
     // Toggles "HitstunActive" bool
-    public void HitstunEnabled(bool b)
+    public void HitstunActive(bool b)
     {
         _animator.SetBool("HitstunActive", b);
     }

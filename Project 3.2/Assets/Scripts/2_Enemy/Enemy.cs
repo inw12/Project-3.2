@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     private float _currentHealth;
 
     private Rigidbody _rb;
+    private Coroutine _hitstunCoroutine;
     private Coroutine _knockbackCoroutine;
 
     // Animator Parameters
@@ -41,7 +42,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
     void LateUpdate()
     {
-        var deltaTime = Time.deltaTime;
+        var deltaTime = Time.deltaTime * _timeScale;
 
         if (hitFeedback) hitFeedback.UpdateEnemyModel(deltaTime);
     }
@@ -83,15 +84,16 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     private IEnumerator KnockbackRoutine(Vector3 direction, float force, float duration)
     {
         var elapsed = 0f;
+        var deltaTime = Time.deltaTime * _timeScale;
 
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            elapsed += deltaTime;
             var progress = elapsed / duration;
 
             // Ease out: full force at the start, tapering to zero
             var currentForce = Mathf.Lerp(force, 0f, progress);
-            var movement = currentForce * Time.deltaTime * direction;
+            var movement = currentForce * deltaTime * direction;
 
             _rb.MovePosition(_rb.position + movement);
 
@@ -109,8 +111,17 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
     public IEnumerator TriggerHitstun(float duration)
     {
-        throw new System.NotImplementedException();
+        _timeScale = 0f;
+        _inHitstun = true;
+        yield return new WaitForSeconds(duration);
+        _timeScale = 1f;
+        _inHitstun = false;
     }
     #endregion
 
+
+    #region *--- Public Accessors ----------------------------------------*
+    // Set TimeScale
+    public void SetTimeScale(float t) => _timeScale = t;
+    #endregion
 }
