@@ -2508,10 +2508,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 465282853641004578, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      propertyPath: targetLayer.m_Bits
-      value: 512
-      objectReference: {fileID: 0}
     - target: {fileID: 3338105584848229232, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -2617,6 +2613,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Enemy::Enemy
   hitFeedback: {fileID: 7589204453462019192}
+  animator: {fileID: 5959376552719597359}
   maxHealth: 100
 --- !u!114 &7589204453462019192
 MonoBehaviour:

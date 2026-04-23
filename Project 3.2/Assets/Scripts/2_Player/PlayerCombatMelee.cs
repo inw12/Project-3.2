@@ -28,6 +28,10 @@ public class PlayerCombatMelee : MonoBehaviour
     [SerializeField] private float hitboxRadius;
     private bool _hitboxEnabled;
     private readonly HashSet<Collider> _alreadyHit = new(); // records hitbox collisions as they happen (avoids duplicate collision effects)
+    
+    [Header("Knockback")]
+    [SerializeField] private float knockbackStrength = 10f;
+    [SerializeField] private float knockbackDuration = 0.2f;
 
     [Header("Combo")]
     [SerializeField] private float comboBuffer = 0.4f;
@@ -166,14 +170,15 @@ public class PlayerCombatMelee : MonoBehaviour
             {
                 var hit = _hits[0];
                 
-                if (hit.TryGetComponent(out IDamageable e))
-                {
-                    // 1. Apply Damage
+                // 1. Try applying damage
+                if (hit.TryGetComponent(out IDamageable e)) {
                     e.DecreaseHealth(damage);
+                }
 
-                    // 2. Try applying Hitstun
-
-                    // 3. Try applying Knockback
+                // 2. Try applying knockback
+                if (hit.TryGetComponent(out IKnockable k))
+                {
+                    k.TriggerKnockback(transform.forward, knockbackStrength, knockbackDuration);
                 }
             }
         }

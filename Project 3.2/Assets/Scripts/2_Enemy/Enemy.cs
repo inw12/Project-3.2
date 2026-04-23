@@ -5,12 +5,17 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 {
     [Header("Enemy Components")]
     [SerializeField] private EnemyHitFeedback hitFeedback;
+    [SerializeField] private Animator animator;
 
     [Header("Stats")]
     [SerializeField] private float maxHealth = 100f;
     private float _currentHealth;
 
     private Rigidbody _rb;
+    private Coroutine _knockbackCoroutine;
+
+    // Animator Parameters
+    private static readonly int KnockbackTrigger = Animator.StringToHash("KnockbackTrigger");
 
     // Hitstun 
     private float _timeScale;
@@ -61,9 +66,39 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
 
     #region *--- 'IKnockable' ----------------------------------------*
-    public void TriggerKnockback(Vector3 direction, float amount)
+    public void TriggerKnockback(Vector3 direction, float force, float duration)
     {
-        throw new System.NotImplementedException();
+        // Interupt coroutine if previously running
+        if (_knockbackCoroutine != null) StopCoroutine(_knockbackCoroutine);
+
+        // Trigger knockback animation
+        animator.SetTrigger(KnockbackTrigger);
+
+        // Rotation enemy towards player
+        _rb.MoveRotation(Quaternion.LookRotation(-direction));
+
+        // Start knockback coroutine
+        _knockbackCoroutine = StartCoroutine(KnockbackRoutine(direction, force, duration));
+    }
+    private IEnumerator KnockbackRoutine(Vector3 direction, float force, float duration)
+    {
+        var elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            var progress = elapsed / duration;
+
+            // Ease out: full force at the start, tapering to zero
+            var currentForce = Mathf.Lerp(force, 0f, progress);
+            var movement = currentForce * Time.deltaTime * direction;
+
+            _rb.MovePosition(_rb.position + movement);
+
+            yield return null;
+        }
+
+        _knockbackCoroutine = null;
     }
     #endregion
 
