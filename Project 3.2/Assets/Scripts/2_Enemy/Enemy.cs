@@ -1,8 +1,11 @@
 using UnityEngine;
 using System.Collections;
+using System;
 [RequireComponent(typeof(Rigidbody))]
 public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 {
+    public event Action OnDeath;
+
     [Header("Enemy Components")]
     [SerializeField] private EnemyHitFeedback hitFeedback;
     [SerializeField] private Animator animator;
@@ -60,6 +63,11 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
         if (hitFeedback) hitFeedback.TriggerHitFeedback();
 
         Debug.Log($"Current HP: {_currentHealth} / {maxHealth}");
+
+        if (_currentHealth <= 0f)
+        {
+            OnDeath?.Invoke();
+        }
     }
     public void IncreaseHealth(float amount)
     {
