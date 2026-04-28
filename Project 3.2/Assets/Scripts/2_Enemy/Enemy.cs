@@ -142,6 +142,6 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
 
     #region *--- Animator Access ------------------------------*
-
+    public void SetTrigger(string s) => animator.SetTrigger(s);
     #endregion
 }

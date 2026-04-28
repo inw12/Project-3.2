@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -37,6 +38,13 @@ public class CombatManager : MonoBehaviour
         );
 
         cameraManager.SwitchTo<FocusCamera>();
+
+        StartCoroutine(ParryPhaseRoutine());
+    }
+    private IEnumerator ParryPhaseRoutine()
+    {
+        yield return new WaitForSeconds(1f);
+        enemy.SetTrigger("ComboTrigger");
     }
 
     public void ExitParryPhase()
