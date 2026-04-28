@@ -215,6 +215,8 @@ public class PlayerMovement : MonoBehaviour
     #region *--- Public Getters ----------------------------------------------------*
     public MovementState GetState() => _state;
     public MovementState GetPrevState() => _prevState;
+
+    public bool MovementInputEnabled() => _movementInputEnabled;
     #endregion
 
 
@@ -229,10 +231,14 @@ public class PlayerMovement : MonoBehaviour
             // Stop any character movement
             _requestedMovement = _state.Velocity = Vector3.zero;
             _state.CurrentAction = MovementAction.Idle;
+
+            // Disable Character Controller Component
+            CharacterControllerActive(false);
         }
         else
         {
             _movementInputEnabled = b;
+            CharacterControllerActive(true);
         }
     }
     public void SetVelocity(Vector3 velocity, float acceleration)
@@ -245,5 +251,7 @@ public class PlayerMovement : MonoBehaviour
         );
     }
     public void SetRotation(Quaternion rotation) => transform.rotation = rotation;
+    // Toggles Character Controller Component
+    public void CharacterControllerActive(bool b) => _controller.enabled = b;
     #endregion
 }

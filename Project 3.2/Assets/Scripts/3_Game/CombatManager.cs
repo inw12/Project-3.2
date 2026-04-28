@@ -7,8 +7,10 @@ public class CombatManager : MonoBehaviour
     [Header("Main Enemy")]
     [SerializeField] private Enemy enemy;
 
-    [Header("Parry Phase")]
+    [Header("Parry Phase Sequencing")]
     [SerializeField] private TimelineAsset parryPhaseSequence;
+    [SerializeField] private Transform enemyPosition;
+    [SerializeField] private Transform playerPosition;
     private PlayableDirector _director;
 
     [Header("Camera")]
@@ -22,6 +24,18 @@ public class CombatManager : MonoBehaviour
 
     public void EnterParryPhase()
     {
+        Player.Instance.InputEnabled(false);
+        Player.Instance.ParryInputEnabled(true);
+
+        Player.Instance.transform.SetPositionAndRotation(
+            playerPosition.position,
+            playerPosition.rotation
+        );
+        enemy.transform.SetPositionAndRotation(
+            enemyPosition.position,
+            enemyPosition.rotation
+        );
+
         cameraManager.SwitchTo<FocusCamera>();
     }
 

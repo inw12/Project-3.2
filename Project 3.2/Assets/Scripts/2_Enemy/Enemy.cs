@@ -26,6 +26,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     private float _timeScale;
     private bool _inHitstun;
 
+
     void Start()
     {
         // Initialize Components
@@ -137,5 +138,10 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     #region *--- Public Accessors ----------------------------------------*
     // Set TimeScale
     public void SetTimeScale(float t) => _timeScale = t;
+    #endregion
+
+
+    #region *--- Animator Access ------------------------------*
+
     #endregion
 }
