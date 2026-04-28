@@ -513,6 +513,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Game::CombatManager
   enemy: {fileID: 7589204453462019191}
+  enemyCombo: {fileID: 8037206068912205258}
   parryPhaseSequence: {fileID: 0}
   enemyPosition: {fileID: 1385405019}
   playerPosition: {fileID: 928788602}

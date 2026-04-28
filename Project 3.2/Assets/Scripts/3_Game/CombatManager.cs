@@ -7,6 +7,7 @@ public class CombatManager : MonoBehaviour
 {
     [Header("Main Enemy")]
     [SerializeField] private Enemy enemy;
+    [SerializeField] private EnemyCombo enemyCombo;
 
     [Header("Parry Phase Sequencing")]
     [SerializeField] private TimelineAsset parryPhaseSequence;
@@ -21,6 +22,7 @@ public class CombatManager : MonoBehaviour
     {
         _director = GetComponent<PlayableDirector>();
         if (enemy) enemy.OnDeath += EnterParryPhase;
+        if (enemyCombo) enemyCombo.OnComboEnd += ExitParryPhase;
     }
 
     public void EnterParryPhase()
@@ -49,7 +51,8 @@ public class CombatManager : MonoBehaviour
 
     public void ExitParryPhase()
     {
-        
+        Player.Instance.InputEnabled(true);
+        cameraManager.SwitchTo<DefaultCamera>();
     }
 
     public void PlayPlayerFinisher()
@@ -60,5 +63,6 @@ public class CombatManager : MonoBehaviour
     void OnDestroy()
     {
         if (enemy) enemy.OnDeath -= EnterParryPhase;
+        if (enemyCombo) enemyCombo.OnComboEnd -= ExitParryPhase;
     }
 }

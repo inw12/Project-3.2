@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 public class EnemyCombo : MonoBehaviour
@@ -17,6 +18,11 @@ public class EnemyCombo : MonoBehaviour
     private readonly Collider[] _hits   = new Collider[10];   
     private readonly HashSet<Collider> _alreadyHit = new(); 
 
+    private int _comboCount;
+    private int _parryCount;
+
+    public event Action OnComboEnd;
+
     void OnDrawGizmos()
     {
         if (!ShowDebug) return;
@@ -28,10 +34,20 @@ public class EnemyCombo : MonoBehaviour
         }
     }
 
+    void OnGUI()
+    {
+        if (!ShowDebug) return;
+
+        GUILayout.Label($"Hits: {_comboCount}");
+        GUILayout.Label($"Parries: {_parryCount}");
+    }
+
     void Awake()
     {
         _hurtboxLayer = LayerMask.NameToLayer("PlayerHurtbox");
         _parryboxLayer = LayerMask.NameToLayer("PlayerParrybox");
+
+        _comboCount = _parryCount = 0;
     }
 
     void Update()
@@ -55,15 +71,17 @@ public class EnemyCombo : MonoBehaviour
 
                 if (_alreadyHit.Add(hit))
                 {
-                    // Search for Parry collision
+                    // PARRY Collisions
                     if (layer == _parryboxLayer)
                     {
                         if (hit.TryGetComponent(out IParrybox p))
                         {
                             p.TriggerParry();
+
+                            _parryCount++;
                         }
                     }
-                    // Search for Hurtbox collision
+                    // HURTBOX Collisions
                     else if (layer == _hurtboxLayer)
                     {
                         if (hit.TryGetComponent(out IDamageable e))
@@ -81,9 +99,14 @@ public class EnemyCombo : MonoBehaviour
     {
         _alreadyHit.Clear();
         _hitboxEnabled = true;
+        _comboCount++;
     }
     public void DisableHitbox()
     {
         _hitboxEnabled = false;
+    }
+    public void CheckForExit()  // check for end of combo phase
+    {
+        OnComboEnd?.Invoke();
     }
 }
