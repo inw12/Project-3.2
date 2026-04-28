@@ -8,6 +8,7 @@
 ///     - ComboCount            (int)
 ///     - HitstunActive         (bool)
 ///     - ParryTrigger          (Trigger)
+///     - HitTrigger            (Trigger)
 /// ************************************************
 
 using UnityEngine;
