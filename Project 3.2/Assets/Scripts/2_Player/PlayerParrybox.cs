@@ -1,6 +1,6 @@
 using UnityEngine;
 [RequireComponent(typeof(CapsuleCollider))]
-public class PlayerParrybox : MonoBehaviour
+public class PlayerParrybox : MonoBehaviour, IParrybox
 {
     [SerializeField] private float parryDuration = 0.5f;
     [SerializeField] private float parryCooldown = 1f;
@@ -63,6 +63,8 @@ public class PlayerParrybox : MonoBehaviour
     }
     public void TriggerParry()
     {
+        _cooldownTimer = parryCooldown;
+
         // Update Animator
         _animationController.TriggerParry();
 

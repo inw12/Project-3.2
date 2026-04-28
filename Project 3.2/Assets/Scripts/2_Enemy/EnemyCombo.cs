@@ -10,6 +10,8 @@ public class EnemyCombo : MonoBehaviour
     [SerializeField] private float hitboxRadius;
     [Space]
     [SerializeField] private LayerMask targetLayer;
+    private int _hurtboxLayer;  // player hurtbox
+    private int _parryboxLayer; // player parrybox
 
     private bool _hitboxEnabled;
     private readonly Collider[] _hits   = new Collider[10];   
@@ -26,6 +28,12 @@ public class EnemyCombo : MonoBehaviour
         }
     }
 
+    void Awake()
+    {
+        _hurtboxLayer = LayerMask.NameToLayer("PlayerHurtbox");
+        _parryboxLayer = LayerMask.NameToLayer("PlayerParrybox");
+    }
+
     void Update()
     {
         if (_hitboxEnabled)
@@ -39,16 +47,29 @@ public class EnemyCombo : MonoBehaviour
                 targetLayer
             );
 
-            // Trigger hit 
+            // Trigger hit (if detected)
             if (hits > 0)
             {
                 var hit = _hits[0];
+                var layer = hit.gameObject.layer;
 
                 if (_alreadyHit.Add(hit))
                 {
-                    if (hit.TryGetComponent(out IDamageable e))
+                    // Search for Parry collision
+                    if (layer == _parryboxLayer)
                     {
-                        e.DecreaseHealth(damage);
+                        if (hit.TryGetComponent(out IParrybox p))
+                        {
+                            p.TriggerParry();
+                        }
+                    }
+                    // Search for Hurtbox collision
+                    else if (layer == _hurtboxLayer)
+                    {
+                        if (hit.TryGetComponent(out IDamageable e))
+                        {
+                            e.DecreaseHealth(damage);
+                        }
                     }
                 }
             }
