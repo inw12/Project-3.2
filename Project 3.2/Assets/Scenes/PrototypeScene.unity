@@ -938,6 +938,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TrainingDummy
       objectReference: {fileID: 0}
+    - target: {fileID: 4481789441953731918, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
+      propertyPath: maxHealth
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5448100723142779783, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

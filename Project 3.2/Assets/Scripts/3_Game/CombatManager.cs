@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Codice.CM.Common.Serialization;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Timeline;
@@ -53,6 +55,11 @@ public class CombatManager : MonoBehaviour
     {
         Player.Instance.InputEnabled(true);
         cameraManager.SwitchTo<DefaultCamera>();
+
+        if (enemy.TryGetComponent(out IDamageable e))
+        {
+            e.IncreaseHealth(float.MaxValue);
+        }
     }
 
     public void PlayPlayerFinisher()
