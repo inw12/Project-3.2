@@ -29,6 +29,7 @@ public class CombatManager : MonoBehaviour
 
     public void EnterParryPhase()
     {
+        Player.Instance.SetToIdle();
         Player.Instance.InputEnabled(false);
         Player.Instance.ParryInputEnabled(true);
 

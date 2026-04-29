@@ -162,4 +162,15 @@ public class Player : MonoBehaviour
     // Combat Action Setter
     public void SetCurrentCombatAction(CombatAction action) => playerCombat.SetCurrentCombatAction(action);
     #endregion
+
+
+    #region *--- Animation Controller Access ----------*
+    public void SetToIdle() 
+    {
+        playerMovement.ExitMovementState();
+        playerCombat.ExitCombatState();
+        animationController.UpdateAnimator();
+        animationController.SetToIdle();
+    }
+    #endregion
 }
