@@ -31,6 +31,7 @@ public class PlayerCombat : MonoBehaviour
     private PlayerCombatMelee _meleeAttack;
 
     private bool _combatInputEnabled;
+    private bool _parryInputEnabled;
 
     // Requested Inputs
     private bool _requestedRanged;
@@ -56,7 +57,7 @@ public class PlayerCombat : MonoBehaviour
         _meleeAttack.Initialize(targetLayer);
         parrybox.Initialize(animationController, hurtbox);
 
-        _combatInputEnabled = true;
+        _combatInputEnabled = _parryInputEnabled = true;
 
         _state.CurrentAction = CombatAction.None;
         _state.Target = Vector3.forward;
@@ -66,22 +67,28 @@ public class PlayerCombat : MonoBehaviour
     // Update()
     public void UpdateInput(CombatInput input)
     {
-        if (_combatInputEnabled && Player.Instance.GetCurrentMovementAction() is not MovementAction.Roll)
+        if (Player.Instance.GetCurrentMovementAction() is not MovementAction.Roll)
         {
-            // Parry should only be available if the button is pressed
-            //  AND we're not performing a melee attack
-            _requestedParry = (input.Parry && _state.CurrentAction is not CombatAction.Melee) || _requestedParry;
+            if (_combatInputEnabled || _parryInputEnabled)
+            {
+                // Parry should only be available if the button is pressed
+                //  AND we're not performing a melee attack
+                _requestedParry = (input.Parry && _state.CurrentAction is not CombatAction.Melee) || _requestedParry;
+            }
 
-            // Melee attack should only be available if the button is pressed
-            //  AND we're not performing a parry
-            _requestedMelee = input.Melee && _state.CurrentAction is not CombatAction.Parry;
+            if (_combatInputEnabled)
+            {
+                // Melee attack should only be available if the button is pressed
+                //  AND we're not performing a parry
+                _requestedMelee = input.Melee && _state.CurrentAction is not CombatAction.Parry;
 
-            // Ranged attack should only be available if the button is pressed
-            //  AND we're not performing a melee attack
-            //  AND we're not performing a parry
-            _requestedRanged = input.Ranged && _state.CurrentAction is not CombatAction.Melee or CombatAction.Parry;
+                // Ranged attack should only be available if the button is pressed
+                //  AND we're not performing a melee attack
+                //  AND we're not performing a parry
+                _requestedRanged = input.Ranged && _state.CurrentAction is not CombatAction.Melee or CombatAction.Parry;
 
-            _requestedMousePosition = input.MousePosition;
+                _requestedMousePosition = input.MousePosition;
+            }
         }
         else
         {
@@ -178,6 +185,9 @@ public class PlayerCombat : MonoBehaviour
 
     // CombatAction Setters
     public void SetCurrentCombatAction(CombatAction action) => _state.CurrentAction = action;
+
+    public bool CombatInputEnabled() => _combatInputEnabled;
+    public bool ParryInputEnabled() => _parryInputEnabled;
     #endregion
 
 
@@ -189,8 +199,18 @@ public class PlayerCombat : MonoBehaviour
     {
         if (!b)
             _combatInputEnabled = _requestedMelee = _requestedRanged = _requestedParry = false;
-        else 
+        else
             _combatInputEnabled = b;
+    }
+    public void ParryInputEnabled(bool b)
+    {
+        _parryInputEnabled = b;
+    }
+    public void ExitCombatState()
+    {
+        _state.CurrentAction = CombatAction.None;
+        _parryStarted = false;
+        _meleeStarted = false;
     }
     public void MeleeHitboxEnabled(bool b) => _meleeAttack.HitboxEnabled(b);
     /// * Enable/Disable ATTACK inputs

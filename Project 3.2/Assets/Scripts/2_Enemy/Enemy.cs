@@ -1,8 +1,11 @@
 using UnityEngine;
 using System.Collections;
+using System;
 [RequireComponent(typeof(Rigidbody))]
 public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 {
+    public event Action OnDeath;
+
     [Header("Enemy Components")]
     [SerializeField] private EnemyHitFeedback hitFeedback;
     [SerializeField] private Animator animator;
@@ -22,6 +25,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     // Hitstun 
     private float _timeScale;
     private bool _inHitstun;
+
 
     void Start()
     {
@@ -60,6 +64,11 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
         if (hitFeedback) hitFeedback.TriggerHitFeedback();
 
         Debug.Log($"Current HP: {_currentHealth} / {maxHealth}");
+
+        if (_currentHealth <= 0f)
+        {
+            OnDeath?.Invoke();
+        }
     }
     public void IncreaseHealth(float amount)
     {
@@ -129,5 +138,10 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     #region *--- Public Accessors ----------------------------------------*
     // Set TimeScale
     public void SetTimeScale(float t) => _timeScale = t;
+    #endregion
+
+
+    #region *--- Animator Access ------------------------------*
+    public void SetTrigger(string s) => animator.SetTrigger(s);
     #endregion
 }

@@ -30,6 +30,9 @@ public class Player : MonoBehaviour
         if (!ShowDebug) return;
         GUILayout.Label($"Movement Action: {GetCurrentMovementAction()}");
         GUILayout.Label($"Combat Action: {GetCurrentCombatAction()}");
+        GUILayout.Label($"Movement Input Enabled: {playerMovement.MovementInputEnabled()}");
+        GUILayout.Label($"Combat Input Enabled: {playerCombat.CombatInputEnabled()}");
+        GUILayout.Label($"Parry Input Enabled: {playerCombat.ParryInputEnabled()}");
     }
 
 
@@ -123,27 +126,55 @@ public class Player : MonoBehaviour
     void OnDisable() => _input.Dispose();
 
 
-    #region *--- Public Getters --------------------------------------------------*
+    #region *--- Player Input Access --------------------------------------------------*
+    // ALL Inputs
+    public void InputEnabled(bool b) 
+    {
+        MovementInputEnabled(b);
+        CombatInputEnabled(b);
+    }
+    // Movement Inputs
+    public void MovementInputEnabled(bool b) => playerMovement.MovementInputEnabled(b);
+    // Combat Inputs
+    public void CombatInputEnabled(bool b) => playerCombat.CombatInputEnabled(b);
+    // Parry Input
+    public void ParryInputEnabled(bool b) => playerCombat.ParryInputEnabled(b);
+    #endregion
+
+
+    #region *--- Current Action Getters --------------------------------------------------*
     public MovementAction GetCurrentMovementAction() => playerMovement.GetState().CurrentAction;
     public CombatAction GetCurrentCombatAction() => playerCombat.GetState().CurrentAction;
     #endregion
 
 
     #region *--- 'PlayerMovement' Access ----------------------*
-    // Toggle Movement Input
-    public void MovementInputEnabled(bool b) => playerMovement.MovementInputEnabled(b);
     // Set Velocity
     public void SetVelocity(Vector3 velocity, float acceleration) => playerMovement.SetVelocity(velocity, acceleration);
     // Set Rotation
     public void SetRotation(Quaternion rotation) => playerMovement.SetRotation(rotation);
+    // CharacterController Toggle
+    public void CharacterControllerEnabled(bool b) => playerMovement.CharacterControllerEnabled(b);
     #endregion
 
+
     #region *--- 'PlayerCombat' Access ----------------------*
-    // Toggle Combat Input 
-    public void CombatInputEnabled(bool b) => playerCombat.CombatInputEnabled(b);
     // Toggle Melee Hitbox
     public void MeleeHitboxEnabled(bool b) => playerCombat.MeleeHitboxEnabled(b);
     // Combat Action Setter
     public void SetCurrentCombatAction(CombatAction action) => playerCombat.SetCurrentCombatAction(action);
     #endregion
+
+
+    #region *--- Animation Controller Access ----------*
+    public void SetBoolean(string s, bool b) => animationController.SetBoolean(s, b);
+    #endregion
+
+    public void SetToIdle() 
+    {
+        playerMovement.ExitMovementState();
+        playerCombat.ExitCombatState();
+        animationController.UpdateAnimator();
+        animationController.SetToIdle();
+    }
 }

@@ -189,7 +189,7 @@ public class PlayerCombatMelee : MonoBehaviour
                     {
                         _hitstunActive = true;
                         _hitstunTimer = 0f;
-                        animationController.HitstunActive(_hitstunActive);
+                        animationController.SetHitstunActive(_hitstunActive);
 
                         var targetDuration = _comboCounter == 4 ? hitstunDuration * finalHitHitstunMultiplier : hitstunDuration;
 
@@ -213,12 +213,12 @@ public class PlayerCombatMelee : MonoBehaviour
             if (_hitstunTimer >= hitstunDuration)
             {
                 _hitstunActive = false;
-                animationController.HitstunActive(_hitstunActive);
+                animationController.SetHitstunActive(_hitstunActive);
             }
         }
     }
 
-    private void ResetCombo()
+    public void ResetCombo()
     {
         _comboCounter   = 0;
         _comboTimer     = 0f;

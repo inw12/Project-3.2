@@ -215,6 +215,8 @@ public class PlayerMovement : MonoBehaviour
     #region *--- Public Getters ----------------------------------------------------*
     public MovementState GetState() => _state;
     public MovementState GetPrevState() => _prevState;
+
+    public bool MovementInputEnabled() => _movementInputEnabled;
     #endregion
 
 
@@ -244,6 +246,13 @@ public class PlayerMovement : MonoBehaviour
             1f - Mathf.Exp(-acceleration * Time.fixedDeltaTime)
         );
     }
+    public void ExitMovementState()
+    {
+        _state.CurrentAction = MovementAction.Idle;
+        _state.Velocity = Vector3.zero;
+    }
     public void SetRotation(Quaternion rotation) => transform.rotation = rotation;
+    // Toggles Character Controller Component
+    public void CharacterControllerEnabled(bool b) => _controller.enabled = b;
     #endregion
 }
