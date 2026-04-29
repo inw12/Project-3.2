@@ -231,14 +231,10 @@ public class PlayerMovement : MonoBehaviour
             // Stop any character movement
             _requestedMovement = _state.Velocity = Vector3.zero;
             _state.CurrentAction = MovementAction.Idle;
-
-            // Disable Character Controller Component
-            CharacterControllerActive(false);
         }
         else
         {
             _movementInputEnabled = b;
-            CharacterControllerActive(true);
         }
     }
     public void SetVelocity(Vector3 velocity, float acceleration)
@@ -257,6 +253,6 @@ public class PlayerMovement : MonoBehaviour
     }
     public void SetRotation(Quaternion rotation) => transform.rotation = rotation;
     // Toggles Character Controller Component
-    public void CharacterControllerActive(bool b) => _controller.enabled = b;
+    public void CharacterControllerEnabled(bool b) => _controller.enabled = b;
     #endregion
 }

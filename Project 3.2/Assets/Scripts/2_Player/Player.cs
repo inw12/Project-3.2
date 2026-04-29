@@ -153,6 +153,8 @@ public class Player : MonoBehaviour
     public void SetVelocity(Vector3 velocity, float acceleration) => playerMovement.SetVelocity(velocity, acceleration);
     // Set Rotation
     public void SetRotation(Quaternion rotation) => playerMovement.SetRotation(rotation);
+    // CharacterController Toggle
+    public void CharacterControllerEnabled(bool b) => playerMovement.CharacterControllerEnabled(b);
     #endregion
 
 

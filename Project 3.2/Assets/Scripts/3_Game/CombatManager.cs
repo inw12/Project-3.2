@@ -31,6 +31,7 @@ public class CombatManager : MonoBehaviour
     {
         Player.Instance.SetToIdle();
         Player.Instance.InputEnabled(false);
+        Player.Instance.CharacterControllerEnabled(false);
         Player.Instance.ParryInputEnabled(true);
         Player.Instance.SetBoolean("InParryPhase", true);
 
@@ -56,6 +57,7 @@ public class CombatManager : MonoBehaviour
     public void ExitParryPhase()
     {
         Player.Instance.InputEnabled(true);
+        Player.Instance.CharacterControllerEnabled(true);
         Player.Instance.SetBoolean("InParryPhase", false);
         cameraManager.SwitchTo<DefaultCamera>();
 

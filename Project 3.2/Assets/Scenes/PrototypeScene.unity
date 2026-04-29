@@ -1000,7 +1000,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1754191947011916880, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: ShowDebug
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3338105584848229232, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: m_Name
