@@ -535,6 +535,30 @@ PlayableDirector:
   m_SceneBindings: []
   m_ExposedReferences:
     m_References: []
+--- !u!1 &686097330 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6335985312391173036, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
+  m_PrefabInstance: {fileID: 7439229689161145460}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &686097331 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 9194126192834368291, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
+  m_PrefabInstance: {fileID: 7439229689161145460}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &686097333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 686097330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa973d66cb8c448acbdeefbe4ffe1bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::PlayerHurtbox
+  ShowDebug: 0
+  maxHealth: 100
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -999,9 +1023,17 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1754191947011916880, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
+      propertyPath: hurtbox
+      value: 
+      objectReference: {fileID: 686097333}
+    - target: {fileID: 1754191947011916880, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: ShowDebug
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1754191947011916880, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
+      propertyPath: hurtboxCollider
+      value: 
+      objectReference: {fileID: 686097331}
     - target: {fileID: 3338105584848229232, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1049,7 +1081,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6335985312391173036, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 686097333}
   m_SourcePrefab: {fileID: 100100000, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
 --- !u!114 &7589204453462019191 stripped
 MonoBehaviour:
