@@ -998,6 +998,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1754191947011916880, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
+      propertyPath: ShowDebug
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3338105584848229232, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1070,7 +1074,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b371238ad03b140adb8e54fe03e4d8c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Enemy::EnemyCombo
-  ShowDebug: 1
+  ShowDebug: 0
   damage: 5
   hitboxSpawn: {fileID: 1875041810}
   hitboxRadius: 2

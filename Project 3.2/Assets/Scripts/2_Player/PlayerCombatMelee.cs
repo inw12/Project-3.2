@@ -218,7 +218,7 @@ public class PlayerCombatMelee : MonoBehaviour
         }
     }
 
-    private void ResetCombo()
+    public void ResetCombo()
     {
         _comboCounter   = 0;
         _comboTimer     = 0f;

@@ -32,6 +32,7 @@ public class CombatManager : MonoBehaviour
         Player.Instance.SetToIdle();
         Player.Instance.InputEnabled(false);
         Player.Instance.ParryInputEnabled(true);
+        Player.Instance.SetBoolean("InParryPhase", true);
 
         Player.Instance.transform.SetPositionAndRotation(
             playerPosition.position,
@@ -55,6 +56,7 @@ public class CombatManager : MonoBehaviour
     public void ExitParryPhase()
     {
         Player.Instance.InputEnabled(true);
+        Player.Instance.SetBoolean("InParryPhase", false);
         cameraManager.SwitchTo<DefaultCamera>();
 
         if (enemy.TryGetComponent(out IDamageable e))

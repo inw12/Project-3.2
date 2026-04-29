@@ -10,9 +10,11 @@ public class ParryBehavior : StateMachineBehaviour
     }
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Player.Instance.MovementInputEnabled(true);
-        Player.Instance.CombatInputEnabled(true);
-
+        if (!animator.GetBool("InParryPhase"))
+        {
+            Player.Instance.MovementInputEnabled(true);
+            Player.Instance.CombatInputEnabled(true);
+        }
         Player.Instance.SetCurrentCombatAction(CombatAction.None);
     }
 }

@@ -28,11 +28,11 @@ public class Player : MonoBehaviour
     void OnGUI()
     {
         if (!ShowDebug) return;
-        //GUILayout.Label($"Movement Action: {GetCurrentMovementAction()}");
-        //GUILayout.Label($"Combat Action: {GetCurrentCombatAction()}");
+        GUILayout.Label($"Movement Action: {GetCurrentMovementAction()}");
+        GUILayout.Label($"Combat Action: {GetCurrentCombatAction()}");
         GUILayout.Label($"Movement Input Enabled: {playerMovement.MovementInputEnabled()}");
         GUILayout.Label($"Combat Input Enabled: {playerCombat.CombatInputEnabled()}");
-        GUILayout.Label($"Combat Input Enabled: {playerCombat.ParryInputEnabled()}");
+        GUILayout.Label($"Parry Input Enabled: {playerCombat.ParryInputEnabled()}");
     }
 
 
@@ -165,6 +165,9 @@ public class Player : MonoBehaviour
 
 
     #region *--- Animation Controller Access ----------*
+    public void SetBoolean(string s, bool b) => animationController.SetBoolean(s, b);
+    #endregion
+
     public void SetToIdle() 
     {
         playerMovement.ExitMovementState();
@@ -172,5 +175,4 @@ public class Player : MonoBehaviour
         animationController.UpdateAnimator();
         animationController.SetToIdle();
     }
-    #endregion
 }

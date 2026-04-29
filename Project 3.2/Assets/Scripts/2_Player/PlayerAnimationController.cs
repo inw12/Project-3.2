@@ -78,6 +78,22 @@ public class PlayerAnimationController : MonoBehaviour
         _animator.SetTrigger(ParryTrigger);
     }
 
-    // Sets Animator to 'Idle' and resets ALL parameters
-    public void SetToIdle() => _animator.Play("Idle");
+    // Sets Animator to 'Idle' and resets most parameters
+    public void SetToIdle() 
+    {
+        _animator.Play("Idle");
+        ResetParameters();
+    }
+
+    public void SetBoolean(string s, bool b) => _animator.SetBool(s, b);
+
+    public void ResetParameters()
+    {
+        _animator.SetFloat(xVelocity, 0f);
+        _animator.SetFloat(yVelocity, 0f);
+        _animator.SetInteger(MovementAction, 0);
+        _animator.SetInteger(CombatAction, 0);
+        _animator.SetInteger(ComboCount, 0);
+        _animator.SetBool(HitstunActive, false);
+    }
 }
