@@ -79,6 +79,8 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
 
     #region *--- 'IKnockable' ----------------------------------------*
+    public void TriggerKnockback() => throw new NotImplementedException();
+
     public void TriggerKnockback(Vector3 direction, float force, float duration)
     {
         // Interupt coroutine if previously running

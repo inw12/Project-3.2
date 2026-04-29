@@ -1,5 +1,5 @@
 using UnityEngine;
-public class PlayerHurtbox : MonoBehaviour, IDamageable
+public class PlayerHurtbox : MonoBehaviour, IDamageable, IKnockable
 {
     public bool ShowDebug;
     [Space]
@@ -7,15 +7,18 @@ public class PlayerHurtbox : MonoBehaviour, IDamageable
     [SerializeField] private float maxHealth = 100f;
     private float _currentHealth;
 
+    private PlayerAnimationController _animationController;
+
     void OnGUI()
     {
         if (!ShowDebug) return;
         GUILayout.Label($"Current HP: {_currentHealth} / {maxHealth}");
     }
 
-    public void Initialize()
+    public void Initialize(PlayerAnimationController animationController)
     {
         _currentHealth = maxHealth;
+        _animationController = animationController;
     }
 
     #region *--- 'IDamageable' --------------------------------------------------*
@@ -31,6 +34,17 @@ public class PlayerHurtbox : MonoBehaviour, IDamageable
     {
         _currentHealth += amount;
         _currentHealth = Mathf.Clamp(_currentHealth, 0f, maxHealth);
+    }
+    #endregion
+
+    #region *--- 'IKnockable' --------------------------------------------------*
+    public void TriggerKnockback()
+    {
+        _animationController.SetTrigger("HitTrigger");
+    }
+    public void TriggerKnockback(Vector3 direction, float force, float duration)
+    {
+        throw new System.NotImplementedException();
     }
     #endregion
 }

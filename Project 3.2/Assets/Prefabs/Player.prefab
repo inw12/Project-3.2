@@ -754,7 +754,8 @@ MonoBehaviour:
   playerCombat: {fileID: 465282853641004578}
   animationController: {fileID: 237403034597020557}
   animationRig: {fileID: 7784359779279616290}
-  hurtbox: {fileID: 9194126192834368291}
+  hurtbox: {fileID: 8283261463781057391}
+  hurtboxCollider: {fileID: 9194126192834368291}
   parrybox: {fileID: 9101396590835421816}
   groundLayer:
     serializedVersion: 2
@@ -1849,6 +1850,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5125234054467487124}
   - component: {fileID: 9194126192834368291}
+  - component: {fileID: 8283261463781057391}
   m_Layer: 7
   m_Name: Hurtbox
   m_TagString: Untagged
@@ -1894,6 +1896,20 @@ CapsuleCollider:
   m_Height: 1.8
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &8283261463781057391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6335985312391173036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa973d66cb8c448acbdeefbe4ffe1bfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::PlayerHurtbox
+  ShowDebug: 0
+  maxHealth: 100
 --- !u!1 &6445845333855939819
 GameObject:
   m_ObjectHideFlags: 0

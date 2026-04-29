@@ -535,30 +535,6 @@ PlayableDirector:
   m_SceneBindings: []
   m_ExposedReferences:
     m_References: []
---- !u!1 &686097330 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6335985312391173036, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-  m_PrefabInstance: {fileID: 7439229689161145460}
-  m_PrefabAsset: {fileID: 0}
---- !u!136 &686097331 stripped
-CapsuleCollider:
-  m_CorrespondingSourceObject: {fileID: 9194126192834368291, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-  m_PrefabInstance: {fileID: 7439229689161145460}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &686097333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 686097330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa973d66cb8c448acbdeefbe4ffe1bfe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Player::PlayerHurtbox
-  ShowDebug: 0
-  maxHealth: 100
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,11 +870,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::DefaultCamera
   cameraPosition: {x: 0, y: 12.5, z: -15}
   cameraRotation: {x: 30, y: 0, z: 0}
---- !u!4 &1875041810 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 894150297212142600, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-  m_PrefabInstance: {fileID: 4707600413473519260}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2003432723
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,11 +916,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::BehindPlayerCamera
   cameraPosition: {x: 2, y: 1, z: -4}
   cameraRotation: {x: -5, y: -15, z: 0}
---- !u!1 &1656778423227599917 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1892890549939078670, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-  m_PrefabInstance: {fileID: 4707600413473519260}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4707600413473519260
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -961,10 +927,6 @@ PrefabInstance:
     - target: {fileID: 1354778989664995145, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: m_Name
       value: TrainingDummy
-      objectReference: {fileID: 0}
-    - target: {fileID: 4481789441953731918, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: maxHealth
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5448100723142779783, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1009,10 +971,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1892890549939078670, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8037206068912205258}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
 --- !u!1001 &7439229689161145460
 PrefabInstance:
@@ -1022,18 +981,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1754191947011916880, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      propertyPath: hurtbox
-      value: 
-      objectReference: {fileID: 686097333}
-    - target: {fileID: 1754191947011916880, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      propertyPath: ShowDebug
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1754191947011916880, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      propertyPath: hurtboxCollider
-      value: 
-      objectReference: {fileID: 686097331}
     - target: {fileID: 3338105584848229232, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: m_Name
       value: Player
@@ -1081,10 +1028,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6335985312391173036, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 686097333}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
 --- !u!114 &7589204453462019191 stripped
 MonoBehaviour:
@@ -1097,25 +1041,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc77e21c74de49cbb49eefbaaf4fdd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Enemy::Enemy
---- !u!114 &8037206068912205258
+--- !u!114 &8037206068912205258 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 3403632369631423611, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
+  m_PrefabInstance: {fileID: 4707600413473519260}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1656778423227599917}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b371238ad03b140adb8e54fe03e4d8c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Enemy::EnemyCombo
-  ShowDebug: 0
-  damage: 5
-  hitboxSpawn: {fileID: 1875041810}
-  hitboxRadius: 2
-  targetLayer:
-    serializedVersion: 2
-    m_Bits: 384
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

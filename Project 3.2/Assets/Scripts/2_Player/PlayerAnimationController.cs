@@ -85,6 +85,10 @@ public class PlayerAnimationController : MonoBehaviour
         ResetParameters();
     }
 
+    public void SetTrigger(string s) => _animator.SetTrigger(s);
+
+    // Parameter Get/Set
+    public bool GetBoolean(string s) => _animator.GetBool(s);
     public void SetBoolean(string s, bool b) => _animator.SetBool(s, b);
 
     public void ResetParameters()

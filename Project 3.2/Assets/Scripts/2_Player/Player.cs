@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
         animationRig.Initialize();
 
         // Hurtbox
-        hurtbox.Initialize();
+        hurtbox.Initialize(animationController);
     }
 
     void Update()
@@ -161,6 +161,8 @@ public class Player : MonoBehaviour
     public void SetRotation(Quaternion rotation) => playerMovement.SetRotation(rotation);
     // CharacterController Toggle
     public void CharacterControllerEnabled(bool b) => playerMovement.CharacterControllerEnabled(b);
+    // Exit Movement State
+    public void ExitMovementState() => playerMovement.ExitMovementState();
     #endregion
 
 
@@ -169,6 +171,8 @@ public class Player : MonoBehaviour
     public void MeleeHitboxEnabled(bool b) => playerCombat.MeleeHitboxEnabled(b);
     // Combat Action Setter
     public void SetCurrentCombatAction(CombatAction action) => playerCombat.SetCurrentCombatAction(action);
+    // Exit Combat State
+    public void ExitCombatState() => playerCombat.ExitCombatState();
     #endregion
 
 
