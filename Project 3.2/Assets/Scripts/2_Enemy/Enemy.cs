@@ -57,6 +57,17 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     {
         var deltaTime = Time.deltaTime * _timeScale;
 
+        // Animator
+        var state = enemyAI.GetState();
+        var animationContext = new EnemyAnimatorContext
+        {
+            CurrentAction   = (int)state.CurrentAction,
+            AttackID        = state.AttackID,
+            AttackActive    = state.AttackActive,
+            InHitstun       = _inHitstun
+        };
+        animationController.UpdateAnimator(animationContext);
+
         if (hitFeedback) hitFeedback.UpdateEnemyModel(deltaTime);
     }
 

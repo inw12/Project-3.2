@@ -19,8 +19,6 @@ public enum EnemyAction
 [RequireComponent(typeof(Rigidbody))]
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] private EnemyAnimationController animationController;
-
     [Header("State Machine Control")]
     [SerializeField] private float stateChangeCooldown = 5f;
     private float _cooldownTimer;
@@ -37,13 +35,6 @@ public class EnemyAI : MonoBehaviour
     private Rigidbody _rb;
 
     private float _moveSpeed;
-
-    // Relevant Animator Parameters
-    private static readonly int CurrentAction       = Animator.StringToHash("CurrentAction");
-    private static readonly int AttackID            = Animator.StringToHash("AttackID");
-    private static readonly int AttackTrigger       = Animator.StringToHash("AttackTrigger");
-    private static readonly int AttackActive        = Animator.StringToHash("AttackActive");
-
 
     void OnDrawGizmosSelected()
     {
@@ -77,9 +68,6 @@ public class EnemyAI : MonoBehaviour
             // Change State
             _state.CurrentAction = EnemyAction.Move;
 
-            // Update Animator
-            animationController.SetInteger("CurrentAction", (int)_state.CurrentAction);
-
             // Reset State Machine Cooldown
             _cooldownTimer = 0f;
         }
@@ -95,7 +83,6 @@ public class EnemyAI : MonoBehaviour
             if (_rb.position == _state.MovementTarget)
             {
                 _state.CurrentAction = EnemyAction.Idle;
-                animationController.SetInteger("CurrentAction", (int)_state.CurrentAction);
                 return;
             }
 
