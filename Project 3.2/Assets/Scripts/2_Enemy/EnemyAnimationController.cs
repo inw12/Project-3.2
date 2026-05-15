@@ -47,9 +47,12 @@ public class EnemyAnimationController : MonoBehaviour
     }
 
     #region *--- Public Setters --------------------------------------------------*
+    // Parameter Access
     public void SetInteger(string s, int i) => _animator.SetInteger(s, i);
     public void SetFloat(string s, int i)   => _animator.SetFloat(s, i);
     public void SetBool(string s, bool b)   => _animator.SetBool(s, b);
     public void SetTrigger(string s)        => _animator.SetTrigger(s);
+    // Play Access
+    public void Play(string s)              => _animator.Play(s);
     #endregion
 }

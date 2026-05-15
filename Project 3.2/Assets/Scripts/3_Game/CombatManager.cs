@@ -21,16 +21,20 @@ public class CombatManager : MonoBehaviour
 
     public void EnterParryPhase()
     {
+        // Player
         Player.Instance.SetToIdle();
         Player.Instance.InputEnabled(false);
         Player.Instance.CharacterControllerEnabled(false);
         Player.Instance.ParryInputEnabled(true);
         Player.Instance.SetBoolean("InParryPhase", true);
-
         Player.Instance.transform.SetPositionAndRotation(
             playerPosition.position,
             playerPosition.rotation
         );
+
+        // Enemy
+        enemy.SetToIdle();
+        enemy.EnemyActive(false);
         enemy.transform.SetPositionAndRotation(
             enemyPosition.position,
             enemyPosition.rotation
@@ -57,6 +61,8 @@ public class CombatManager : MonoBehaviour
         {
             e.IncreaseHealth(float.MaxValue);
         }
+
+        enemy.EnemyActive(true);
     }
 
     public void PlayPlayerFinisher()

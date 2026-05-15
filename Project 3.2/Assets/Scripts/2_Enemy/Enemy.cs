@@ -165,6 +165,14 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     #region *--- Public Accessors ----------------------------------------*
     // Set TimeScale
     public void SetTimeScale(float t) => _timeScale = t;
+
+    // Set to Idle
+    public void SetToIdle() 
+    {
+        enemyAI.SetToIdle();
+        animationController.Play("Idle");
+    }
+    public void EnemyActive(bool b) => enemyAI.EnemyActive(b);
     #endregion
 
 

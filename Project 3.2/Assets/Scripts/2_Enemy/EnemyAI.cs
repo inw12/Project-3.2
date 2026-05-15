@@ -56,7 +56,7 @@ public class EnemyAI : MonoBehaviour
     {
         _rb = GetComponent<Rigidbody>();
 
-        ResetEnemy();
+        SetToIdle();
         _isActive = true;
     }
 
@@ -129,9 +129,9 @@ public class EnemyAI : MonoBehaviour
     public EnemyState GetState() => _state;
     public EnemyState GetPrevState() => _prevState;
     // Enable/Disable Enemy AI
-    public void Enabled(bool b) => _isActive = b;
+    public void EnemyActive(bool b) => _isActive = b;
     // Reset Enemy AI
-    public void ResetEnemy()
+    public void SetToIdle()
     {
         _state.CurrentAction = EnemyAction.Idle;
         _state.AttackID = 0;
