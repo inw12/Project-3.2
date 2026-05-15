@@ -230,6 +230,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Enemy::Enemy
   enemyAI: {fileID: 7452434067175923134}
+  animationController: {fileID: 2172641294016679017}
   hitFeedback: {fileID: 7271059406618516646}
   animator: {fileID: 6867951403096359160}
   maxHealth: 5
@@ -245,8 +246,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 127d7d369e45049ff9eb6d9c47ebcc5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Enemy::EnemyAI
-  stateChangeCooldown: 5
-  movementRange: 25
+  ShowDebug: 0
+  stateChangeCooldown: 3
   playerLayer:
     serializedVersion: 2
     m_Bits: 384
@@ -254,6 +255,8 @@ MonoBehaviour:
   projectilePool: {fileID: 2362655462679477691}
   attacks:
   - {fileID: 11400000, guid: 8b46fb41b671240c0bcfb3e8049900ac, type: 2}
+  speed: 10.5
+  movementRadius: 20
 --- !u!114 &7271059406618516646
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -19,6 +19,8 @@ public enum EnemyAction
 [RequireComponent(typeof(Rigidbody))]
 public class EnemyAI : MonoBehaviour
 {
+    public bool ShowDebug;
+
     [Header("State Machine Control")]
     [SerializeField] private float stateChangeCooldown = 5f;
     private float _cooldownTimer;
@@ -29,47 +31,48 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private ProjectilePool projectilePool;
     [SerializeField] private EnemyAttack[] attacks;
 
+    [Header("Movement")]
+    [SerializeField] private float speed = 10f;
+    [SerializeField] private float movementRadius = 20f;
+
+    // State Machine Control 
     private EnemyState _state;
     private EnemyState _prevState;
 
     private Rigidbody _rb;
 
-    private float _moveSpeed;
+    private bool _isActive;
 
+    // Debug Gizmos
     void OnDrawGizmosSelected()
     {
+        if (!ShowDebug) return;
         Gizmos.color = Color.red;
         if (_state.MovementTarget != Vector3.zero) Gizmos.DrawSphere(_state.MovementTarget, 0.5f);
     }
 
-
     // Start()
-    public void Initialize(float speed)
+    public void Initialize()
     {
-        _state.CurrentAction = EnemyAction.Idle;
-        _prevState = _state;
-
         _rb = GetComponent<Rigidbody>();
 
-        _moveSpeed = speed;
-
-        _cooldownTimer = 0f;
+        ResetEnemy();
+        _isActive = true;
     }
 
     // Update()
     public void UpdateAI(float deltaTime)
     {
-        if (_state.CurrentAction is EnemyAction.Idle) _cooldownTimer += deltaTime;
-        if (_cooldownTimer >= stateChangeCooldown)
+        if (_isActive)
         {
-            // Random movement target
-            _state.MovementTarget = GetRandomPosition(25);
+            if (_state.CurrentAction is EnemyAction.Idle) _cooldownTimer += deltaTime;
+            if (_cooldownTimer >= stateChangeCooldown)
+            {
+                // Random Movement
+                MoveTo(GetRandomPosition(movementRadius));
 
-            // Change State
-            _state.CurrentAction = EnemyAction.Move;
-
-            // Reset State Machine Cooldown
-            _cooldownTimer = 0f;
+                _cooldownTimer = 0f;
+            }
         }
     }
 
@@ -95,7 +98,7 @@ public class EnemyAI : MonoBehaviour
             (
                 _rb.position,
                 _state.MovementTarget,
-                1f - Mathf.Exp(-_moveSpeed * fixedDeltaTime)
+                1f - Mathf.Exp(-speed * fixedDeltaTime)
             );
 
             // Apply movement
@@ -105,7 +108,13 @@ public class EnemyAI : MonoBehaviour
 
 
     #region *--- Helper Functions --------------------------------------------------*
-    // Returns a random Vector3 position within given radius projected onto y-axis
+    // Moves the enemy character to target position
+    private void MoveTo(Vector3 position)
+    {
+        _state.CurrentAction = EnemyAction.Move;
+        _state.MovementTarget = position;
+    }
+    // Returns a random Vector3 position within given radius (projected onto y-axis)
     private Vector3 GetRandomPosition(float radius)
     {
         var target = Random.insideUnitSphere * radius;
@@ -116,7 +125,20 @@ public class EnemyAI : MonoBehaviour
 
 
     #region *--- Public Accessors --------------------------------------------------*
+    // State Getters
     public EnemyState GetState() => _state;
     public EnemyState GetPrevState() => _prevState;
+    // Enable/Disable Enemy AI
+    public void Enabled(bool b) => _isActive = b;
+    // Reset Enemy AI
+    public void ResetEnemy()
+    {
+        _state.CurrentAction = EnemyAction.Idle;
+        _state.AttackID = 0;
+        _state.AttackActive = false;
+        _state.MovementTarget = Vector3.zero;
+
+        _cooldownTimer = 0f;
+    }
     #endregion
 }

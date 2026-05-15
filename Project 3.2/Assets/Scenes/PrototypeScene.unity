@@ -927,10 +927,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TrainingDummy
       objectReference: {fileID: 0}
-    - target: {fileID: 4481789441953731918, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: animationController
-      value: 
-      objectReference: {fileID: 8037206068912205261}
     - target: {fileID: 5448100723142779783, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -970,14 +966,6 @@ PrefabInstance:
     - target: {fileID: 5448100723142779783, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: animationController
-      value: 
-      objectReference: {fileID: 8037206068912205261}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: stateChangeCooldown
-      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1063,17 +1051,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b371238ad03b140adb8e54fe03e4d8c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Enemy::EnemyCombo
---- !u!114 &8037206068912205261 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2172641294016679017, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-  m_PrefabInstance: {fileID: 4707600413473519260}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6ce673bc6bf34093accdbcdf01b4ecc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Enemy::EnemyAnimationController
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

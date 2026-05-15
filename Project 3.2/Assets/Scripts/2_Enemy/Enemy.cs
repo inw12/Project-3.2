@@ -15,7 +15,6 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
     [Header("Stats")]
     [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private float speed = 10f;
     private float _currentHealth;
 
     private Rigidbody _rb;
@@ -35,7 +34,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     {
         // Initialize Components
         animationController.Initialize();
-        enemyAI.Initialize(speed);
+        enemyAI.Initialize();
         hitFeedback.Initialize();
         _rb = GetComponent<Rigidbody>();
 
