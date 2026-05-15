@@ -10,6 +10,7 @@ public struct EnemyAttackContext
 
 public abstract class EnemyAttack : ScriptableObject
 {
+    public int attackID;
     public abstract void Attack(EnemyAttackContext context);
 }
 

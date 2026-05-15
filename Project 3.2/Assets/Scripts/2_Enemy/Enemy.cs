@@ -7,11 +7,14 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     public event Action OnDeath;
 
     [Header("Enemy Components")]
+    [SerializeField] private EnemyAI enemyAI;
+    [Space]
     [SerializeField] private EnemyHitFeedback hitFeedback;
     [SerializeField] private Animator animator;
 
     [Header("Stats")]
     [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float speed = 10f;
     private float _currentHealth;
 
     private Rigidbody _rb;
@@ -30,6 +33,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     void Start()
     {
         // Initialize Components
+        enemyAI.Initialize();
         hitFeedback.Initialize();
         _rb = GetComponent<Rigidbody>();
 

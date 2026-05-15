@@ -18,8 +18,11 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float stateChangeCooldown = 5f;
     private float _cooldownTimer;
 
-    [Header("Enemy Movement")]
-    [SerializeField] private float movementRange = 25f;
+    [Header("Attacks")]
+    [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private Transform projectileSpawn;
+    [SerializeField] private ProjectilePool projectilePool;
+    [SerializeField] private EnemyAttack[] attacks;
 
     private EnemyState _state;
     private EnemyState _prevState;
