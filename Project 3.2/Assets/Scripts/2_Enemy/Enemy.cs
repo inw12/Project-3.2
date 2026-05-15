@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
     [Header("Enemy Components")]
     [SerializeField] private EnemyAI enemyAI;
+    [SerializeField] private EnemyAnimationController animationController;
     [Space]
     [SerializeField] private EnemyHitFeedback hitFeedback;
     [SerializeField] private Animator animator;
@@ -33,7 +34,8 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     void Start()
     {
         // Initialize Components
-        enemyAI.Initialize();
+        animationController.Initialize();
+        enemyAI.Initialize(speed);
         hitFeedback.Initialize();
         _rb = GetComponent<Rigidbody>();
 
@@ -46,7 +48,9 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
     void Update()
     {
-        
+        var deltaTime = Time.deltaTime * _timeScale;
+
+        enemyAI.UpdateAI(deltaTime);
     }
 
     void LateUpdate()
@@ -54,6 +58,13 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
         var deltaTime = Time.deltaTime * _timeScale;
 
         if (hitFeedback) hitFeedback.UpdateEnemyModel(deltaTime);
+    }
+
+    void FixedUpdate()
+    {
+        var fixedDeltaTime = Time.fixedDeltaTime * _timeScale;
+
+        enemyAI.UpdateMovement(fixedDeltaTime);
     }
 
     #region *--- 'IDamageable' --------------------------------------------------*
@@ -148,6 +159,9 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
 
     #region *--- Animator Access ------------------------------*
-    public void SetTrigger(string s) => animator.SetTrigger(s);
+    public void SetInteger(string s, int i) => animationController.SetInteger(s, i);
+    public void SetFloat(string s, int i)   => animationController.SetFloat(s, i);
+    public void SetBool(string s, bool b)   => animationController.SetBool(s, b);
+    public void SetTrigger(string s)        => animationController.SetTrigger(s);
     #endregion
 }

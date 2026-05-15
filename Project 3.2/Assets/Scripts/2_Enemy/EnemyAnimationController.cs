@@ -21,8 +21,10 @@ public class EnemyAnimationController : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    public void UpdateAnimator()
-    {
-        
-    }
+    #region *--- Public Setters --------------------------------------------------*
+    public void SetInteger(string s, int i) => _animator.SetInteger(s, i);
+    public void SetFloat(string s, int i)   => _animator.SetFloat(s, i);
+    public void SetBool(string s, bool b)   => _animator.SetBool(s, b);
+    public void SetTrigger(string s)        => _animator.SetTrigger(s);
+    #endregion
 }
