@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using Codice.CM.Common.Serialization;
 using UnityEngine;
-using UnityEngine.Playables;
-using UnityEngine.Timeline;
-[RequireComponent(typeof(PlayableDirector))]
+using System.Collections;
 public class CombatManager : MonoBehaviour
 {
     [Header("Main Enemy")]
@@ -12,17 +7,14 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private EnemyCombo enemyCombo;
 
     [Header("Parry Phase Sequencing")]
-    [SerializeField] private TimelineAsset parryPhaseSequence;
     [SerializeField] private Transform enemyPosition;
     [SerializeField] private Transform playerPosition;
-    private PlayableDirector _director;
 
     [Header("Camera")]
     [SerializeField] private CameraManager cameraManager;
 
     void Awake()
     {
-        _director = GetComponent<PlayableDirector>();
         if (enemy) enemy.OnDeath += EnterParryPhase;
         if (enemyCombo) enemyCombo.OnComboEnd += ExitParryPhase;
     }
