@@ -42,7 +42,8 @@ public class EnemyAI : MonoBehaviour
     private Rigidbody _rb;
 
     // Misc. Variables
-    private bool _isActive;
+    private bool _isActive;     // true/false if the state machine is active
+    private bool _actionCheck;  // used to ensure state actions only trigger once per state change
     #endregion
 
 
@@ -71,7 +72,9 @@ public class EnemyAI : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
 
         SetToIdle();
+
         _isActive = true;
+        _actionCheck = false;
     }
     #endregion
 
@@ -89,12 +92,21 @@ public class EnemyAI : MonoBehaviour
             // State Machine Control
             if (_cooldownTimer >= stateChangeCooldown)
             {
-                // Random Movement
-                MoveTo(GetRandomPosition(movementRadius));
+                // Movement
+                //MoveTo(GetRandomPosition(movementRadius));
+
+                // Attack
+                Attack();
 
                 _cooldownTimer = 0f;
             }
         }
+    }
+    // LateUpdate()
+    public void LateUpdateAI(float deltaTime)
+    {
+        // Update Previous State
+        _prevState = _state;
     }
     // FixedUpdate()
     public void UpdateMovement(float fixedDeltaTime)
@@ -107,7 +119,7 @@ public class EnemyAI : MonoBehaviour
             // If destination reached, EXIT movement state
             if (_rb.position == _state.MovementTarget)
             {
-                _state.CurrentAction = EnemyAction.Idle;
+                SetToIdle();
                 return;
             }
 
@@ -130,13 +142,43 @@ public class EnemyAI : MonoBehaviour
     #endregion
 
 
-    #region * Helper Functions 
+    #region * State Machine Actions
     // Moves the enemy character to target position
     private void MoveTo(Vector3 position)
     {
         _state.CurrentAction = EnemyAction.Move;
         _state.MovementTarget = position;
     }
+    // Grabs an attack from the list and performs it
+    private void Attack()
+    {
+        // Attack Initialization
+        if (!_actionCheck)
+        {
+            // Update State Machine
+            _actionCheck = true;
+            _state.CurrentAction = EnemyAction.Attack;
+
+            // Select an Attack to perform
+            var attack = attacks[0];    // * placeholder attack selection *
+            _state.CurrentAttack = attack;
+        }
+        
+        // Call Attack function
+        if (_state.CurrentAttack.attackActive)
+        {
+            
+        }
+        // Reset State Machine
+        else
+        {
+            SetToIdle();
+        }
+    }
+    #endregion
+
+
+    #region * Helper Functions 
     // Returns a random Vector3 position within given radius (projected onto y-axis)
     private Vector3 GetRandomPosition(float radius)
     {
@@ -161,6 +203,7 @@ public class EnemyAI : MonoBehaviour
         _state.MovementTarget = Vector3.zero;
 
         _cooldownTimer = 0f;
+        _actionCheck = false;
     }
     #endregion
 }
