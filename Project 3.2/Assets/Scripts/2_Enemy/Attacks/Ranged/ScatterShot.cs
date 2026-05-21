@@ -23,33 +23,32 @@ public class ScatterShot : EnemyRangedAttack
     // keeping track of attack duration
     private float _duration;
     private bool _attackTriggered;
-    [HideInInspector] public bool attackComplete;
 
-    // Called every frame
+    // Called in 'Update()' in EnemyAI.cs
     public override void Attack(EnemyAttackContext context)
     {
-        // Initialize attack
+        // Attack START
         if (!_attackTriggered)
         {
             _attackTriggered = true;
-            attackComplete = false;
+            attackActive = true;
             _duration = Random.Range(durationMin, durationMax);
         }
 
+        // Update timers
         var deltaTime = Time.deltaTime;
-
         _durationTimer += deltaTime;
         _fireTimer += deltaTime;
 
-        // End attack if duration is up
+        // Attack END
         if (_durationTimer >= _duration)
         {
-            attackComplete = true;
             _attackTriggered = false;
+            attackActive = false;
         }
 
-        // Trigger attack if attack not complete
-        if (_fireTimer >= fireRate && !attackComplete)
+        // Attack Implementation
+        if (_fireTimer >= fireRate && attackActive)
         {
             var amount = Random.Range(shotMin, shotMax + 1);
             for (int i = 0; i < amount; i++)

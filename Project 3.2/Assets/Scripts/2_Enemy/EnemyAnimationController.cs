@@ -11,27 +11,26 @@ public struct EnemyAnimatorContext
 [RequireComponent(typeof(Animator))]
 public class EnemyAnimationController : MonoBehaviour
 {
-    private Animator _animator;
-
-    #region *--- Animator Parameters ------------------------------------------------------------*
+    #region * Animator Parameters 
     //
     // * "High Level" Parameters
-    //      - Parameters untouched by GameManagers
+    //      - Parameters used by Enemy scripts
     private static readonly int CurrentAction       = Animator.StringToHash("CurrentAction");
     private static readonly int AttackID            = Animator.StringToHash("AttackID");
     private static readonly int AttackTrigger       = Animator.StringToHash("AttackTrigger");    
     private static readonly int AttackActive        = Animator.StringToHash("AttackActive");    
     private static readonly int KnockbackTrigger    = Animator.StringToHash("KnockbackTrigger");
     private static readonly int InHitstun           = Animator.StringToHash("InHitstun");
-
+    //
     // * "Low Level" Parameters
-    //      - Parameters used by GameManagers
+    //      - Parameters used by GameManager scripts
     private static readonly int PullTrigger         = Animator.StringToHash("PullTrigger");
     private static readonly int PlayerPulled        = Animator.StringToHash("PlayerPulled");
     private static readonly int ComboTrigger        = Animator.StringToHash("ComboTrigger");
     private static readonly int InParryPhase        = Animator.StringToHash("InParryPhase");
-    //
     #endregion
+
+    private Animator _animator;
 
     public void Initialize()
     {
@@ -46,13 +45,16 @@ public class EnemyAnimationController : MonoBehaviour
         _animator.SetBool(InHitstun, context.InHitstun);
     }
 
-    #region *--- Public Setters --------------------------------------------------*
+    #region * Public Access
     // Parameter Access
-    public void SetInteger(string s, int i) => _animator.SetInteger(s, i);
-    public void SetFloat(string s, int i)   => _animator.SetFloat(s, i);
-    public void SetBool(string s, bool b)   => _animator.SetBool(s, b);
-    public void SetTrigger(string s)        => _animator.SetTrigger(s);
-    // Play Access
-    public void Play(string s)              => _animator.Play(s);
+    public void     SetInteger(string s, int i) => _animator.SetInteger(s, i);
+    public int      GetInteger(string s)        => _animator.GetInteger(s);
+    public void     SetFloat(string s, int i)   => _animator.SetFloat(s, i);
+    public float    GetFloat(string s)          => _animator.GetFloat(s);
+    public void     SetBool(string s, bool b)   => _animator.SetBool(s, b);
+    public bool     GetBool(string s)           => _animator.GetBool(s);
+    public void     SetTrigger(string s)        => _animator.SetTrigger(s);
+    // Play Control
+    public void Play(string s)                  => _animator.Play(s);
     #endregion
 }

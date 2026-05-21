@@ -3,9 +3,7 @@ using UnityEngine;
 public struct EnemyState
 {
     public EnemyAction CurrentAction;
-
-    public int AttackID;
-    public bool AttackActive;
+    public EnemyAttack CurrentAttack;
 
     public Vector3 MovementTarget;
 }
@@ -21,6 +19,7 @@ public class EnemyAI : MonoBehaviour
 {
     public bool ShowDebug;
 
+    #region * Variables
     [Header("State Machine Control")]
     [SerializeField] private float stateChangeCooldown = 5f;
     private float _cooldownTimer;
@@ -39,18 +38,33 @@ public class EnemyAI : MonoBehaviour
     private EnemyState _state;
     private EnemyState _prevState;
 
+    // Unity Components
     private Rigidbody _rb;
 
+    // Misc. Variables
     private bool _isActive;
+    #endregion
 
-    // Debug Gizmos
+
+    #region * Debug Messages
     void OnDrawGizmosSelected()
     {
         if (!ShowDebug) return;
         Gizmos.color = Color.red;
         if (_state.MovementTarget != Vector3.zero) Gizmos.DrawSphere(_state.MovementTarget, 0.5f);
     }
+    void OnGUI()
+    {
+        if (!ShowDebug) return;
+        var debugText = $"Current State: {_state.CurrentAction} ({(int)_state.CurrentAction})\n"
+                        + $"Current Attack: {_state.CurrentAttack?.attackID ?? 0}\n"
+                        + $"State Machine Cooldown: {_cooldownTimer:F2} sec\n";
+        GUI.Label(new Rect(10, 10, 300, 100), debugText);
+    }
+    #endregion
+    
 
+    #region * Initialization
     // Start()
     public void Initialize()
     {
@@ -59,13 +73,20 @@ public class EnemyAI : MonoBehaviour
         SetToIdle();
         _isActive = true;
     }
+    #endregion
 
+
+    #region * Update
     // Update()
     public void UpdateAI(float deltaTime)
     {
+        // Only update State Machine if active
         if (_isActive)
         {
+            // Update cooldown timer when Idle
             if (_state.CurrentAction is EnemyAction.Idle) _cooldownTimer += deltaTime;
+
+            // State Machine Control
             if (_cooldownTimer >= stateChangeCooldown)
             {
                 // Random Movement
@@ -75,14 +96,15 @@ public class EnemyAI : MonoBehaviour
             }
         }
     }
-
     // FixedUpdate()
     public void UpdateMovement(float fixedDeltaTime)
     {
-        // Movement Implementation
-        if (_state.CurrentAction is EnemyAction.Move)
+        /// * Enemy can only move when...
+        ///     - in "Move" state
+        ///     - performing an attack that requires movement
+        if (_state.CurrentAction is EnemyAction.Move || (_state.CurrentAttack && _state.CurrentAttack.requiresMovement))
         {
-            // If destination reached, exit movement state
+            // If destination reached, EXIT movement state
             if (_rb.position == _state.MovementTarget)
             {
                 _state.CurrentAction = EnemyAction.Idle;
@@ -105,9 +127,10 @@ public class EnemyAI : MonoBehaviour
             _rb.MovePosition(next);
         }
     }
+    #endregion
 
 
-    #region *--- Helper Functions --------------------------------------------------*
+    #region * Helper Functions 
     // Moves the enemy character to target position
     private void MoveTo(Vector3 position)
     {
@@ -124,7 +147,7 @@ public class EnemyAI : MonoBehaviour
     #endregion
 
 
-    #region *--- Public Accessors --------------------------------------------------*
+    #region * Public Access 
     // State Getters
     public EnemyState GetState() => _state;
     public EnemyState GetPrevState() => _prevState;
@@ -134,8 +157,7 @@ public class EnemyAI : MonoBehaviour
     public void SetToIdle()
     {
         _state.CurrentAction = EnemyAction.Idle;
-        _state.AttackID = 0;
-        _state.AttackActive = false;
+        _state.CurrentAttack = null;
         _state.MovementTarget = Vector3.zero;
 
         _cooldownTimer = 0f;
