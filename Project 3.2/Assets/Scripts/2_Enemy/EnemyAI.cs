@@ -40,10 +40,10 @@ public class EnemyAI : MonoBehaviour
 
     // Unity Components
     private Rigidbody _rb;
+    private EnemyAnimationController _animationController;
 
     // Misc. Variables
     private bool _isActive;         // true/false if the state machine is active
-    private bool _attackStarted;    // used to ensure state actions only trigger once per state change
     #endregion
 
 
@@ -67,14 +67,15 @@ public class EnemyAI : MonoBehaviour
 
     #region * Initialization
     // Start()
-    public void Initialize()
+    public void Initialize(EnemyAnimationController controller)
     {
         _rb = GetComponent<Rigidbody>();
+        _animationController = controller;
 
         SetToIdle();
 
+        _cooldownTimer = 0f;
         _isActive = true;
-        _attackStarted = false;
     }
     #endregion
 
@@ -96,7 +97,7 @@ public class EnemyAI : MonoBehaviour
                 //MoveTo(GetRandomPosition(movementRadius));
 
                 // Attack
-                Attack();
+                EnterAttackState();
 
                 _cooldownTimer = 0f;
             }
@@ -105,6 +106,9 @@ public class EnemyAI : MonoBehaviour
     // LateUpdate()
     public void LateUpdateAI(float deltaTime)
     {
+        // Perform attack
+        if (_state.CurrentAction is EnemyAction.Attack) UpdateCurrentAttack();
+
         // Update Previous State
         _prevState = _state;
     }
@@ -149,26 +153,31 @@ public class EnemyAI : MonoBehaviour
         _state.CurrentAction = EnemyAction.Move;
         _state.MovementTarget = position;
     }
-    // Grabs an attack from the list and performs it (every frame)
-    private void Attack()
+    // Changes state to "Attack" and selects an attack to perform from list
+    private void EnterAttackState()
     {
-        // Attack Initialization
-        if (!_attackStarted)
+        // Update State Machine
+        _state.CurrentAction = EnemyAction.Attack;
+
+        // Select an Attack to perform
+        var attack = attacks[0];    // * placeholder attack selection *
+        _state.CurrentAttack = attack;
+
+        // Initialize Attack
+        _state.CurrentAttack.Initialize();
+    }
+    // Calls the 'Attack' function of the current attack (every frame)
+    private void UpdateCurrentAttack()
+    {
+        // Return to Idle if 'CurrentAttack' is null OR if 'CurrentAttack' is complete
+        if (!_state.CurrentAttack || _state.CurrentAttack.attackComplete)
         {
-            // Update State Machine
-            _attackStarted = true;
-            _state.CurrentAction = EnemyAction.Attack;
-
-            // Select an Attack to perform
-            var attack = attacks[0];    // * placeholder attack selection *
-            _state.CurrentAttack = attack;
-
-            // Initialize Attack
-            _state.CurrentAttack.Initialize();
+            _animationController.SetBool("AttackActive", false);
+            SetToIdle();
+            return;
         }
-        
-        // Call Attack function
-        if (!_state.CurrentAttack.attackComplete)
+
+        if (_animationController.GetBool("AttackActive"))
         {
             var context = new EnemyAttackContext
             {
@@ -178,11 +187,6 @@ public class EnemyAI : MonoBehaviour
                 PlayerLayer     = playerLayer
             };
             _state.CurrentAttack.Attack(context);
-        }
-        // Reset State Machine
-        else
-        {
-            SetToIdle();
         }
     }
     #endregion
@@ -213,7 +217,6 @@ public class EnemyAI : MonoBehaviour
         _state.MovementTarget = Vector3.zero;
 
         _cooldownTimer = 0f;
-        _attackStarted = false;
     }
     #endregion
 }

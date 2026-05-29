@@ -17,6 +17,7 @@ public class ScatterShot : EnemyRangedAttack
     public int shotMin;
     public int shotMax;
 
+    // Timers & Counters
     private float _fireTimer;
     private float _durationTimer;
     private int _shotCount;
@@ -29,8 +30,7 @@ public class ScatterShot : EnemyRangedAttack
         _shotCount = 0;
 
         // Reset logic checks
-        _attackStarted = false;
-        _attackComplete = false;
+        attackStarted = false;
         attackComplete = false;
     }
 
@@ -38,9 +38,9 @@ public class ScatterShot : EnemyRangedAttack
     public override void Attack(EnemyAttackContext context)
     {
         // Attack START
-        if (!_attackStarted)
+        if (!attackStarted)
         {
-            _attackStarted = true;
+            attackStarted = true;
             _duration = Random.Range(durationMin, durationMax);
         }
 
@@ -52,11 +52,11 @@ public class ScatterShot : EnemyRangedAttack
         // Attack END
         if (_durationTimer >= _duration)
         {
-            _attackComplete = attackComplete = true;
+            attackComplete = true;
         }
 
         // Attack Implementation
-        if (_fireTimer >= fireRate && !_attackComplete)
+        if (_fireTimer >= fireRate && !attackComplete)
         {
             var amount = Random.Range(shotMin, shotMax + 1);
             for (int i = 0; i < amount; i++)
@@ -79,6 +79,7 @@ public class ScatterShot : EnemyRangedAttack
                 context.ProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
             }
 
+            _fireTimer = 0f;
             _shotCount++;
         }
     }

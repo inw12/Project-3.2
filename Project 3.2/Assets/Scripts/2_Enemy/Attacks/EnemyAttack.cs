@@ -14,8 +14,7 @@ public abstract class EnemyAttack : ScriptableObject
     public int attackID;
 
     // Attack runtime controllers
-    protected bool _attackStarted;
-    protected bool _attackComplete;
+    [HideInInspector] public bool attackStarted;
     [HideInInspector] public bool attackComplete;
 
     [HideInInspector] public bool requiresMovement;
