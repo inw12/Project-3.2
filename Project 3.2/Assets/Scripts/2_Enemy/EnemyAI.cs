@@ -22,6 +22,7 @@ public class EnemyAI : MonoBehaviour
     #region * Variables
     [Header("State Machine Control")]
     [SerializeField] private float stateChangeCooldown = 5f;
+    [SerializeField] [Range(0f, 100f)] private float attackChance = 50f;    // % chance that the state machine will choose to attack over movement
     private float _cooldownTimer;
 
     [Header("Attacks")]
@@ -93,11 +94,19 @@ public class EnemyAI : MonoBehaviour
             // State Machine Control
             if (_cooldownTimer >= stateChangeCooldown)
             {
-                // Movement
-                //MoveTo(GetRandomPosition(movementRadius));
-
+                // Choose a random action
+                var rand = Random.Range(0f, 100f);
+                Debug.Log(rand);
                 // Attack
-                EnterAttackState();
+                if (rand <= attackChance)
+                {
+                    EnterAttackState();
+                }
+                // Movement
+                else
+                {
+                    MoveTo(GetRandomPosition(movementRadius));
+                }
 
                 _cooldownTimer = 0f;
             }
