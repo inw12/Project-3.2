@@ -13,12 +13,14 @@ MonoBehaviour:
   m_Name: ScatterShot
   m_EditorClassIdentifier: Enemy::ScatterShot
   attackID: 1
+  attackStarted: 1
+  attackComplete: 1
+  requiresMovement: 0
   damage: 1
   fireRate: 0.1
-  projectileSpeed: 17.5
+  projectileSpeed: 15
   range: 70
   durationMin: 5
   durationMax: 8
-  shotMin: 1
-  shotMax: 4
-  attackComplete: 0
+  shotMin: 4
+  shotMax: 8
