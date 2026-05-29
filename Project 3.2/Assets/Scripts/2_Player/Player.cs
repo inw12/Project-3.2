@@ -13,8 +13,11 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerAnimationController animationController;
     [SerializeField] private PlayerAnimationRig animationRig;
 
+    [Header("Health/Hurtbox")]
+    [SerializeField] private PlayerHurtbox hurtbox;
+
     [Header("Misc")]
-    [SerializeField] private CapsuleCollider hurtbox;
+    [SerializeField] private CapsuleCollider hurtboxCollider;
     [SerializeField] private CapsuleCollider parrybox;
     [SerializeField] private LayerMask groundLayer;
 
@@ -57,12 +60,15 @@ public class Player : MonoBehaviour
         _inputEnabled = true;
 
         // Core Components
-        playerMovement.Initialize(hurtbox);
-        playerCombat.Initialize(animationController, hurtbox);
+        playerMovement.Initialize(hurtboxCollider);
+        playerCombat.Initialize(animationController, hurtboxCollider);
 
         // Animation
         animationController.Initialize();
         animationRig.Initialize();
+
+        // Hurtbox
+        hurtbox.Initialize(animationController);
     }
 
     void Update()
@@ -155,6 +161,8 @@ public class Player : MonoBehaviour
     public void SetRotation(Quaternion rotation) => playerMovement.SetRotation(rotation);
     // CharacterController Toggle
     public void CharacterControllerEnabled(bool b) => playerMovement.CharacterControllerEnabled(b);
+    // Exit Movement State
+    public void ExitMovementState() => playerMovement.ExitMovementState();
     #endregion
 
 
@@ -163,6 +171,8 @@ public class Player : MonoBehaviour
     public void MeleeHitboxEnabled(bool b) => playerCombat.MeleeHitboxEnabled(b);
     // Combat Action Setter
     public void SetCurrentCombatAction(CombatAction action) => playerCombat.SetCurrentCombatAction(action);
+    // Exit Combat State
+    public void ExitCombatState() => playerCombat.ExitCombatState();
     #endregion
 
 

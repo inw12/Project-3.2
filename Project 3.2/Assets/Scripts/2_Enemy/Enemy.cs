@@ -1,18 +1,23 @@
 using UnityEngine;
-using System.Collections;
 using System;
+using System.Collections;
+
 [RequireComponent(typeof(Rigidbody))]
 public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 {
-    public event Action OnDeath;
-
+    #region * Variables
     [Header("Enemy Components")]
+    [SerializeField] private EnemyAI enemyAI;
+    [SerializeField] private EnemyAnimationController animationController;
+    [Space]
     [SerializeField] private EnemyHitFeedback hitFeedback;
     [SerializeField] private Animator animator;
 
     [Header("Stats")]
     [SerializeField] private float maxHealth = 100f;
     private float _currentHealth;
+
+    public event Action OnDeath;
 
     private Rigidbody _rb;
     private Coroutine _hitstunCoroutine;
@@ -25,34 +30,60 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     // Hitstun 
     private float _timeScale;
     private bool _inHitstun;
+    #endregion
 
 
+    #region * Unity Methods
     void Start()
     {
-        // Initialize Components
+        // Initialization
+        animationController.Initialize();
+        enemyAI.Initialize(animationController);
         hitFeedback.Initialize();
+
         _rb = GetComponent<Rigidbody>();
 
-        // Initialize Variables
         _currentHealth = maxHealth;
-
         _timeScale = 1f;
         _inHitstun = false;
     }
-
     void Update()
     {
-        
-    }
+        var deltaTime = Time.deltaTime * _timeScale;
 
+        enemyAI.UpdateAI(deltaTime);
+    }
     void LateUpdate()
     {
         var deltaTime = Time.deltaTime * _timeScale;
 
+        // Update Enemy AI
+        enemyAI.LateUpdateAI(deltaTime);
+
+        // Update Animation Parameters based on Enemy State
+        var state = enemyAI.GetState();
+        var animationContext = new EnemyAnimatorContext
+        {
+            CurrentAction   = (int)state.CurrentAction,
+            AttackID        = state.CurrentAttack != null ? state.CurrentAttack.attackID : -1,
+            InHitstun       = _inHitstun
+        };
+        animationController.UpdateAnimator(animationContext);
+
+        // Update Hit Feedback effect when taking damage
         if (hitFeedback) hitFeedback.UpdateEnemyModel(deltaTime);
     }
+    void FixedUpdate()
+    {
+        var fixedDeltaTime = Time.fixedDeltaTime * _timeScale;
 
-    #region *--- 'IDamageable' --------------------------------------------------*
+        // Update Movement
+        enemyAI.UpdateMovement(fixedDeltaTime);
+    }
+    #endregion
+
+
+    #region * 'IDamageable'
     public float MaxHealth => maxHealth;
     public float CurrentHealth => _currentHealth;
 
@@ -78,7 +109,9 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     #endregion
 
 
-    #region *--- 'IKnockable' ----------------------------------------*
+    #region * 'IKnockable'
+    public void TriggerKnockback() => throw new NotImplementedException();
+
     public void TriggerKnockback(Vector3 direction, float force, float duration)
     {
         // Interupt coroutine if previously running
@@ -118,7 +151,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     #endregion
 
 
-    #region *--- 'IHitstunnable' -------------------------------------*
+    #region * 'IHitstunnable' 
     public float TimeScale => _timeScale;
     public bool InHitstun => _inHitstun;
 
@@ -135,13 +168,29 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     #endregion
 
 
-    #region *--- Public Accessors ----------------------------------------*
+    #region * Public Accessors 
     // Set TimeScale
     public void SetTimeScale(float t) => _timeScale = t;
+
+    // Set to Idle
+    public void SetToIdle() 
+    {
+        enemyAI.SetToIdle();
+        animationController.SetToIdle();
+    }
+
+    // Toggle Enemy State Machine
+    public void EnemyActive(bool b) => enemyAI.EnemyActive(b);
     #endregion
 
 
-    #region *--- Animator Access ------------------------------*
-    public void SetTrigger(string s) => animator.SetTrigger(s);
+    #region * Animator Access 
+    public void SetInteger(string s, int i) => animationController.SetInteger(s, i);
+    public int GetInteger(string s)         => animationController.GetInteger(s);
+    public void SetFloat(string s, int i)   => animationController.SetFloat(s, i);
+    public float GetFloat(string s)         => animationController.GetFloat(s);
+    public void SetBool(string s, bool b)   => animationController.SetBool(s, b);
+    public bool GetBool(string s)           => animationController.GetBool(s);
+    public void SetTrigger(string s)        => animationController.SetTrigger(s);
     #endregion
 }

@@ -211,6 +211,7 @@ public class PlayerCombat : MonoBehaviour
         _state.CurrentAction = CombatAction.None;
         _parryStarted = false;
         _meleeStarted = false;
+        _meleeAttack.ResetCombo();
     }
     public void MeleeHitboxEnabled(bool b) => _meleeAttack.HitboxEnabled(b);
     /// * Enable/Disable ATTACK inputs

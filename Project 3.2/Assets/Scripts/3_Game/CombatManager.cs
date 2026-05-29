@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
-using Codice.CM.Common.Serialization;
 using UnityEngine;
-using UnityEngine.Playables;
-using UnityEngine.Timeline;
-[RequireComponent(typeof(PlayableDirector))]
+using System.Collections;
 public class CombatManager : MonoBehaviour
 {
     [Header("Main Enemy")]
@@ -12,33 +7,34 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private EnemyCombo enemyCombo;
 
     [Header("Parry Phase Sequencing")]
-    [SerializeField] private TimelineAsset parryPhaseSequence;
     [SerializeField] private Transform enemyPosition;
     [SerializeField] private Transform playerPosition;
-    private PlayableDirector _director;
 
     [Header("Camera")]
     [SerializeField] private CameraManager cameraManager;
 
     void Awake()
     {
-        _director = GetComponent<PlayableDirector>();
         if (enemy) enemy.OnDeath += EnterParryPhase;
         if (enemyCombo) enemyCombo.OnComboEnd += ExitParryPhase;
     }
 
     public void EnterParryPhase()
     {
+        // Player
         Player.Instance.SetToIdle();
         Player.Instance.InputEnabled(false);
         Player.Instance.CharacterControllerEnabled(false);
         Player.Instance.ParryInputEnabled(true);
         Player.Instance.SetBoolean("InParryPhase", true);
-
         Player.Instance.transform.SetPositionAndRotation(
             playerPosition.position,
             playerPosition.rotation
         );
+
+        // Enemy
+        enemy.SetToIdle();
+        enemy.EnemyActive(false);
         enemy.transform.SetPositionAndRotation(
             enemyPosition.position,
             enemyPosition.rotation
@@ -65,6 +61,8 @@ public class CombatManager : MonoBehaviour
         {
             e.IncreaseHealth(float.MaxValue);
         }
+
+        enemy.EnemyActive(true);
     }
 
     public void PlayPlayerFinisher()

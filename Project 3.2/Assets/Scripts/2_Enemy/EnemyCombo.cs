@@ -77,9 +77,9 @@ public class EnemyCombo : MonoBehaviour
                         if (hit.TryGetComponent(out IParrybox p))
                         {
                             p.TriggerParry();
-
                             _parryCount++;
                         }
+                        _hitboxEnabled = false;
                     }
                     // HURTBOX Collisions
                     else if (layer == _hurtboxLayer)
@@ -88,6 +88,11 @@ public class EnemyCombo : MonoBehaviour
                         {
                             e.DecreaseHealth(damage);
                         }
+                        if (hit.TryGetComponent(out IKnockable k))
+                        {
+                            k.TriggerKnockback();
+                        }
+                        _hitboxEnabled = false;
                     }
                 }
             }
