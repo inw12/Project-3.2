@@ -10,11 +10,17 @@ public struct EnemyAttackContext
 
 public abstract class EnemyAttack : ScriptableObject
 {
+    // Attack identifier
     public int attackID;
-    public bool attackActive;
+
+    // Attack runtime controllers
+    protected bool _attackStarted;
+    protected bool _attackComplete;
+    [HideInInspector] public bool attackComplete;
 
     [HideInInspector] public bool requiresMovement;
 
+    public abstract void Initialize();
     public abstract void Attack(EnemyAttackContext context);
 }
 

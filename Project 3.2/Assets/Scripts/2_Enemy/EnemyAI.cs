@@ -42,8 +42,8 @@ public class EnemyAI : MonoBehaviour
     private Rigidbody _rb;
 
     // Misc. Variables
-    private bool _isActive;     // true/false if the state machine is active
-    private bool _actionCheck;  // used to ensure state actions only trigger once per state change
+    private bool _isActive;         // true/false if the state machine is active
+    private bool _attackStarted;    // used to ensure state actions only trigger once per state change
     #endregion
 
 
@@ -74,7 +74,7 @@ public class EnemyAI : MonoBehaviour
         SetToIdle();
 
         _isActive = true;
-        _actionCheck = false;
+        _attackStarted = false;
     }
     #endregion
 
@@ -149,25 +149,35 @@ public class EnemyAI : MonoBehaviour
         _state.CurrentAction = EnemyAction.Move;
         _state.MovementTarget = position;
     }
-    // Grabs an attack from the list and performs it
+    // Grabs an attack from the list and performs it (every frame)
     private void Attack()
     {
         // Attack Initialization
-        if (!_actionCheck)
+        if (!_attackStarted)
         {
             // Update State Machine
-            _actionCheck = true;
+            _attackStarted = true;
             _state.CurrentAction = EnemyAction.Attack;
 
             // Select an Attack to perform
             var attack = attacks[0];    // * placeholder attack selection *
             _state.CurrentAttack = attack;
+
+            // Initialize Attack
+            _state.CurrentAttack.Initialize();
         }
         
         // Call Attack function
-        if (_state.CurrentAttack.attackActive)
+        if (!_state.CurrentAttack.attackComplete)
         {
-            
+            var context = new EnemyAttackContext
+            {
+                Enemy           = gameObject.GetComponent<Enemy>(),
+                HitboxSpawn     = projectileSpawn,
+                ProjectilePool  = projectilePool,
+                PlayerLayer     = playerLayer
+            };
+            _state.CurrentAttack.Attack(context);
         }
         // Reset State Machine
         else
@@ -203,7 +213,7 @@ public class EnemyAI : MonoBehaviour
         _state.MovementTarget = Vector3.zero;
 
         _cooldownTimer = 0f;
-        _actionCheck = false;
+        _attackStarted = false;
     }
     #endregion
 }

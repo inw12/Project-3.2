@@ -11,6 +11,7 @@ public class ScatterShot : EnemyRangedAttack
     [Header("Duration")]
     public float durationMin;
     public float durationMax;
+    private float _duration;
 
     [Header("Number of Projectiles per Attack Instance")]
     public int shotMin;
@@ -20,18 +21,26 @@ public class ScatterShot : EnemyRangedAttack
     private float _durationTimer;
     private int _shotCount;
 
-    // keeping track of attack duration
-    private float _duration;
-    private bool _attackTriggered;
+    public override void Initialize()
+    {
+        // Reset timers + counters
+        _fireTimer = fireRate;
+        _durationTimer = 0f;
+        _shotCount = 0;
+
+        // Reset logic checks
+        _attackStarted = false;
+        _attackComplete = false;
+        attackComplete = false;
+    }
 
     // Called in 'Update()' in EnemyAI.cs
     public override void Attack(EnemyAttackContext context)
     {
         // Attack START
-        if (!_attackTriggered)
+        if (!_attackStarted)
         {
-            _attackTriggered = true;
-            attackActive = true;
+            _attackStarted = true;
             _duration = Random.Range(durationMin, durationMax);
         }
 
@@ -43,12 +52,11 @@ public class ScatterShot : EnemyRangedAttack
         // Attack END
         if (_durationTimer >= _duration)
         {
-            _attackTriggered = false;
-            attackActive = false;
+            _attackComplete = attackComplete = true;
         }
 
         // Attack Implementation
-        if (_fireTimer >= fireRate && attackActive)
+        if (_fireTimer >= fireRate && !_attackComplete)
         {
             var amount = Random.Range(shotMin, shotMax + 1);
             for (int i = 0; i < amount; i++)

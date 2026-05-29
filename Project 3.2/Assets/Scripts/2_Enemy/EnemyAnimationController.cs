@@ -4,7 +4,6 @@ public struct EnemyAnimatorContext
 {
     public int CurrentAction;
     public int AttackID;
-    public bool AttackActive;
     public bool InHitstun;
 }
 
@@ -40,7 +39,6 @@ public class EnemyAnimationController : MonoBehaviour
     {
         _animator.SetInteger(CurrentAction, context.CurrentAction);
         _animator.SetInteger(AttackID, context.AttackID);
-        _animator.SetBool(AttackActive, context.AttackActive);
         _animator.SetBool(InHitstun, context.InHitstun);
     }
 

@@ -66,7 +66,6 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
         {
             CurrentAction   = (int)state.CurrentAction,
             AttackID        = state.CurrentAttack != null ? state.CurrentAttack.attackID : -1,
-            AttackActive    = state.CurrentAttack != null && state.CurrentAttack.attackActive,
             InHitstun       = _inHitstun
         };
         animationController.UpdateAnimator(animationContext);
