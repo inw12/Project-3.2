@@ -24,6 +24,9 @@ public class ScatterShot : EnemyRangedAttack
 
     public override void Initialize()
     {
+        // Does this attack require movement?
+        requiresMovement = false;
+
         // Reset timers + counters
         _fireTimer = fireRate;
         _durationTimer = 0f;

@@ -176,7 +176,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     public void SetToIdle() 
     {
         enemyAI.SetToIdle();
-        animationController.Play("Idle");
+        animationController.SetToIdle();
     }
 
     // Toggle Enemy State Machine

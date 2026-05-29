@@ -52,6 +52,13 @@ public class EnemyAnimationController : MonoBehaviour
     public bool     GetBool(string s)           => _animator.GetBool(s);
     public void     SetTrigger(string s)        => _animator.SetTrigger(s);
     // Play Control
-    public void Play(string s)                  => _animator.Play(s);
+    public void SetToIdle()
+    {
+        _animator.SetInteger(CurrentAction, 0);
+        _animator.SetInteger(AttackID, 0);
+        _animator.SetBool(AttackActive, false);
+        _animator.SetBool(InHitstun, false);
+        _animator.Play("Idle");
+    }
     #endregion
 }
