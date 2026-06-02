@@ -53,10 +53,7 @@ public class ScatterShot : EnemyRangedAttack
         _fireTimer += deltaTime;
 
         // Attack END
-        if (_durationTimer >= _duration)
-        {
-            attackComplete = true;
-        }
+        attackComplete = _durationTimer >= _duration;
 
         // Attack Implementation
         if (_fireTimer >= fireRate && !attackComplete)

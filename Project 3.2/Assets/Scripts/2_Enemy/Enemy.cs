@@ -181,6 +181,12 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
     // Toggle Enemy State Machine
     public void EnemyActive(bool b) => enemyAI.EnemyActive(b);
+
+    // Access EnemyAI Movement
+    public void SetMovementTarget(Vector3 position) => enemyAI.SetMovementTarget(position);
+
+    // EnemyAI State Getter
+    public EnemyState GetState() => enemyAI.GetState();
     #endregion
 
 

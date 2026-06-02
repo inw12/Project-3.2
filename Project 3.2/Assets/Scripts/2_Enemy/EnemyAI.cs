@@ -96,7 +96,6 @@ public class EnemyAI : MonoBehaviour
             {
                 // Choose a random action
                 var rand = Random.Range(0f, 100f);
-                Debug.Log(rand);
                 // Attack
                 if (rand <= attackChance)
                 {
@@ -105,7 +104,7 @@ public class EnemyAI : MonoBehaviour
                 // Movement
                 else
                 {
-                    MoveTo(GetRandomPosition(movementRadius));
+                    EnterMoveState(GetRandomPosition(movementRadius));
                 }
 
                 _cooldownTimer = 0f;
@@ -132,6 +131,7 @@ public class EnemyAI : MonoBehaviour
             // If destination reached, EXIT movement state
             if (_rb.position == _state.MovementTarget)
             {
+                _animationController.SetBool("AttackActive", false);
                 SetToIdle();
                 return;
             }
@@ -156,8 +156,8 @@ public class EnemyAI : MonoBehaviour
 
 
     #region * State Machine Actions
-    // Moves the enemy character to target position
-    private void MoveTo(Vector3 position)
+    // Changes state to "Move" & updates target movement position
+    private void EnterMoveState(Vector3 position)
     {
         _state.CurrentAction = EnemyAction.Move;
         _state.MovementTarget = position;
@@ -226,6 +226,11 @@ public class EnemyAI : MonoBehaviour
         _state.MovementTarget = Vector3.zero;
 
         _cooldownTimer = 0f;
+    }
+    // Set movement target
+    public void SetMovementTarget(Vector3 position)
+    {
+        _state.MovementTarget = position;
     }
     #endregion
 }
