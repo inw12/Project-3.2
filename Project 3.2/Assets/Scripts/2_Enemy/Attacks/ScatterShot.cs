@@ -17,6 +17,15 @@ public class ScatterShot : EnemyRangedAttack
     public int shotMin;
     public int shotMax;
 
+    [Space]
+    [Header("AoE Burst")]
+    public int shotsToBurst;
+    public int burstProjectileCount;
+    [Space]
+    public float burstProjectileSpeed;
+    public float burstRange;
+
+
     // Timers & Counters
     private float _fireTimer;
     private float _durationTimer;
@@ -79,8 +88,40 @@ public class ScatterShot : EnemyRangedAttack
                 context.ProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
             }
 
-            _fireTimer = 0f;
             _shotCount++;
+
+            // Fire AoE Burst
+            if (_shotCount >= shotsToBurst)
+            {
+                Burst(context);
+                _shotCount = 0;
+            }
+
+            _fireTimer = 0f;
+        }
+    }
+
+    private void Burst(EnemyAttackContext context)
+    {
+        var angleStep = 360f / burstProjectileCount;
+        for (int i = 0; i < burstProjectileCount; i++)
+        {
+            // Calculate direction
+            var angle = i * angleStep;
+            var rad = angle * Mathf.Deg2Rad;
+            var direction = new Vector3(Mathf.Sin(rad), 0f, Mathf.Cos(rad));
+
+            // Initialize projectile stats
+            var stats = new ProjectileStats
+            {
+                Damage = damage,
+                Speed = burstProjectileSpeed,
+                Range = burstRange,
+                Direction = direction
+            };
+
+            // Fire projectile
+            context.SecondaryProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
         }
     }
 }

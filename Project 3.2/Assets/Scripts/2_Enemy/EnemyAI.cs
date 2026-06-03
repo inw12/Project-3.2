@@ -29,7 +29,8 @@ public class EnemyAI : MonoBehaviour
     [Header("Attacks")]
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private Transform projectileSpawn;
-    [SerializeField] private ProjectilePool projectilePool;
+    [SerializeField] private ProjectilePool projectilePoolA;
+    [SerializeField] private ProjectilePool projectilePoolB;
     [SerializeField] private EnemyAttack[] attacks;
     [SerializeField] private float playerDetectionRange;
 
@@ -213,10 +214,11 @@ public class EnemyAI : MonoBehaviour
             // Initialize Attack Context
             var context = new EnemyAttackContext
             {
-                Enemy           = gameObject.GetComponent<Enemy>(),
-                HitboxSpawn     = projectileSpawn,
-                ProjectilePool  = projectilePool,
-                PlayerLayer     = playerLayer
+                Enemy                   = gameObject.GetComponent<Enemy>(),
+                HitboxSpawn             = projectileSpawn,
+                ProjectilePool          = projectilePoolA,
+                SecondaryProjectilePool = projectilePoolB,
+                PlayerLayer             = playerLayer
             };
 
             // Trigger Attack

@@ -5,6 +5,7 @@ public struct EnemyAttackContext
     public Enemy Enemy;
     public Transform HitboxSpawn;
     public ProjectilePool ProjectilePool;
+    public ProjectilePool SecondaryProjectilePool;
     public LayerMask PlayerLayer;
 }
 
