@@ -11,9 +11,6 @@ public class StrafeShot : EnemyRangedAttack
     [Header("Movement")]
     public float movementRange;
 
-    [Header("Number of Projectiles per Attack")]
-    public int projectilesPerShot;
-
     private float _fireTimer;           // Fire rate control
 
     #region * Initialization
@@ -63,17 +60,28 @@ public class StrafeShot : EnemyRangedAttack
         //      - Fires projectiles in an arc (shotgun-blast)
         if (_fireTimer >= fireRate && !attackComplete)
         {
+            // Get firing direction
+            var start = Vector3.ProjectOnPlane(context.Enemy.transform.position, Vector3.up);
+            var end = Vector3.ProjectOnPlane(context.Enemy.GetPlayerPosition(), Vector3.up);
+            var direction = (end - start).normalized;
+
             // Initialize Projectile Stats
             var stats = new ProjectileStats
             {
                 Damage = damage,
                 Speed = projectileSpeed,
                 Range = range,
-                Direction = Vector3.forward // *EDIT LATER*
+                Direction = direction
             };
 
+            // *testing*
+            // adjust projectile spawn height
+            var spawnPos = context.HitboxSpawn;
+            var spawnActual = new Vector3(spawnPos.position.x, 1f, spawnPos.position.z);
+            spawnPos.position = spawnActual;
+
             // Get Projectile from Object Pool
-            context.ProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
+            context.ProjectilePool.Get(stats, spawnPos, context.PlayerLayer);
 
             // Reset fire rate timer
             _fireTimer = 0f;

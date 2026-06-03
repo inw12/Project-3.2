@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: StrafeShot
   m_EditorClassIdentifier: Enemy::StrafeShot
   attackID: 2
-  attackStarted: 0
+  attackStarted: 1
   attackComplete: 0
-  requiresMovement: 0
+  requiresMovement: 1
   damage: 1
-  fireRate: 0.3
-  projectileSpeed: 20
+  fireRate: 0.5
+  projectileSpeed: 27.5
   range: 75
   movementRange: 20
   projectilesPerShot: 5
