@@ -170,13 +170,14 @@ public class EnemyAI : MonoBehaviour
 
 
     #region * State Machine Actions
-    // Changes state to "Move" & updates target movement position
+    // Movement START
     private void EnterMoveState(Vector3 position)
     {
         _state.CurrentAction = EnemyAction.Move;
         _state.MovementTarget = position;
     }
-    // Changes state to "Attack" and selects an attack to perform from list
+
+    // Attack START
     private void EnterAttackState()
     {
         // Update State Machine
@@ -190,19 +191,26 @@ public class EnemyAI : MonoBehaviour
         // Initialize Attack
         _state.CurrentAttack.Initialize();
     }
-    // Calls the 'Attack' function of the current attack (every frame)
+
+    // Attack IDLE
     private void UpdateCurrentAttack()
     {
         // Return to Idle if 'CurrentAttack' is null OR if 'CurrentAttack' is complete
         if (!_state.CurrentAttack || _state.CurrentAttack.attackComplete)
         {
             _animationController.SetBool("AttackActive", false);
-            _enemy.SetToIdle();
+            SetToIdle();
             return;
         }
 
         if (_animationController.GetBool("AttackActive"))
         {
+            // Adjust projectile spawn to be at player height
+            Vector3 targetSpawn = projectileSpawn.position;
+            targetSpawn.y = 0.5f;   // * magic number alert *
+            projectileSpawn.position = targetSpawn;
+
+            // Initialize Attack Context
             var context = new EnemyAttackContext
             {
                 Enemy           = gameObject.GetComponent<Enemy>(),
@@ -210,6 +218,8 @@ public class EnemyAI : MonoBehaviour
                 ProjectilePool  = projectilePool,
                 PlayerLayer     = playerLayer
             };
+
+            // Trigger Attack
             _state.CurrentAttack.Attack(context);
         }
     }

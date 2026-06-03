@@ -75,14 +75,8 @@ public class StrafeShot : EnemyRangedAttack
                 Direction = direction
             };
 
-            // *testing*
-            // adjust projectile spawn height
-            var spawnPos = context.HitboxSpawn;
-            var spawnActual = new Vector3(spawnPos.position.x, 1f, spawnPos.position.z);
-            spawnPos.position = spawnActual;
-
             // Get Projectile from Object Pool
-            context.ProjectilePool.Get(stats, spawnPos, context.PlayerLayer);
+            context.ProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
 
             // Reset fire rate timer
             _fireTimer = 0f;
@@ -95,8 +89,8 @@ public class StrafeShot : EnemyRangedAttack
     // Returns a random position within a specified radius around the enemy
     private Vector3 GetRandomPosition(EnemyAttackContext context)
     {
-        Vector3 targetPosition = new(-1f, -1f, -1f);
         bool validPointFound = false;
+        Vector3 targetPosition = new(-1f, -1f, -1f);
 
         while (!validPointFound)
         {
@@ -107,14 +101,12 @@ public class StrafeShot : EnemyRangedAttack
 
             // 2. Check if distance between object and point is within movement range
             var distanceToPoint = Vector3.Distance(context.Enemy.transform.position, point);
-            Debug.Log(distanceToPoint);
 
             // 3. If not, loop back and try again
             if (distanceToPoint >= minMoveDistance)
             {
                 validPointFound = true;
                 targetPosition = point;
-                Debug.Log("*** Valid Point Found! ***");
             }
         }
 

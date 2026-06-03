@@ -17,8 +17,8 @@ MonoBehaviour:
   attackComplete: 0
   requiresMovement: 1
   damage: 1
-  fireRate: 0.5
-  projectileSpeed: 27.5
+  fireRate: 0.4325
+  projectileSpeed: 28
   range: 75
-  minMoveDistance: 10
-  maxMoveDistance: 15
+  minMoveDistance: 14
+  maxMoveDistance: 18
