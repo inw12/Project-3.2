@@ -992,6 +992,10 @@ PrefabInstance:
       value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
+      propertyPath: playerDetectionRange
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: 'attacks.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: efdf059b643730f41a4a7d2e5fd69734, type: 2}

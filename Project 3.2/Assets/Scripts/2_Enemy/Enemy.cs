@@ -187,6 +187,9 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
     // EnemyAI State Getter
     public EnemyState GetState() => enemyAI.GetState();
+
+    // Player Position Getter
+    public Vector3 GetPlayerPosition() => enemyAI.GetPlayerPosition();
     #endregion
 
 

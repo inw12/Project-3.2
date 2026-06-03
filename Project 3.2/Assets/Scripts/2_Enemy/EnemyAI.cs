@@ -30,6 +30,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Transform projectileSpawn;
     [SerializeField] private ProjectilePool projectilePool;
     [SerializeField] private EnemyAttack[] attacks;
+    [SerializeField] private float playerDetectionRange;
 
     [Header("Movement")]
     [SerializeField] private float speed = 10f;
@@ -42,6 +43,10 @@ public class EnemyAI : MonoBehaviour
     // Unity Components
     private Rigidbody _rb;
     private EnemyAnimationController _animationController;
+
+    // Player Tracking
+    private readonly Collider[] _detectionHits = new Collider[10];  // OverlapSphereNonAlloc buffer for player detection
+    private Transform _target;      // player's position 
 
     // Misc. Variables
     private bool _isActive;         // true/false if the state machine is active
@@ -60,7 +65,8 @@ public class EnemyAI : MonoBehaviour
         if (!ShowDebug) return;
         var debugText = $"Current State: {_state.CurrentAction} ({(int)_state.CurrentAction})\n"
                         + $"Current Attack: {_state.CurrentAttack?.attackID ?? 0}\n"
-                        + $"State Machine Cooldown: {_cooldownTimer:F2} sec\n";
+                        + $"State Machine Cooldown: {_cooldownTimer:F2} sec\n"
+                        + $"Player Position: {_target.position}\n";
         GUI.Label(new Rect(10, 10, 300, 100), debugText);
     }
     #endregion
@@ -85,6 +91,9 @@ public class EnemyAI : MonoBehaviour
     // Update()
     public void UpdateAI(float deltaTime)
     {
+        // Track player position
+        TrackPlayer();
+
         // Only update State Machine if active
         if (_isActive)
         {
@@ -209,6 +218,22 @@ public class EnemyAI : MonoBehaviour
         target = Vector3.ProjectOnPlane(target, Vector3.up);
         return target;
     }
+    private void TrackPlayer()
+    {
+        var hits = Physics.OverlapSphereNonAlloc
+        (
+            transform.position,
+            playerDetectionRange,
+            _detectionHits,
+            playerLayer
+        );
+
+        if (hits > 0)
+        {
+            var hit = _detectionHits[0];
+            _target = hit.gameObject.transform;
+        }
+    }
     #endregion
 
 
@@ -232,5 +257,6 @@ public class EnemyAI : MonoBehaviour
     {
         _state.MovementTarget = position;
     }
+    public Vector3 GetPlayerPosition() => _target.position;
     #endregion
 }
