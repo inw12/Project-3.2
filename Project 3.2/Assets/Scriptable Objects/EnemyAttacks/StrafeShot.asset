@@ -21,4 +21,4 @@ MonoBehaviour:
   projectileSpeed: 27.5
   range: 75
   minMoveDistance: 10
-  maxMoveDistance: 20
+  maxMoveDistance: 15

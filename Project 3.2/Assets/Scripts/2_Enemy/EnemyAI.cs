@@ -183,7 +183,8 @@ public class EnemyAI : MonoBehaviour
         _state.CurrentAction = EnemyAction.Attack;
 
         // Select an Attack to perform
-        var attack = attacks[0];    // * placeholder attack selection *
+        var rand = Random.Range(0, attacks.Length);
+        var attack = attacks[rand];    // * placeholder attack selection *
         _state.CurrentAttack = attack;
 
         // Initialize Attack
