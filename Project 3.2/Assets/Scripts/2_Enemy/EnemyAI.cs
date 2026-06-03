@@ -5,6 +5,7 @@ public struct EnemyState
     public EnemyAction CurrentAction;
     public EnemyAttack CurrentAttack;
 
+    public Vector3 PlayerPosition;
     public Vector3 MovementTarget;
 }
 public enum EnemyAction
@@ -42,11 +43,11 @@ public class EnemyAI : MonoBehaviour
 
     // Unity Components
     private Rigidbody _rb;
+    private Enemy _enemy;
     private EnemyAnimationController _animationController;
 
     // Player Tracking
     private readonly Collider[] _detectionHits = new Collider[10];  // OverlapSphereNonAlloc buffer for player detection
-    private Transform _target;      // player's position 
 
     // Misc. Variables
     private bool _isActive;         // true/false if the state machine is active
@@ -66,7 +67,7 @@ public class EnemyAI : MonoBehaviour
         var debugText = $"Current State: {_state.CurrentAction} ({(int)_state.CurrentAction})\n"
                         + $"Current Attack: {_state.CurrentAttack?.attackID ?? 0}\n"
                         + $"State Machine Cooldown: {_cooldownTimer:F2} sec\n"
-                        + $"Player Position: {_target.position}\n";
+                        + $"Player Position: {_state.PlayerPosition}\n";
         GUI.Label(new Rect(10, 10, 300, 100), debugText);
     }
     #endregion
@@ -74,12 +75,16 @@ public class EnemyAI : MonoBehaviour
 
     #region * Initialization
     // Start()
-    public void Initialize(EnemyAnimationController controller)
+    public void Initialize(Enemy enemy, EnemyAnimationController controller)
     {
+        _enemy = enemy;
         _rb = GetComponent<Rigidbody>();
         _animationController = controller;
 
         SetToIdle();
+
+        TrackPlayer();
+        _state.PlayerPosition = _state.PlayerPosition != null ? _state.PlayerPosition : Vector3.zero;
 
         _cooldownTimer = 0f;
         _isActive = true;
@@ -141,7 +146,7 @@ public class EnemyAI : MonoBehaviour
             if (_rb.position == _state.MovementTarget)
             {
                 _animationController.SetBool("AttackActive", false);
-                SetToIdle();
+                _enemy.SetToIdle();
                 return;
             }
 
@@ -191,7 +196,7 @@ public class EnemyAI : MonoBehaviour
         if (!_state.CurrentAttack || _state.CurrentAttack.attackComplete)
         {
             _animationController.SetBool("AttackActive", false);
-            SetToIdle();
+            _enemy.SetToIdle();
             return;
         }
 
@@ -231,7 +236,7 @@ public class EnemyAI : MonoBehaviour
         if (hits > 0)
         {
             var hit = _detectionHits[0];
-            _target = hit.gameObject.transform;
+            _state.PlayerPosition = Vector3.ProjectOnPlane(hit.gameObject.transform.position, Vector3.up);
         }
     }
     #endregion
@@ -257,6 +262,6 @@ public class EnemyAI : MonoBehaviour
     {
         _state.MovementTarget = position;
     }
-    public Vector3 GetPlayerPosition() => _target.position;
+    public Vector3 GetPlayerPosition() => _state.PlayerPosition;
     #endregion
 }

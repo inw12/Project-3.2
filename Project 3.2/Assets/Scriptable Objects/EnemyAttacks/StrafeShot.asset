@@ -20,5 +20,5 @@ MonoBehaviour:
   fireRate: 0.5
   projectileSpeed: 27.5
   range: 75
-  movementRange: 20
-  projectilesPerShot: 5
+  minMoveDistance: 10
+  maxMoveDistance: 20

@@ -9,7 +9,8 @@ public class StrafeShot : EnemyRangedAttack
     public float range;
 
     [Header("Movement")]
-    public float movementRange;
+    public float minMoveDistance;
+    public float maxMoveDistance;
 
     private float _fireTimer;           // Fire rate control
 
@@ -41,7 +42,7 @@ public class StrafeShot : EnemyRangedAttack
             context.Enemy.SetMovementTarget(position);
 
             // 3. Turn on arm animation rig
-            // * logic here *
+            context.Enemy.ArmRigEnabled(true);
         }
 
         // Attack END
@@ -94,7 +95,8 @@ public class StrafeShot : EnemyRangedAttack
     // Returns a random position within a specified radius around the enemy
     private Vector3 GetRandomPosition()
     {
-        var target = Random.insideUnitSphere * movementRange;
+        var range = Random.Range(minMoveDistance, maxMoveDistance);
+        var target = Random.insideUnitSphere * range;
         target = Vector3.ProjectOnPlane(target, Vector3.up);
         return target;
     }
