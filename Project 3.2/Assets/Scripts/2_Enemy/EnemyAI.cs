@@ -5,6 +5,7 @@ public struct EnemyState
     public EnemyAction CurrentAction;
     public EnemyAttack CurrentAttack;
 
+    public Vector3 PlayerPosition;
     public Vector3 MovementTarget;
 }
 public enum EnemyAction
@@ -28,8 +29,10 @@ public class EnemyAI : MonoBehaviour
     [Header("Attacks")]
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private Transform projectileSpawn;
-    [SerializeField] private ProjectilePool projectilePool;
+    [SerializeField] private ProjectilePool projectilePoolA;
+    [SerializeField] private ProjectilePool projectilePoolB;
     [SerializeField] private EnemyAttack[] attacks;
+    [SerializeField] private float playerDetectionRange;
 
     [Header("Movement")]
     [SerializeField] private float speed = 10f;
@@ -41,7 +44,11 @@ public class EnemyAI : MonoBehaviour
 
     // Unity Components
     private Rigidbody _rb;
+    private Enemy _enemy;
     private EnemyAnimationController _animationController;
+
+    // Player Tracking
+    private readonly Collider[] _detectionHits = new Collider[10];  // OverlapSphereNonAlloc buffer for player detection
 
     // Misc. Variables
     private bool _isActive;         // true/false if the state machine is active
@@ -54,13 +61,16 @@ public class EnemyAI : MonoBehaviour
         if (!ShowDebug) return;
         Gizmos.color = Color.red;
         if (_state.MovementTarget != Vector3.zero) Gizmos.DrawSphere(_state.MovementTarget, 0.5f);
+        Gizmos.color = Color.orange;
+        Gizmos.DrawWireSphere(transform.position, playerDetectionRange);
     }
     void OnGUI()
     {
         if (!ShowDebug) return;
         var debugText = $"Current State: {_state.CurrentAction} ({(int)_state.CurrentAction})\n"
                         + $"Current Attack: {_state.CurrentAttack?.attackID ?? 0}\n"
-                        + $"State Machine Cooldown: {_cooldownTimer:F2} sec\n";
+                        + $"State Machine Cooldown: {_cooldownTimer:F2} sec\n"
+                        + $"Player Position: {_state.PlayerPosition}\n";
         GUI.Label(new Rect(10, 10, 300, 100), debugText);
     }
     #endregion
@@ -68,12 +78,16 @@ public class EnemyAI : MonoBehaviour
 
     #region * Initialization
     // Start()
-    public void Initialize(EnemyAnimationController controller)
+    public void Initialize(Enemy enemy, EnemyAnimationController controller)
     {
+        _enemy = enemy;
         _rb = GetComponent<Rigidbody>();
         _animationController = controller;
 
         SetToIdle();
+
+        TrackPlayer();
+        _state.PlayerPosition = _state.PlayerPosition != null ? _state.PlayerPosition : Vector3.zero;
 
         _cooldownTimer = 0f;
         _isActive = true;
@@ -85,6 +99,9 @@ public class EnemyAI : MonoBehaviour
     // Update()
     public void UpdateAI(float deltaTime)
     {
+        // Track player position
+        TrackPlayer();
+
         // Only update State Machine if active
         if (_isActive)
         {
@@ -96,7 +113,6 @@ public class EnemyAI : MonoBehaviour
             {
                 // Choose a random action
                 var rand = Random.Range(0f, 100f);
-                Debug.Log(rand);
                 // Attack
                 if (rand <= attackChance)
                 {
@@ -105,7 +121,7 @@ public class EnemyAI : MonoBehaviour
                 // Movement
                 else
                 {
-                    MoveTo(GetRandomPosition(movementRadius));
+                    EnterMoveState(GetRandomPosition(movementRadius));
                 }
 
                 _cooldownTimer = 0f;
@@ -132,7 +148,8 @@ public class EnemyAI : MonoBehaviour
             // If destination reached, EXIT movement state
             if (_rb.position == _state.MovementTarget)
             {
-                SetToIdle();
+                _animationController.SetBool("AttackActive", false);
+                _enemy.SetToIdle();
                 return;
             }
 
@@ -156,29 +173,32 @@ public class EnemyAI : MonoBehaviour
 
 
     #region * State Machine Actions
-    // Moves the enemy character to target position
-    private void MoveTo(Vector3 position)
+    // Movement START
+    private void EnterMoveState(Vector3 position)
     {
         _state.CurrentAction = EnemyAction.Move;
         _state.MovementTarget = position;
     }
-    // Changes state to "Attack" and selects an attack to perform from list
+
+    // Attack START
     private void EnterAttackState()
     {
         // Update State Machine
         _state.CurrentAction = EnemyAction.Attack;
 
         // Select an Attack to perform
-        var attack = attacks[0];    // * placeholder attack selection *
+        var rand = Random.Range(0, attacks.Length);
+        var attack = attacks[rand];    // * placeholder attack selection *
         _state.CurrentAttack = attack;
 
         // Initialize Attack
         _state.CurrentAttack.Initialize();
     }
-    // Calls the 'Attack' function of the current attack (every frame)
+
+    // ATTACK
     private void UpdateCurrentAttack()
     {
-        // Return to Idle if 'CurrentAttack' is null OR if 'CurrentAttack' is complete
+        // Attack END
         if (!_state.CurrentAttack || _state.CurrentAttack.attackComplete)
         {
             _animationController.SetBool("AttackActive", false);
@@ -186,15 +206,27 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
+        // Attack IDLE
         if (_animationController.GetBool("AttackActive"))
         {
+            // Adjust projectile spawn to be at player height
+            Vector3 targetSpawn = projectileSpawn.position;
+            targetSpawn.y = 0.5f;   // * magic number alert *
+            projectileSpawn.position = targetSpawn;
+
+            // Initialize Attack Context
             var context = new EnemyAttackContext
             {
-                Enemy           = gameObject.GetComponent<Enemy>(),
-                HitboxSpawn     = projectileSpawn,
-                ProjectilePool  = projectilePool,
-                PlayerLayer     = playerLayer
+                Enemy                   = gameObject.GetComponent<Enemy>(),
+                AnimationController     = _animationController,
+                ProjectilePool          = projectilePoolA,
+                SecondaryProjectilePool = projectilePoolB,
+                PlayerPosition          = _state.PlayerPosition,
+                PlayerLayer             = playerLayer,
+                HitboxSpawn             = projectileSpawn,
             };
+
+            // Trigger Attack
             _state.CurrentAttack.Attack(context);
         }
     }
@@ -209,8 +241,31 @@ public class EnemyAI : MonoBehaviour
         target = Vector3.ProjectOnPlane(target, Vector3.up);
         return target;
     }
+    private void TrackPlayer()
+    {
+        var hits = Physics.OverlapSphereNonAlloc
+        (
+            transform.position,
+            playerDetectionRange,
+            _detectionHits,
+            playerLayer
+        );
+
+        if (hits > 0)
+        {
+            var hit = _detectionHits[0];
+            _state.PlayerPosition = Vector3.ProjectOnPlane(hit.gameObject.transform.position, Vector3.up);
+        }
+    }
     #endregion
 
+
+    #region * Movement Access
+    // Set movement target
+    public void SetMovementTarget(Vector3 position) => _state.MovementTarget = position;
+    // Set character rotation
+    public void RotateTowards(Vector3 direction) => transform.rotation = Quaternion.LookRotation(direction);
+    #endregion
 
     #region * Public Access 
     // State Getters
@@ -227,5 +282,6 @@ public class EnemyAI : MonoBehaviour
 
         _cooldownTimer = 0f;
     }
+    public Vector3 GetPlayerPosition() => _state.PlayerPosition;
     #endregion
 }

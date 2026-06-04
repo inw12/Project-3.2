@@ -12,6 +12,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     [Space]
     [SerializeField] private EnemyHitFeedback hitFeedback;
     [SerializeField] private Animator animator;
+    [SerializeField] private EnemyArmRig armRig;
 
     [Header("Stats")]
     [SerializeField] private float maxHealth = 100f;
@@ -38,8 +39,10 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     {
         // Initialization
         animationController.Initialize();
-        enemyAI.Initialize(animationController);
+        enemyAI.Initialize(this, animationController);
         hitFeedback.Initialize();
+
+        armRig.Initialize();
 
         _rb = GetComponent<Rigidbody>();
 
@@ -69,6 +72,8 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
             InHitstun       = _inHitstun
         };
         animationController.UpdateAnimator(animationContext);
+
+        armRig.UpdateRig();
 
         // Update Hit Feedback effect when taking damage
         if (hitFeedback) hitFeedback.UpdateEnemyModel(deltaTime);
@@ -171,16 +176,38 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     #region * Public Accessors 
     // Set TimeScale
     public void SetTimeScale(float t) => _timeScale = t;
-
     // Set to Idle
     public void SetToIdle() 
     {
         enemyAI.SetToIdle();
         animationController.SetToIdle();
+        ArmRigEnabled(false);
     }
+    #endregion
 
+
+    #region * Function Extensions
+    /// <summary>
+    /// *** Gateway for functions from enemy-related scripts *** 
+    /// </summary>
+    
     // Toggle Enemy State Machine
     public void EnemyActive(bool b) => enemyAI.EnemyActive(b);
+
+    // Access EnemyAI Movement
+    public void SetMovementTarget(Vector3 position) => enemyAI.SetMovementTarget(position);
+
+    // Character rotation
+    public void RotateTowards(Vector3 direction) => enemyAI.RotateTowards(direction);
+
+    // EnemyAI State Getter
+    public EnemyState GetState() => enemyAI.GetState();
+
+    // Player Position Getter
+    public Vector3 GetPlayerPosition() => enemyAI.GetPlayerPosition();
+
+    // Arm Rig Toggle
+    public void ArmRigEnabled(bool b) => armRig.ArmRigEnabled(b);
     #endregion
 
 

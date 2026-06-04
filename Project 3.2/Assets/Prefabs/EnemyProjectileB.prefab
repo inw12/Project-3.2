@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1516057337678909603}
   - component: {fileID: 6603622426385172766}
   m_Layer: 0
-  m_Name: EnemyProjectile
+  m_Name: EnemyProjectileB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,8 +30,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0, z: 0}
-  m_LocalScale: {x: 0.66, y: 0.66, z: 0.66}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 43480085bc0d749808ec1b853e2e4e6f, type: 2}
+  - {fileID: 2100000, guid: 678de9f97435aa042a4a2b293c5dd34d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -125,4 +125,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e085126c632e4074bf83dc6241802fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Resources::Projectile_Basic
-  hitboxRadius: 0.7
+  hitboxRadius: 0.9

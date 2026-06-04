@@ -16,7 +16,7 @@ public class EnemyAnimationController : MonoBehaviour
     //      - Parameters used by Enemy scripts
     private static readonly int CurrentAction       = Animator.StringToHash("CurrentAction");
     private static readonly int AttackID            = Animator.StringToHash("AttackID");  
-    private static readonly int AttackActive        = Animator.StringToHash("AttackActive");    
+    private static readonly int AttackActive        = Animator.StringToHash("AttackActive");    // used to toggle attacks during animation states
     private static readonly int KnockbackTrigger    = Animator.StringToHash("KnockbackTrigger");
     private static readonly int InHitstun           = Animator.StringToHash("InHitstun");
     //
@@ -26,6 +26,10 @@ public class EnemyAnimationController : MonoBehaviour
     private static readonly int PlayerPulled        = Animator.StringToHash("PlayerPulled");
     private static readonly int ComboTrigger        = Animator.StringToHash("ComboTrigger");
     private static readonly int InParryPhase        = Animator.StringToHash("InParryPhase");
+    #endregion
+
+    #region * Animation Events
+    
     #endregion
 
     private Animator _animator;
@@ -46,11 +50,18 @@ public class EnemyAnimationController : MonoBehaviour
     // Parameter Access
     public void     SetInteger(string s, int i) => _animator.SetInteger(s, i);
     public int      GetInteger(string s)        => _animator.GetInteger(s);
-    public void     SetFloat(string s, int i)   => _animator.SetFloat(s, i);
+
+    public void     SetFloat(string s, float f) => _animator.SetFloat(s, f);
+    public void     SetFloat(int i, float f)    => _animator.SetFloat(i, f);
     public float    GetFloat(string s)          => _animator.GetFloat(s);
+
     public void     SetBool(string s, bool b)   => _animator.SetBool(s, b);
     public bool     GetBool(string s)           => _animator.GetBool(s);
+
     public void     SetTrigger(string s)        => _animator.SetTrigger(s);
+
+    public void     SetAttackActive(bool b)        => _animator.SetBool(AttackActive, b);
+
     // Play Control
     public void SetToIdle()
     {

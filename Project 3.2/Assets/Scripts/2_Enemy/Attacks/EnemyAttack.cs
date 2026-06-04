@@ -3,9 +3,15 @@ using UnityEngine;
 public struct EnemyAttackContext
 {
     public Enemy Enemy;
-    public Transform HitboxSpawn;
+    public EnemyAnimationController AnimationController;
+    
     public ProjectilePool ProjectilePool;
+    public ProjectilePool SecondaryProjectilePool;
+
+    public Vector3 PlayerPosition;
     public LayerMask PlayerLayer;
+
+    public Transform HitboxSpawn;
 }
 
 public abstract class EnemyAttack : ScriptableObject
@@ -23,7 +29,15 @@ public abstract class EnemyAttack : ScriptableObject
     public abstract void Attack(EnemyAttackContext context);
 }
 
-public abstract class EnemyRangedAttack : EnemyAttack {}
-public abstract class EnemyFocusAttack  : EnemyAttack {}
-public abstract class EnemyAreaAttack   : EnemyAttack {}
-public abstract class EnemyMeleeAttack  : EnemyAttack {}
+public abstract class EnemyRangedAttack : EnemyAttack
+{
+    [Header("Stats")]
+    [SerializeField] protected float damage;
+    [SerializeField] protected float fireRate;
+    [SerializeField] protected float projectileSpeed;
+    [SerializeField] protected float range;
+}
+public abstract class EnemyFocusAttack      : EnemyAttack {}
+public abstract class EnemyAreaAttack       : EnemyAttack {}
+public abstract class EnemyMeleeAttack      : EnemyAttack {}
+public abstract class EnemySpecialAttack    : EnemyAttack {}

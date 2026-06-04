@@ -2,20 +2,23 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy Attacks/Ranged/ScatterShot")]
 public class ScatterShot : EnemyRangedAttack
 {
-    [Header("Stats")]
-    public float damage;
-    public float fireRate;
-    public float projectileSpeed;
-    public float range;
-
     [Header("Duration")]
-    public float durationMin;
-    public float durationMax;
+    [SerializeField] private float durationMin;
+    [SerializeField] private float durationMax;
     private float _duration;
 
     [Header("Number of Projectiles per Attack Instance")]
-    public int shotMin;
-    public int shotMax;
+    [SerializeField] private int shotMin;
+    [SerializeField] private int shotMax;
+
+    [Space]
+    [Header("AoE Burst")]
+    [SerializeField] private int shotsToBurst;
+    [SerializeField] private int burstProjectileCount;
+    [Space]
+    [SerializeField] private float burstProjectileSpeed;
+    [SerializeField] private float burstRange;
+
 
     // Timers & Counters
     private float _fireTimer;
@@ -53,10 +56,7 @@ public class ScatterShot : EnemyRangedAttack
         _fireTimer += deltaTime;
 
         // Attack END
-        if (_durationTimer >= _duration)
-        {
-            attackComplete = true;
-        }
+        attackComplete = _durationTimer >= _duration;
 
         // Attack Implementation
         if (_fireTimer >= fireRate && !attackComplete)
@@ -82,8 +82,40 @@ public class ScatterShot : EnemyRangedAttack
                 context.ProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
             }
 
-            _fireTimer = 0f;
             _shotCount++;
+
+            // Fire AoE Burst
+            if (_shotCount >= shotsToBurst)
+            {
+                Burst(context);
+                _shotCount = 0;
+            }
+
+            _fireTimer = 0f;
+        }
+    }
+
+    private void Burst(EnemyAttackContext context)
+    {
+        var angleStep = 360f / burstProjectileCount;
+        for (int i = 0; i < burstProjectileCount; i++)
+        {
+            // Calculate direction
+            var angle = i * angleStep;
+            var rad = angle * Mathf.Deg2Rad;
+            var direction = new Vector3(Mathf.Sin(rad), 0f, Mathf.Cos(rad));
+
+            // Initialize projectile stats
+            var stats = new ProjectileStats
+            {
+                Damage = damage,
+                Speed = burstProjectileSpeed,
+                Range = burstRange,
+                Direction = direction
+            };
+
+            // Fire projectile
+            context.SecondaryProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
         }
     }
 }

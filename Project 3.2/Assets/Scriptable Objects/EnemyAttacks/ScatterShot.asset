@@ -18,9 +18,13 @@ MonoBehaviour:
   requiresMovement: 0
   damage: 1
   fireRate: 0.1
-  projectileSpeed: 15
-  range: 70
-  durationMin: 5
-  durationMax: 8
-  shotMin: 4
-  shotMax: 8
+  projectileSpeed: 17
+  range: 60
+  durationMin: 4
+  durationMax: 6
+  shotMin: 8
+  shotMax: 12
+  shotsToBurst: 18
+  burstProjectileCount: 40
+  burstProjectileSpeed: 15
+  burstRange: 50
