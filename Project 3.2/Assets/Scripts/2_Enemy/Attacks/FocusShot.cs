@@ -10,9 +10,12 @@ public class FocusShot : EnemyRangedAttack
 
     private Vector3 _target;
 
+    private bool _chargeComplete;
+
     public override void Initialize()
     {
         requiresMovement = attackStarted = attackComplete = false;
+        _chargeComplete = false;
         _chargeTimer = _delayTimer = 0f;
     }
 
@@ -27,26 +30,25 @@ public class FocusShot : EnemyRangedAttack
 
         if (!attackComplete)
         {
-            // Attack START
+            // Charged Up!
             if (_chargeTimer >= chargeTime)
             {
-                // Update delay timer
+                if (!_chargeComplete)
+                {
+                    context.AnimationController.SetBool("ChargeActive", false);
+                    _chargeComplete = true;
+                }
+
                 _delayTimer += deltaTime;
 
-                // Fire when ready
+                // Fire!
                 if (_delayTimer >= fireDelay)
                 {
-                    // Initialize Projectile Stats
-                    var stats = new ProjectileStats
-                    {
-                        Damage = damage,
-                        Speed = projectileSpeed,
-                        Range = range,
-                        Direction = _target
-                    };
+                    // update animator
+                    context.AnimationController.SetBool("AttackActive", false);
 
-                    // Get Projectile from Object Pool
-                    context.ProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
+                    // fire projectile
+                    FireProjectile(context);
 
                     // Reset Timers
                     _chargeTimer = _delayTimer = 0f;
@@ -61,5 +63,20 @@ public class FocusShot : EnemyRangedAttack
                 _target = context.PlayerPosition;
             }
         }
+    }
+
+    private void FireProjectile(EnemyAttackContext context)
+    {
+        // Initialize Projectile Stats
+        var stats = new ProjectileStats
+        {
+            Damage = damage,
+            Speed = projectileSpeed,
+            Range = range,
+            Direction = (_target - context.Enemy.transform.position).normalized
+        };
+
+        // Get Projectile from Object Pool
+        context.ProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
     }
 }

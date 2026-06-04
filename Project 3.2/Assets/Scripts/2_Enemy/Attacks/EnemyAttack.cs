@@ -3,11 +3,15 @@ using UnityEngine;
 public struct EnemyAttackContext
 {
     public Enemy Enemy;
-    public Transform HitboxSpawn;
+    public EnemyAnimationController AnimationController;
+    
     public ProjectilePool ProjectilePool;
     public ProjectilePool SecondaryProjectilePool;
+    
     public Vector3 PlayerPosition;
     public LayerMask PlayerLayer;
+
+    public Transform HitboxSpawn;
 }
 
 public abstract class EnemyAttack : ScriptableObject

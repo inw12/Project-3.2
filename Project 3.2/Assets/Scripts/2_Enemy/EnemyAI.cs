@@ -218,11 +218,12 @@ public class EnemyAI : MonoBehaviour
             var context = new EnemyAttackContext
             {
                 Enemy                   = gameObject.GetComponent<Enemy>(),
-                HitboxSpawn             = projectileSpawn,
+                AnimationController     = _animationController,
                 ProjectilePool          = projectilePoolA,
                 SecondaryProjectilePool = projectilePoolB,
                 PlayerPosition          = _state.PlayerPosition,
-                PlayerLayer             = playerLayer
+                PlayerLayer             = playerLayer,
+                HitboxSpawn             = projectileSpawn,
             };
 
             // Trigger Attack
