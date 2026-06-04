@@ -197,6 +197,9 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     // Access EnemyAI Movement
     public void SetMovementTarget(Vector3 position) => enemyAI.SetMovementTarget(position);
 
+    // Character rotation
+    public void RotateTowards(Vector3 direction) => enemyAI.RotateTowards(direction);
+
     // EnemyAI State Getter
     public EnemyState GetState() => enemyAI.GetState();
 

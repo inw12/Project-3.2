@@ -7,7 +7,7 @@ public struct EnemyAttackContext
     
     public ProjectilePool ProjectilePool;
     public ProjectilePool SecondaryProjectilePool;
-    
+
     public Vector3 PlayerPosition;
     public LayerMask PlayerLayer;
 
@@ -37,6 +37,7 @@ public abstract class EnemyRangedAttack : EnemyAttack
     [SerializeField] protected float projectileSpeed;
     [SerializeField] protected float range;
 }
-public abstract class EnemyFocusAttack  : EnemyAttack {}
-public abstract class EnemyAreaAttack   : EnemyAttack {}
-public abstract class EnemyMeleeAttack  : EnemyAttack {}
+public abstract class EnemyFocusAttack      : EnemyAttack {}
+public abstract class EnemyAreaAttack       : EnemyAttack {}
+public abstract class EnemyMeleeAttack      : EnemyAttack {}
+public abstract class EnemySpecialAttack    : EnemyAttack {}

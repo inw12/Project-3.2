@@ -355,8 +355,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Enemy::EnemyAI
   ShowDebug: 1
-  stateChangeCooldown: 2
-  attackChance: 100
+  stateChangeCooldown: 2.5
+  attackChance: 90
   playerLayer:
     serializedVersion: 2
     m_Bits: 384
@@ -364,6 +364,8 @@ MonoBehaviour:
   projectilePoolA: {fileID: 2362655462679477691}
   projectilePoolB: {fileID: 3610125099506432815}
   attacks:
+  - {fileID: 11400000, guid: 8b46fb41b671240c0bcfb3e8049900ac, type: 2}
+  - {fileID: 11400000, guid: efdf059b643730f41a4a7d2e5fd69734, type: 2}
   - {fileID: 11400000, guid: 4c3543a9d4e3f994185e6e2cea9516ba, type: 2}
   playerDetectionRange: 100
   speed: 11

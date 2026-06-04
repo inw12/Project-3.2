@@ -260,6 +260,13 @@ public class EnemyAI : MonoBehaviour
     #endregion
 
 
+    #region * Movement Access
+    // Set movement target
+    public void SetMovementTarget(Vector3 position) => _state.MovementTarget = position;
+    // Set character rotation
+    public void RotateTowards(Vector3 direction) => transform.rotation = Quaternion.LookRotation(direction);
+    #endregion
+
     #region * Public Access 
     // State Getters
     public EnemyState GetState() => _state;
@@ -274,11 +281,6 @@ public class EnemyAI : MonoBehaviour
         _state.MovementTarget = Vector3.zero;
 
         _cooldownTimer = 0f;
-    }
-    // Set movement target
-    public void SetMovementTarget(Vector3 position)
-    {
-        _state.MovementTarget = position;
     }
     public Vector3 GetPlayerPosition() => _state.PlayerPosition;
     #endregion

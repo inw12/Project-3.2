@@ -40,38 +40,37 @@ public class FocusShot : EnemyRangedAttack
             context.AnimationController.SetFloat(PlaybackSpeedB, playbackSpeed);
         }
 
-        var deltaTime = Time.deltaTime;
-
         // Update charge timer
+        var deltaTime = Time.deltaTime;
         _chargeTimer += deltaTime;
 
+        // Attack UPDATE
         if (!attackComplete)
         {
             // Charged Up!
             if (_chargeTimer >= chargeTime)
             {
-                _delayTimer += deltaTime;
-
                 // Fire!
                 if (_delayTimer >= fireDelay)
                 {
-                    // update animator
-                    context.AnimationController.SetBool("AttackActive", false);
-
-                    // fire projectile
                     FireProjectile(context);
-
-                    // Reset Timers
-                    _chargeTimer = _delayTimer = 0f;
-
-                    // Attack END
                     attackComplete = true;
                 }
+
+                // update delay timer
+                _delayTimer += deltaTime;
             }
-            // Track player position WHILE charging
+            // ONLY track player position WHILE charging
             else
             {
+                // update target
                 _target = context.PlayerPosition;
+
+                // update character rotation
+                var target = _target;
+                target.y = 0f;
+                var direction = (target - context.Enemy.transform.position).normalized;
+                context.Enemy.RotateTowards(direction);
             }
         }
     }
