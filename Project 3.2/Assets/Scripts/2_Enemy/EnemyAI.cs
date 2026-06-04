@@ -61,6 +61,8 @@ public class EnemyAI : MonoBehaviour
         if (!ShowDebug) return;
         Gizmos.color = Color.red;
         if (_state.MovementTarget != Vector3.zero) Gizmos.DrawSphere(_state.MovementTarget, 0.5f);
+        Gizmos.color = Color.orange;
+        Gizmos.DrawWireSphere(transform.position, playerDetectionRange);
     }
     void OnGUI()
     {

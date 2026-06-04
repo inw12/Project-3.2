@@ -2,15 +2,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy Attacks/Ranged/StrafeShot")]
 public class StrafeShot : EnemyRangedAttack
 {
-    [Header("Stats")]
-    public float damage;
-    public float fireRate;
-    public float projectileSpeed;
-    public float range;
-
     [Header("Movement")]
-    public float minMoveDistance;
-    public float maxMoveDistance;
+    [SerializeField] private float minMoveDistance;
+    [SerializeField] private float maxMoveDistance;
 
     private float _fireTimer;           // Fire rate control
 

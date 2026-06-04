@@ -2,28 +2,22 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy Attacks/Ranged/ScatterShot")]
 public class ScatterShot : EnemyRangedAttack
 {
-    [Header("Stats")]
-    public float damage;
-    public float fireRate;
-    public float projectileSpeed;
-    public float range;
-
     [Header("Duration")]
-    public float durationMin;
-    public float durationMax;
+    [SerializeField] private float durationMin;
+    [SerializeField] private float durationMax;
     private float _duration;
 
     [Header("Number of Projectiles per Attack Instance")]
-    public int shotMin;
-    public int shotMax;
+    [SerializeField] private int shotMin;
+    [SerializeField] private int shotMax;
 
     [Space]
     [Header("AoE Burst")]
-    public int shotsToBurst;
-    public int burstProjectileCount;
+    [SerializeField] private int shotsToBurst;
+    [SerializeField] private int burstProjectileCount;
     [Space]
-    public float burstProjectileSpeed;
-    public float burstRange;
+    [SerializeField] private float burstProjectileSpeed;
+    [SerializeField] private float burstRange;
 
 
     // Timers & Counters
