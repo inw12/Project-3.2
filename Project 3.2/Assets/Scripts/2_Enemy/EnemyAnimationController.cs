@@ -16,7 +16,8 @@ public class EnemyAnimationController : MonoBehaviour
     //      - Parameters used by Enemy scripts
     private static readonly int CurrentAction       = Animator.StringToHash("CurrentAction");
     private static readonly int AttackID            = Animator.StringToHash("AttackID");  
-    private static readonly int AttackActive        = Animator.StringToHash("AttackActive");    
+    private static readonly int AttackActive        = Animator.StringToHash("AttackActive");    // used to toggle attacks during animation states
+    private static readonly int ChargeActive        = Animator.StringToHash("ChargeActive");    // used as a cue to trigger charge-based attacks
     private static readonly int KnockbackTrigger    = Animator.StringToHash("KnockbackTrigger");
     private static readonly int InHitstun           = Animator.StringToHash("InHitstun");
     //
