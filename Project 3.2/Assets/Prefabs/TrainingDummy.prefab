@@ -249,6 +249,7 @@ GameObject:
   - component: {fileID: 7452434067175923134}
   - component: {fileID: 7271059406618516646}
   - component: {fileID: 2362655462679477691}
+  - component: {fileID: 3610125099506432815}
   m_Layer: 9
   m_Name: TrainingDummy
   m_TagString: Untagged
@@ -354,16 +355,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Enemy::EnemyAI
   ShowDebug: 1
-  stateChangeCooldown: 2.8
-  attackChance: 85
+  stateChangeCooldown: 2
+  attackChance: 100
   playerLayer:
     serializedVersion: 2
     m_Bits: 384
-  projectileSpawn: {fileID: 1557692526481242841}
-  projectilePool: {fileID: 2362655462679477691}
+  projectileSpawn: {fileID: 4707431086118746279}
+  projectilePoolA: {fileID: 2362655462679477691}
+  projectilePoolB: {fileID: 3610125099506432815}
   attacks:
-  - {fileID: 11400000, guid: efdf059b643730f41a4a7d2e5fd69734, type: 2}
-  - {fileID: 11400000, guid: 8b46fb41b671240c0bcfb3e8049900ac, type: 2}
+  - {fileID: 11400000, guid: 4c3543a9d4e3f994185e6e2cea9516ba, type: 2}
   playerDetectionRange: 100
   speed: 11
   movementRadius: 20
@@ -396,6 +397,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Resources::ProjectilePool
   projectile: {fileID: 1860350838970000365, guid: 78e57cc89424b456e8d8247df3cc9ffe, type: 3}
+  defaultCapacity: 50
+  maxCapacity: 100
+--- !u!114 &3610125099506432815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354778989664995145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adc7cac9624ae4e03a9c732117db9402, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Resources::ProjectilePool
+  projectile: {fileID: 1860350838970000365, guid: 2b709f2e8b9302841869f39693fe41be, type: 3}
   defaultCapacity: 50
   maxCapacity: 100
 --- !u!1 &1430932352337793238
@@ -492,6 +508,51 @@ Transform:
   - {fileID: 6335710787389415531}
   m_Father: {fileID: 3979073776965234155}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1612436652890736961
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4707431086118746279}
+  - component: {fileID: 3349347273093551190}
+  m_Layer: 0
+  m_Name: Projectile Spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4707431086118746279
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1612436652890736961}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1557692526481242841}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3349347273093551190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1612436652890736961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dc1768baac1d8f46b05408071cf5982, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Enemy::ProjectileSpawnController
+  attachTo: {fileID: 1557692526481242841}
 --- !u!1 &1658486024563836115
 GameObject:
   m_ObjectHideFlags: 0
@@ -2198,6 +2259,7 @@ Transform:
   - {fileID: 7048693538443348389}
   - {fileID: 8852749667746374050}
   - {fileID: 6433758512223021345}
+  - {fileID: 4707431086118746279}
   m_Father: {fileID: 4786795306771117494}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8224210559292973837

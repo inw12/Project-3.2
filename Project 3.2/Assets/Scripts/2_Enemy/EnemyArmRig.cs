@@ -33,6 +33,15 @@ public class EnemyArmRig : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(hint.position, 0.25f);
     }
+    void OnGUI()
+    {
+        if (!ShowDebug) return;
+
+        var debugText = $"Rig Active: {_rigActive}\n"
+                        + $"Shoulder Weight: {shoulderAim.weight}\n"
+                        + $"Arm Weight: {armAim.weight}\n";
+        GUI.Label(new Rect(10, 200, 300, 100), debugText);
+    }
 
     public void Initialize()
     {
