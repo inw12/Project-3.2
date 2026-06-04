@@ -8,20 +8,37 @@ public class FocusShot : EnemyRangedAttack
     private float _chargeTimer;
     private float _delayTimer;
 
-    private Vector3 _target;
+    [Header("Animations")]
+    [SerializeField] private AnimationClip chargeAnimation;
+    [SerializeField] private AnimationClip delayAnimation;
+    private static readonly int PlaybackSpeedA = Animator.StringToHash("PlaybackSpeedA");
+    private static readonly int PlaybackSpeedB = Animator.StringToHash("PlaybackSpeedB");
 
-    private bool _chargeComplete;
+    private Vector3 _target;
 
     public override void Initialize()
     {
         requiresMovement = attackStarted = attackComplete = false;
-        _chargeComplete = false;
         _chargeTimer = _delayTimer = 0f;
     }
 
     public override void Attack(EnemyAttackContext context)
     {
-        if (!attackStarted) attackStarted = true;
+        // Attack START
+        if (!attackStarted) 
+        {
+            attackStarted = true;
+
+            context.AnimationController.SetAttackActive(true);
+
+            // Set playback speed for "charging up"
+            float playbackSpeed = chargeAnimation.length / chargeTime;
+            context.AnimationController.SetFloat(PlaybackSpeedA, playbackSpeed);
+
+            // Set playback speed for the delay before shooting
+            playbackSpeed = delayAnimation.length / fireDelay;
+            context.AnimationController.SetFloat(PlaybackSpeedB, playbackSpeed);
+        }
 
         var deltaTime = Time.deltaTime;
 
@@ -33,12 +50,6 @@ public class FocusShot : EnemyRangedAttack
             // Charged Up!
             if (_chargeTimer >= chargeTime)
             {
-                if (!_chargeComplete)
-                {
-                    context.AnimationController.SetBool("ChargeActive", false);
-                    _chargeComplete = true;
-                }
-
                 _delayTimer += deltaTime;
 
                 // Fire!

@@ -50,11 +50,18 @@ public class EnemyAnimationController : MonoBehaviour
     // Parameter Access
     public void     SetInteger(string s, int i) => _animator.SetInteger(s, i);
     public int      GetInteger(string s)        => _animator.GetInteger(s);
-    public void     SetFloat(string s, int i)   => _animator.SetFloat(s, i);
+
+    public void     SetFloat(string s, float f) => _animator.SetFloat(s, f);
+    public void     SetFloat(int i, float f)    => _animator.SetFloat(i, f);
     public float    GetFloat(string s)          => _animator.GetFloat(s);
+
     public void     SetBool(string s, bool b)   => _animator.SetBool(s, b);
     public bool     GetBool(string s)           => _animator.GetBool(s);
+
     public void     SetTrigger(string s)        => _animator.SetTrigger(s);
+
+    public void     SetAttackActive(bool b)        => _animator.SetBool(AttackActive, b);
+
     // Play Control
     public void SetToIdle()
     {
