@@ -17,7 +17,6 @@ public class EnemyAnimationController : MonoBehaviour
     private static readonly int CurrentAction       = Animator.StringToHash("CurrentAction");
     private static readonly int AttackID            = Animator.StringToHash("AttackID");  
     private static readonly int AttackActive        = Animator.StringToHash("AttackActive");    // used to toggle attacks during animation states
-    private static readonly int ChargeActive        = Animator.StringToHash("ChargeActive");    // used as a cue to trigger charge-based attacks
     private static readonly int KnockbackTrigger    = Animator.StringToHash("KnockbackTrigger");
     private static readonly int InHitstun           = Animator.StringToHash("InHitstun");
     //
@@ -27,6 +26,10 @@ public class EnemyAnimationController : MonoBehaviour
     private static readonly int PlayerPulled        = Animator.StringToHash("PlayerPulled");
     private static readonly int ComboTrigger        = Animator.StringToHash("ComboTrigger");
     private static readonly int InParryPhase        = Animator.StringToHash("InParryPhase");
+    #endregion
+
+    #region * Animation Events
+    
     #endregion
 
     private Animator _animator;
