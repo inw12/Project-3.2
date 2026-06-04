@@ -6,6 +6,7 @@ public struct EnemyAttackContext
     public Transform HitboxSpawn;
     public ProjectilePool ProjectilePool;
     public ProjectilePool SecondaryProjectilePool;
+    public Vector3 PlayerPosition;
     public LayerMask PlayerLayer;
 }
 

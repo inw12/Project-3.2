@@ -195,10 +195,10 @@ public class EnemyAI : MonoBehaviour
         _state.CurrentAttack.Initialize();
     }
 
-    // Attack IDLE
+    // ATTACK
     private void UpdateCurrentAttack()
     {
-        // Return to Idle if 'CurrentAttack' is null OR if 'CurrentAttack' is complete
+        // Attack END
         if (!_state.CurrentAttack || _state.CurrentAttack.attackComplete)
         {
             _animationController.SetBool("AttackActive", false);
@@ -206,6 +206,7 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
+        // Attack IDLE
         if (_animationController.GetBool("AttackActive"))
         {
             // Adjust projectile spawn to be at player height
@@ -220,6 +221,7 @@ public class EnemyAI : MonoBehaviour
                 HitboxSpawn             = projectileSpawn,
                 ProjectilePool          = projectilePoolA,
                 SecondaryProjectilePool = projectilePoolB,
+                PlayerPosition          = _state.PlayerPosition,
                 PlayerLayer             = playerLayer
             };
 
