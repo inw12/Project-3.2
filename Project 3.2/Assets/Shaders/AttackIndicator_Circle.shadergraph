@@ -92,7 +92,20 @@
         }
     ],
     "m_GroupDatas": [],
-    "m_StickyNoteDatas": [],
+    "m_StickyNoteDatas": [
+        {
+            "m_Id": "d5e370b789b848eb861600b85578f91e"
+        },
+        {
+            "m_Id": "9dda63bb09af4b12bc8751f5b2bc5152"
+        },
+        {
+            "m_Id": "2ab18ed2eaa04596bee6605de5b37be3"
+        },
+        {
+            "m_Id": "7af80d6b522e4c34a08c99dba80917c8"
+        }
+    ],
     "m_Edges": [
         {
             "m_OutputSlot": {
@@ -105,7 +118,7 @@
                 "m_Node": {
                     "m_Id": "61ace1cc5fd241219872b6b5044ef70d"
                 },
-                "m_SlotId": 0
+                "m_SlotId": 1
             }
         },
         {
@@ -147,7 +160,7 @@
                 "m_Node": {
                     "m_Id": "61ace1cc5fd241219872b6b5044ef70d"
                 },
-                "m_SlotId": 1
+                "m_SlotId": 0
             }
         },
         {
@@ -377,8 +390,8 @@
     ],
     "m_VertexContext": {
         "m_Position": {
-            "x": 538.9999389648438,
-            "y": -150.99998474121095
+            "x": 642.0,
+            "y": -549.0
         },
         "m_Blocks": [
             {
@@ -394,8 +407,8 @@
     },
     "m_FragmentContext": {
         "m_Position": {
-            "x": 538.9999389648438,
-            "y": 49.00000762939453
+            "x": 642.0,
+            "y": -348.9999694824219
         },
         "m_Blocks": [
             {
@@ -439,10 +452,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 177.0,
-            "y": 162.0,
+            "x": 273.0,
+            "y": 367.9999694824219,
             "width": 126.0,
-            "height": 142.0
+            "height": 142.00003051757813
         }
     },
     "m_Slots": [
@@ -555,10 +568,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -207.0,
-            "y": 34.000003814697269,
-            "width": 145.0,
-            "height": 118.0
+            "x": -129.9999542236328,
+            "y": 234.99998474121095,
+            "width": 144.99996948242188,
+            "height": 118.00001525878906
         }
     },
     "m_Slots": [
@@ -640,10 +653,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -381.0000915527344,
-            "y": -199.00001525878907,
-            "width": 129.00001525878907,
-            "height": 94.00001525878906
+            "x": -677.9999389648438,
+            "y": -218.99996948242188,
+            "width": 129.0,
+            "height": 93.99998474121094
         }
     },
     "m_Slots": [
@@ -751,10 +764,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 23.999984741210939,
-            "y": 373.0000305175781,
+            "x": 35.00001525878906,
+            "y": 234.99998474121095,
             "width": 128.00001525878907,
-            "height": 94.0
+            "height": 93.99998474121094
         }
     },
     "m_Slots": [
@@ -863,6 +876,26 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
+    "m_ObjectId": "2ab18ed2eaa04596bee6605de5b37be3",
+    "m_Title": "Lerping Base -> Fill",
+    "m_Content": "- STEP output gives progress of 'FillProgress' going from 0 -> 1\n- The shader is 'BaseColor' by default\n- As output from STEP updates, 'FillColor' overlaps 'BaseColor' in respect to 'FillProgress' ",
+    "m_TextSize": 0,
+    "m_Theme": 1,
+    "m_Position": {
+        "serializedVersion": "2",
+        "x": 25.0,
+        "y": -503.0,
+        "width": 238.0,
+        "height": 138.0
+    },
+    "m_Group": {
+        "m_Id": ""
+    }
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "2c755d4f2cb34e298adb2a4069f93d01",
     "m_Id": 0,
@@ -914,8 +947,8 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -708.0001220703125,
-            "y": -176.0,
+            "x": -1210.0,
+            "y": -142.0000457763672,
             "width": 128.0,
             "height": 101.0
         }
@@ -1021,10 +1054,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -209.0,
-            "y": -105.0,
+            "x": -465.99993896484377,
+            "y": -218.99996948242188,
             "width": 126.0,
-            "height": 118.0
+            "height": 117.99998474121094
         }
     },
     "m_Slots": [
@@ -1105,10 +1138,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 196.99998474121095,
-            "y": -53.00001525878906,
-            "width": 129.9999542236328,
-            "height": 142.0
+            "x": 139.00003051757813,
+            "y": -353.9999694824219,
+            "width": 129.99993896484376,
+            "height": 141.99998474121095
         }
     },
     "m_Slots": [
@@ -1242,10 +1275,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -268.0,
-            "y": 191.0,
+            "x": 42.000030517578128,
+            "y": 375.0,
             "width": 120.0,
-            "height": 149.0
+            "height": 148.99993896484376
         }
     },
     "m_Slots": [
@@ -1526,10 +1559,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 379.00006103515627,
-            "y": 308.0000305175781,
-            "width": 126.0,
-            "height": 117.99996948242188
+            "x": 429.9999694824219,
+            "y": 234.0,
+            "width": 126.00003051757813,
+            "height": 118.0
         }
     },
     "m_Slots": [
@@ -1611,10 +1644,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -404.0,
-            "y": 230.0,
-            "width": 131.0,
-            "height": 34.0
+            "x": -88.99994659423828,
+            "y": 415.0,
+            "width": 130.99996948242188,
+            "height": 33.999969482421878
         }
     },
     "m_Slots": [
@@ -1724,6 +1757,26 @@
     "m_DefaultValue": 1.0,
     "m_Labels": [],
     "m_LiteralMode": false
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
+    "m_ObjectId": "7af80d6b522e4c34a08c99dba80917c8",
+    "m_Title": "Shift Origin to center of Quad",
+    "m_Content": "Before SUBTRACT:\n- (0, 0) = Bottom Left\n- (0.5, 0.5) = Center\n- (1, 1) = Top Right\n\nAfter SUBTRACT:\n- (-0.5, -0.5) = Bottom Left\n- (0, 0) = Center\n- (0.5, 0.5) = Top Right\n",
+    "m_TextSize": 0,
+    "m_Theme": 1,
+    "m_Position": {
+        "serializedVersion": "2",
+        "x": -1222.0,
+        "y": -457.0,
+        "width": 305.0,
+        "height": 164.0
+    },
+    "m_Group": {
+        "m_Id": ""
+    }
 }
 
 {
@@ -1845,10 +1898,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -5.999965190887451,
-            "y": -21.00001335144043,
-            "width": 144.99998474121095,
-            "height": 118.00003051757813
+            "x": -30.000045776367189,
+            "y": -243.99998474121095,
+            "width": 145.00006103515626,
+            "height": 118.00001525878906
         }
     },
     "m_Slots": [
@@ -1874,6 +1927,26 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
+    "m_ObjectId": "9dda63bb09af4b12bc8751f5b2bc5152",
+    "m_Title": "\"Making a Circle\"",
+    "m_Content": "- Using distance from origin, we can map out what IS NOT inside of the circle\n\n* Results <= 1 are IN the circle\n* Results > 1 are OUT of the circle",
+    "m_TextSize": 0,
+    "m_Theme": 1,
+    "m_Position": {
+        "serializedVersion": "2",
+        "x": -575.0,
+        "y": -55.0,
+        "width": 230.0,
+        "height": 113.0
+    },
+    "m_Group": {
+        "m_Id": ""
+    }
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.SubtractNode",
     "m_ObjectId": "aeee9edc38754e2aa666b16597bde24e",
     "m_Group": {
@@ -1884,10 +1957,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -540.0001220703125,
-            "y": -200.00003051757813,
-            "width": 130.00006103515626,
-            "height": 118.00003051757813
+            "x": -1044.0,
+            "y": -219.0,
+            "width": 130.0,
+            "height": 117.99996185302735
         }
     },
     "m_Slots": [
@@ -2085,9 +2158,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 6.000003337860107,
-            "y": -104.00003051757813,
-            "width": 131.00006103515626,
+            "x": 4.9999871253967289,
+            "y": -318.0,
+            "width": 131.00001525878907,
             "height": 34.0
         }
     },
@@ -2202,10 +2275,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -730.0,
-            "y": -346.0000305175781,
-            "width": 208.0,
-            "height": 312.00006103515627
+            "x": -1224.0,
+            "y": -282.0000305175781,
+            "width": 145.0,
+            "height": 128.0
         }
     },
     "m_Slots": [
@@ -2368,10 +2441,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 18.00001335144043,
-            "y": -64.00000762939453,
-            "width": 120.00001525878906,
-            "height": 33.999996185302737
+            "x": 13.000045776367188,
+            "y": -287.0,
+            "width": 119.99990844726563,
+            "height": 34.00001525878906
         }
     },
     "m_Slots": [
@@ -2467,6 +2540,26 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.StickyNoteData",
+    "m_ObjectId": "d5e370b789b848eb861600b85578f91e",
+    "m_Title": "Distance from origin",
+    "m_Content": "- Each pixel calculates distance from the centered origin (0, 0)\n- Multiply by 2 to remap values to work in a 0->1 range",
+    "m_TextSize": 0,
+    "m_Theme": 1,
+    "m_Position": {
+        "serializedVersion": "2",
+        "x": -614.0,
+        "y": -336.0,
+        "width": 220.0,
+        "height": 100.0
+    },
+    "m_Group": {
+        "m_Id": ""
+    }
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "d72f67a24e344b5996a31b671b7c5d25",
     "m_Id": 2,
@@ -2502,9 +2595,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -218.0,
-            "y": -152.00003051757813,
-            "width": 136.00003051757813,
+            "x": -175.00003051757813,
+            "y": -203.99996948242188,
+            "width": 136.00001525878907,
             "height": 34.0
         }
     },
@@ -2579,9 +2672,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -272.0,
-            "y": 358.0,
-            "width": 118.0,
+            "x": 42.000030517578128,
+            "y": 529.0,
+            "width": 120.0,
             "height": 149.0
         }
     },
@@ -2626,8 +2719,8 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -434.0,
-            "y": 400.0,
+            "x": -79.99996948242188,
+            "y": 569.0,
             "width": 120.0,
             "height": 34.0
         }
