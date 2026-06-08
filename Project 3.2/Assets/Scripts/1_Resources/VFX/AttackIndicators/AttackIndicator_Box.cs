@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AttackIndicator_Rectangle : AttackIndicator
+public class AttackIndicator_Box : AttackIndicator
 {
     private static readonly int FillProgress = Shader.PropertyToID("_FillProgress");
 
