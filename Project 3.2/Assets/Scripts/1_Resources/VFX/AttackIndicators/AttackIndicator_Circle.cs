@@ -6,8 +6,8 @@ public class AttackIndicator_Circle : AttackIndicator
 
     protected override void SetFillProgress(float progress)
     {
-        fillRenderer.GetPropertyBlock(_mpb);
+        _mr.GetPropertyBlock(_mpb);
         _mpb.SetFloat(FillProgress, progress);
-        fillRenderer.SetPropertyBlock(_mpb);
+        _mr.SetPropertyBlock(_mpb);
     }
 }
