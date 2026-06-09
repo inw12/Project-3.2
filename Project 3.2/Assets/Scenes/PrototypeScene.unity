@@ -972,6 +972,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
+      propertyPath: stateChangeCooldown
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: 'attacks.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: 6d95bb58fa24c9b41916db508bdff92c, type: 2}
