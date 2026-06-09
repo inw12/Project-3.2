@@ -3,8 +3,6 @@ using UnityEngine;
 [RequireComponent(typeof(MeshRenderer))]
 public abstract class AttackIndicator : MonoBehaviour
 {
-    [SerializeField] private float duration;    // ** Delete Later **
-
     // Unity Components
     protected MeshRenderer _mr;
     protected MaterialPropertyBlock _mpb;   
@@ -16,29 +14,19 @@ public abstract class AttackIndicator : MonoBehaviour
     // Event/Action Signal
     private Action _onComplete;
 
-    public void Initialize(float duration, Action onComplete)
+
+    public void Initialize(float duration, Action onComplete, Vector3 scale)
     {
         _mr = GetComponent<MeshRenderer>();
         _mpb = new MaterialPropertyBlock();
 
         _duration = duration;
         _elapsed = 0f;
+
+        transform.localScale = scale;
 
         _onComplete = onComplete;
-        
-        OnInitialize();
     }
-
-    // *** Delete Later ***
-    void Start()
-    {
-        _mr = GetComponent<MeshRenderer>();
-        _mpb = new MaterialPropertyBlock();
-
-        _duration = duration;
-        _elapsed = 0f;
-    }
-    // ********************
 
     void Update()
     {
@@ -57,9 +45,5 @@ public abstract class AttackIndicator : MonoBehaviour
         }
     }
 
-    // Called once on Initialize for any subclass-specific setup
-    protected virtual void OnInitialize() { }
-
-    // Each subclass drives its fill differently
     protected abstract void SetFillProgress(float progress);
 }

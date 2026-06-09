@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class AttackIndicator_Circle : AttackIndicator
 {
     private static readonly int FillProgress = Shader.PropertyToID("_FillProgress");
