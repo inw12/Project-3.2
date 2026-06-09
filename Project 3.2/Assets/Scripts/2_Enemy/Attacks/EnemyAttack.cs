@@ -29,6 +29,9 @@ public abstract class EnemyAttack : ScriptableObject
     public abstract void Attack(EnemyAttackContext context);
 }
 
+// ----------------------------------------------------------------------
+
+#region * RANGED *
 public abstract class EnemyRangedAttack : EnemyAttack
 {
     [Header("Stats")]
@@ -37,7 +40,23 @@ public abstract class EnemyRangedAttack : EnemyAttack
     [SerializeField] protected float projectileSpeed;
     [SerializeField] protected float range;
 }
-public abstract class EnemyFocusAttack      : EnemyAttack {}
-public abstract class EnemyAreaAttack       : EnemyAttack {}
+#endregion
+
+#region * AREA *
+public abstract class EnemyAreaAttack       : EnemyAttack
+{
+    public enum AreaAttackShape
+    {
+        Circle,
+        Box
+    }
+
+    [Header("Stats")]
+    [SerializeField] protected float damage;
+    protected AreaAttackShape _attackShape;
+}
+#endregion
+
 public abstract class EnemyMeleeAttack      : EnemyAttack {}
+public abstract class EnemyFocusAttack      : EnemyAttack {}
 public abstract class EnemySpecialAttack    : EnemyAttack {}
