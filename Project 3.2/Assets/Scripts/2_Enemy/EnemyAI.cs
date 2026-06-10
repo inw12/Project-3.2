@@ -18,6 +18,7 @@ public enum EnemyAction
 [RequireComponent(typeof(Rigidbody))]
 public class EnemyAI : MonoBehaviour
 {
+    public bool isActive;
     public bool ShowDebug;
 
     #region * Variables
@@ -71,7 +72,9 @@ public class EnemyAI : MonoBehaviour
                         + $"Current Attack: {_state.CurrentAttack?.attackID ?? 0}\n"
                         + $"State Machine Cooldown: {_cooldownTimer:F2} sec\n"
                         + $"Player Position: {_state.PlayerPosition}\n";
-        GUI.Label(new Rect(10, 10, 300, 100), debugText);
+        var altText = "EnemyAI Disabled";
+        var result = _isActive ? debugText : altText;
+        GUI.Label(new Rect(10, 10, 300, 100), result);
     }
     #endregion
     
@@ -99,6 +102,8 @@ public class EnemyAI : MonoBehaviour
     // Update()
     public void UpdateAI(float deltaTime)
     {
+        _isActive = isActive;   // for debugging  *DELETE Later*
+
         // Track player position
         TrackPlayer();
 
