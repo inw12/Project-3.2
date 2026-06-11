@@ -10,28 +10,40 @@ public class PlayerAnimationRig : MonoBehaviour
     [Header("Components Influencing this Animation Rig")]
     [SerializeField] private PlayerCombat playerCombat;
 
-    [Header("Animation Rig Components")]
-    [SerializeField] private MultiAimConstraint shoulderAim;
-    [SerializeField] private TwoBoneIKConstraint armAim;
-    [Space]
-    [SerializeField] private Transform target;
-    [SerializeField] private Transform hint;
+    [Header("Constraints | Left Arm")]
+    public bool leftArmActive;
+    [SerializeField] private MultiAimConstraint shoulderL;
+    [SerializeField] private TwoBoneIKConstraint armL;
+    [SerializeField] private Transform targetL;
+    [SerializeField] private Transform hintL;
+    [SerializeField] private Vector3 hintOffsetL;
+
+    [Header("Constraints | Right Arm")]
+    public bool rightArmActive;
+    [SerializeField] private MultiAimConstraint shoulderR;
+    [SerializeField] private TwoBoneIKConstraint armR;
+    [SerializeField] private Transform targetR;
+    [SerializeField] private Transform hintR;
+    [SerializeField] private Vector3 hintOffsetR;
 
     [Header("Animation Rig Settings")]
-    [SerializeField] [Range(0f, 1f)] private float targetWeight = 1f;
     [SerializeField] private float animationSpeed = 10f;
-    [SerializeField] private Vector3 elbowOffset;
+    [SerializeField] [Range(0f, 1f)] private float targetWeight = 1f;
 
     private CombatState _state;
     private bool _rigActive;
 
     public void Initialize()
     {
-        shoulderAim.weight = 0f;
-        armAim.weight = 0f;
+        shoulderL.weight = 0f;
+        armL.weight = 0f;
+        shoulderR.weight = 0f;
+        armR.weight = 0f;
 
-        target.position = Vector3.zero;
-        hint.position = Vector3.zero;
+        targetL.position = Vector3.zero;
+        targetR.position = Vector3.zero;
+        hintL.position = Vector3.zero;
+        hintR.position = Vector3.zero;
 
         _rigActive = false;
     }
@@ -45,40 +57,80 @@ public class PlayerAnimationRig : MonoBehaviour
         _rigActive = _state.CurrentAction is CombatAction.Ranged;
 
         if (_rigActive)
-            RaiseArm();
-        else 
-            LowerArm();
+        {
+            RaiseLeft();
+            RaiseRight();
+        }
+        else
+        {
+            LowerArms();
+        } 
     }
 
-    private void RaiseArm()
+    private void RaiseLeft()
     {
-        // Update TARGET position
-        target.position = _state.Target;
+        if (leftArmActive)
+        {
+            // TARGET
+            targetL.position = _state.Target;
 
-        // Update HINT position
-        var shoulder = shoulderAim.data.constrainedObject.transform;
-        var direction = (target.position - shoulder.position).normalized;
-        var targetPosition = shoulder.position
-                            + direction * elbowOffset.z     // forward offset
-                            + Vector3.up * elbowOffset.y    // up/down offset
-                            + Vector3.left * elbowOffset.x; // left/right offset
-        hint.position = targetPosition;
+            // HINT
+            var shoulder = shoulderL.data.constrainedObject.transform;
+            var direction = (targetL.position - shoulder.position).normalized;
+            var targetPosition = shoulder.position
+                                + direction * hintOffsetL.z     // forward offset
+                                + Vector3.up * hintOffsetL.y    // up/down offset
+                                + Vector3.left * hintOffsetL.x; // left/right offset
+            hintL.position = targetPosition;
 
-        // Lerp WEIGHT values to 100
-        shoulderAim.weight = armAim.weight = Mathf.Lerp
+            // APPLY Changes
+            shoulderL.weight = armL.weight = Mathf.Lerp
+            (
+                shoulderL.weight,
+                targetWeight,
+                1f - Mathf.Exp(-animationSpeed * Time.deltaTime)
+            );
+        }
+    }
+
+    private void RaiseRight()
+    {
+        if (rightArmActive)
+        {
+            // TARGET
+            targetR.position = _state.Target;
+
+            // HINT
+            var shoulder = shoulderR.data.constrainedObject.transform;
+            var direction = (targetR.position - shoulder.position).normalized;
+            var targetPosition = shoulder.position
+                                + direction * hintOffsetR.z     // forward offset
+                                + Vector3.up * hintOffsetR.y    // up/down offset
+                                + Vector3.left * hintOffsetR.x; // left/right offset
+            hintR.position = targetPosition;
+
+            // APPLY Changes
+            shoulderR.weight = armR.weight = Mathf.Lerp
+            (
+                shoulderR.weight,
+                targetWeight,
+                1f - Mathf.Exp(-animationSpeed * Time.deltaTime)
+            );
+        }
+    }
+
+    private void LowerArms()
+    {
+        shoulderL.weight = armL.weight = Mathf.Lerp
         (
-            shoulderAim.weight,
-            targetWeight,
+            shoulderL.weight,
+            0f,
             1f - Mathf.Exp(-animationSpeed * Time.deltaTime)
         );
-    }
 
-    private void LowerArm()
-    {
-        // * Lerp WEIGHT values to 0
-        shoulderAim.weight = armAim.weight = Mathf.Lerp
+        shoulderR.weight = armR.weight = Mathf.Lerp
         (
-            shoulderAim.weight,
+            shoulderR.weight,
             0f,
             1f - Mathf.Exp(-animationSpeed * Time.deltaTime)
         );
