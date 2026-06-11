@@ -950,8 +950,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1017594663}
     - target: {fileID: 3814022279095183903, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
+      propertyPath: targetLimitR
+      value: 1.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 3814022279095183903, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: leftArmActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3814022279095183903, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
+      propertyPath: targetHeightR
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3814022279095183903, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
+      propertyPath: targetRadiusR
+      value: 0.66
       objectReference: {fileID: 0}
     - target: {fileID: 3814022279095183903, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: handRotationOffsetR.x

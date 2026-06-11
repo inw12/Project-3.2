@@ -31,6 +31,9 @@ public class PlayerAnimationRig : MonoBehaviour
     [Space]
     [SerializeField] private Transform handBoneR;
     [SerializeField] private Vector3 handRotationOffsetR;
+    [Space]
+    [SerializeField] private float targetRadiusR;
+    [SerializeField] private float targetHeightR;
 
     [Header("Animation Rig Settings")]
     [SerializeField] private float animationSpeed = 10f;
@@ -112,7 +115,12 @@ public class PlayerAnimationRig : MonoBehaviour
         if (rightArmActive)
         {
             // TARGET
-            targetR.position = _state.Target;
+            var start = transform.position;
+            var end = _state.Target;
+            start.y = end.y = targetHeightR;
+            
+            var distance = end - start;
+            targetR.position = start + Vector3.ClampMagnitude(distance, targetRadiusR);
 
             // HINT
             var shoulder = shoulderR.data.constrainedObject.transform;
