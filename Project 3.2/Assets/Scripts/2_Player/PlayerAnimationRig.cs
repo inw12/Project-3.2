@@ -17,6 +17,9 @@ public class PlayerAnimationRig : MonoBehaviour
     [SerializeField] private Transform targetL;
     [SerializeField] private Transform hintL;
     [SerializeField] private Vector3 hintOffsetL;
+    [Space]
+    [SerializeField] private Transform handBoneL;
+    [SerializeField] private Vector3 handRotationOffsetL;
 
     [Header("Constraints | Right Arm")]
     public bool rightArmActive;
@@ -25,6 +28,9 @@ public class PlayerAnimationRig : MonoBehaviour
     [SerializeField] private Transform targetR;
     [SerializeField] private Transform hintR;
     [SerializeField] private Vector3 hintOffsetR;
+    [Space]
+    [SerializeField] private Transform handBoneR;
+    [SerializeField] private Vector3 handRotationOffsetR;
 
     [Header("Animation Rig Settings")]
     [SerializeField] private float animationSpeed = 10f;
@@ -90,6 +96,14 @@ public class PlayerAnimationRig : MonoBehaviour
                 targetWeight,
                 1f - Mathf.Exp(-animationSpeed * Time.deltaTime)
             );
+
+            // Force hand to desired rotation
+            if (handBoneL)
+            {
+                var handDirection = (targetL.position - handBoneL.position).normalized;
+                handBoneL.rotation = Quaternion.LookRotation(handDirection, Vector3.up)
+                                    * Quaternion.Euler(handRotationOffsetL);
+            }
         }
     }
 
@@ -116,6 +130,14 @@ public class PlayerAnimationRig : MonoBehaviour
                 targetWeight,
                 1f - Mathf.Exp(-animationSpeed * Time.deltaTime)
             );
+
+            // Force hand to desired rotation
+            if (handBoneR)
+            {
+                var handDirection = (targetR.position - handBoneR.position).normalized;
+                handBoneR.rotation = Quaternion.LookRotation(handDirection, Vector3.up)
+                                    * Quaternion.Euler(handRotationOffsetR);
+            }
         }
     }
 
