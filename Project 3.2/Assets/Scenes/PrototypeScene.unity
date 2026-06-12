@@ -927,18 +927,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 3752595146881450386, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      propertyPath: m_Data.m_MaxLimit
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 3814022279095183903, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      propertyPath: handRotationOffsetR.y
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 4495702507185481024, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      propertyPath: m_Data.m_MaxLimit
-      value: 80
-      objectReference: {fileID: 0}
     - target: {fileID: 9183493435168247240, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
