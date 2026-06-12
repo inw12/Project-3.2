@@ -22,6 +22,8 @@ public class Player : MonoBehaviour
     [SerializeField] private CapsuleCollider hurtboxCollider;
     [SerializeField] private CapsuleCollider parrybox;
     [SerializeField] private LayerMask groundLayer;
+    [Space]
+    [SerializeField] private GameObject weaponModel;
 
     // Player Input
     private PlayerInput _input;
