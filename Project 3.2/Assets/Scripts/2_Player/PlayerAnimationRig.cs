@@ -7,6 +7,8 @@ using UnityEngine;
 using UnityEngine.Animations.Rigging;
 public class PlayerAnimationRig : MonoBehaviour
 {
+    public bool ShowDebug;
+
     [Header("Components Influencing this Animation Rig")]
     [SerializeField] private PlayerCombat playerCombat;
 
@@ -42,6 +44,20 @@ public class PlayerAnimationRig : MonoBehaviour
     private CombatState _state;
     private bool _rigActive;
 
+    #region * Debugging
+    void OnDrawGizmos()
+    {
+        if (!ShowDebug) return;
+        // Target
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(targetR.position, 0.1f);
+        // Hint
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(hintR.position, 0.05f);
+    }
+    #endregion
+
+
     public void Initialize()
     {
         shoulderL.weight = 0f;
@@ -62,8 +78,9 @@ public class PlayerAnimationRig : MonoBehaviour
     public void UpdateRig()
     {
         _state = playerCombat.GetState();
-
         _rigActive = _state.CurrentAction is CombatAction.Ranged;
+
+        hintR.localPosition = hintOffsetR;
 
         if (_rigActive)
         {
@@ -123,13 +140,7 @@ public class PlayerAnimationRig : MonoBehaviour
             targetR.position = start + Vector3.ClampMagnitude(distance, targetRadiusR);
 
             // HINT
-            var shoulder = shoulderR.data.constrainedObject.transform;
-            var direction = (targetR.position - shoulder.position).normalized;
-            var targetPosition = shoulder.position
-                                + direction * hintOffsetR.z     // forward offset
-                                + Vector3.up * hintOffsetR.y    // up/down offset
-                                + Vector3.left * hintOffsetR.x; // left/right offset
-            hintR.position = targetPosition;
+            //hintR.localPosition = hintOffsetR;
 
             // APPLY Changes
             shoulderR.weight = armR.weight = Mathf.Lerp

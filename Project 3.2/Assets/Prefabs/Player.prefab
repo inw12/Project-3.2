@@ -299,7 +299,7 @@ MonoBehaviour:
   fireRate: 0.4
   projectileSpeed: 40
   projectileRange: 75
-  projectileSpawn: {fileID: 2303980449733374902}
+  projectileSpawn: {fileID: 1288154415946621128}
 --- !u!114 &47124724488737220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6301,19 +6301,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3cf068ab3c4a470294510605c4e1ea9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Player::PlayerAnimationRig
+  ShowDebug: 1
   playerCombat: {fileID: 9160193776550035463}
-  leftArmActive: 1
+  leftArmActive: 0
   shoulderL: {fileID: 3752595146881450386}
   armL: {fileID: 6863994877483453021}
   targetL: {fileID: 4032726225621609908}
   hintL: {fileID: 328986359420905522}
   hintOffsetL: {x: 0, y: 0, z: 0}
+  handBoneL: {fileID: 2303980449733374902}
+  handRotationOffsetL: {x: 0, y: 0, z: 0}
   rightArmActive: 1
   shoulderR: {fileID: 4495702507185481024}
   armR: {fileID: 6132685518584751989}
   targetR: {fileID: 2858985966650848665}
   hintR: {fileID: 8700694345984541147}
-  hintOffsetR: {x: 0, y: 0, z: 0}
+  hintOffsetR: {x: 0.2, y: 1.2, z: 0}
+  handBoneR: {fileID: 1288154415946621128}
+  handRotationOffsetR: {x: -80, y: 180, z: 0}
+  targetRadiusR: 0.68
+  targetHeightR: 1.45
   animationSpeed: 15
   targetWeight: 0.5
 --- !u!1 &3658474810866719199
@@ -8563,7 +8570,7 @@ MonoBehaviour:
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
     m_MinLimit: 0
-    m_MaxLimit: 180
+    m_MaxLimit: 90
     m_AimAxis: 4
     m_UpAxis: 2
     m_WorldUpType: 0
@@ -12358,7 +12365,7 @@ MonoBehaviour:
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
     m_MinLimit: 0
-    m_MaxLimit: 180
+    m_MaxLimit: 90
     m_AimAxis: 4
     m_UpAxis: 2
     m_WorldUpType: 0
