@@ -37,13 +37,12 @@ public class Player : MonoBehaviour
         var moveState = playerMovement.GetState();
         var combatState = playerCombat.GetState();
 
-        var debugMessage =   $"Movement: {moveState.CurrentAction}\n"
+        var debugMessage =    $"Movement: {moveState.CurrentAction}\n"
                             + $"Velocity: {moveState.Velocity}\n\n"
                             + $"Combat: {combatState.CurrentAction}\n\n"
                             + $"Movement Input Enabled: {playerMovement.MovementInputEnabled()}\n"
                             + $"Combat Input Enabled: {playerCombat.CombatInputEnabled()}\n"
                             + $"Parry Input Enabled: {playerCombat.ParryInputEnabled()}";
-
         GUI.Label(new Rect(DebugPosition.x, DebugPosition.y, 500, 250), debugMessage);
     }
     #endregion

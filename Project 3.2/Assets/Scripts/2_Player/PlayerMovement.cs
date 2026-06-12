@@ -6,8 +6,7 @@ public struct MovementState
     public Vector3 Velocity;
     public bool IsGrounded;
 
-    public Vector3 CurrentPosition;
-    public Vector3 PreviousPosition;
+    public Vector3 Position;
 }
 public enum MovementAction
 {
@@ -25,6 +24,8 @@ public struct MovementInput
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    #region * Variables
+    // ---
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 10f;
     [SerializeField] private float moveAcceleration = 20f;
@@ -56,24 +57,29 @@ public class PlayerMovement : MonoBehaviour
         public float Timer;
     }
     private RollData _rollData;
+    // ---
+    #endregion
 
 
-    // Start()
+    #region * Initialization
     public void Initialize(CapsuleCollider hurtbox)
     {
-        _controller = GetComponent<CharacterController>();
-
         _movementInputEnabled = true;
+
+        _controller = GetComponent<CharacterController>();
 
         _state.CurrentAction = MovementAction.Idle;
         _state.Velocity = Vector3.zero;
         _state.IsGrounded = _controller.isGrounded;
+        _state.Position = transform.position;
         _prevState = _state;
 
         _hurtbox = hurtbox;
     }
+    #endregion
 
-    // Update()
+
+    #region * Update()
     public void UpdateInput(MovementInput input)
     {
         // Read Player Input
@@ -88,17 +94,20 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Manual interpolation for smooth movement
-        var alpha = (Time.time - Time.fixedTime) / Time.fixedDeltaTime;
-        transform.position = Vector3.Lerp(_state.PreviousPosition, _state.CurrentPosition, alpha);
+        var p = (Time.time - Time.fixedTime) / Time.fixedDeltaTime;
+        transform.position = Vector3.Lerp(_prevState.Position, _state.Position, p);
     }
+    #endregion
+    
 
     #region * FixedUpdate()
     public void UpdateMovement(float fixedDeltaTime)
     {
+        _prevState = _state;
+
         ApplyGravity();
 
         // Roll Movement 
-        // * roll triggered *
         if (_rollData.Triggered)
         {
             _state.CurrentAction = MovementAction.Roll;
@@ -122,7 +131,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         // Regular Movement
-        // * movement input *
         else if (_requestedMovement.sqrMagnitude > 0f && _movementInputEnabled)
         {
             _state.CurrentAction = MovementAction.Move;
@@ -136,7 +144,6 @@ public class PlayerMovement : MonoBehaviour
             );
         }
         // Idle
-        // * no input *
         else if (_requestedMovement.sqrMagnitude == 0f && _movementInputEnabled)
         {
             _state.CurrentAction = MovementAction.Idle;
@@ -147,16 +154,12 @@ public class PlayerMovement : MonoBehaviour
                 1f - Mathf.Exp(-moveAcceleration * fixedDeltaTime)
             );
         }
-        
 
         // Apply Movement
         if (_controller.enabled) _controller.Move(_state.Velocity * fixedDeltaTime);
 
-        _state.PreviousPosition = _state.CurrentPosition;
-        _state.CurrentPosition = transform.position;
-
         // Update State Machine
-        _prevState = _state;
+        _state.Position = transform.position;
     }
     #endregion
 
@@ -199,7 +202,7 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
 
-    #region *--- Helper Functions --------------------------------------------------*
+    #region * Helper Functions 
     private void ApplyGravity()
     {
         // Gravity
@@ -232,7 +235,7 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
 
-    #region *--- Public Getters ----------------------------------------------------*
+    #region * Public Getters 
     public MovementState GetState() => _state;
     public MovementState GetPrevState() => _prevState;
 
@@ -240,7 +243,7 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
 
-    #region *--- Public Methods used by other classes to influence Player movement -----*
+    #region * Public Gateways
     public void MovementInputEnabled(bool b)
     {
         if (!b)

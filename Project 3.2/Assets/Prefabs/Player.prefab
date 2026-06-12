@@ -239,6 +239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Player::Player
   ShowDebug: 1
+  DebugPosition: {x: 20, y: 700}
   playerMovement: {fileID: 5204891853911126009}
   playerCombat: {fileID: 9160193776550035463}
   animationController: {fileID: 6384798146728278658}
@@ -261,12 +262,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01e389e2f1cdd43d389173aa564e9164, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Player::PlayerMovement
-  moveSpeed: 10
-  moveAcceleration: 20
+  moveSpeed: 11
+  moveAcceleration: 25
   moveRotation: 15
   rollSpeed: 12
   rollAcceleration: 20
-  rollDuration: 0.6
+  rollDuration: 0.55
 --- !u!114 &9160193776550035463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6303,7 +6304,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Player::PlayerAnimationRig
   ShowDebug: 1
   playerCombat: {fileID: 9160193776550035463}
-  rightArmActive: 1
   shoulderR: {fileID: 4495702507185481024}
   armR: {fileID: 6132685518584751989}
   targetR: {fileID: 2858985966650848665}
@@ -6313,7 +6313,6 @@ MonoBehaviour:
   targetHeightR: 1.45
   hintOffsetR: {x: 0.2, y: 1.2, z: 0}
   handRotationOffsetR: {x: -80, y: 200, z: 0}
-  leftArmActive: 1
   shoulderL: {fileID: 3752595146881450386}
   armL: {fileID: 6863994877483453021}
   targetL: {fileID: 4032726225621609908}
