@@ -5,6 +5,9 @@ public struct MovementState
     public MovementAction CurrentAction;
     public Vector3 Velocity;
     public bool IsGrounded;
+
+    public Vector3 CurrentPosition;
+    public Vector3 PreviousPosition;
 }
 public enum MovementAction
 {
@@ -73,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
     // Update()
     public void UpdateInput(MovementInput input)
     {
+        // Read Player Input
         if (_movementInputEnabled)
         {
             _requestedMovement = new Vector3(input.Movement.x, 0f, input.Movement.y).normalized;
@@ -82,9 +86,13 @@ public class PlayerMovement : MonoBehaviour
 
             _requestedMousePosition = input.MousePosition;
         }
+
+        // Manual interpolation for smooth movement
+        var alpha = (Time.time - Time.fixedTime) / Time.fixedDeltaTime;
+        transform.position = Vector3.Lerp(_state.PreviousPosition, _state.CurrentPosition, alpha);
     }
 
-    // FixedUpdate()
+    #region * FixedUpdate()
     public void UpdateMovement(float fixedDeltaTime)
     {
         ApplyGravity();
@@ -144,9 +152,14 @@ public class PlayerMovement : MonoBehaviour
         // Apply Movement
         if (_controller.enabled) _controller.Move(_state.Velocity * fixedDeltaTime);
 
+        _state.PreviousPosition = _state.CurrentPosition;
+        _state.CurrentPosition = transform.position;
+
         // Update State Machine
         _prevState = _state;
     }
+    #endregion
+
 
     #region * Rotation
     // LateUpdate()

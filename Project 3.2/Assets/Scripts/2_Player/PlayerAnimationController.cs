@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class PlayerAnimationController : MonoBehaviour
@@ -42,8 +43,10 @@ public class PlayerAnimationController : MonoBehaviour
 
         // Update Velocity
         var velocity = transform.InverseTransformDirection(_moveState.Velocity.normalized);
-        _animator.SetFloat(xVelocity, velocity.x);
-        _animator.SetFloat(yVelocity, velocity.z);
+        var x = MathF.Round(velocity.x, 2);
+        var y = MathF.Round(velocity.z, 2);
+        _animator.SetFloat(xVelocity, x);
+        _animator.SetFloat(yVelocity, y);
 
         // Movement Action
         if (_prevMoveState.CurrentAction != _moveState.CurrentAction) {
