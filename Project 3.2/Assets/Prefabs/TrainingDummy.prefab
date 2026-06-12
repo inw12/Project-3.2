@@ -354,9 +354,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 127d7d369e45049ff9eb6d9c47ebcc5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Enemy::EnemyAI
+  isActive: 0
   ShowDebug: 1
-  stateChangeCooldown: 2.5
-  attackChance: 90
+  stateChangeCooldown: 2.25
+  attackChance: 95
   playerLayer:
     serializedVersion: 2
     m_Bits: 384

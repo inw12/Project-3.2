@@ -1,37 +1,79 @@
-///
-/// *** This script controls the animation rig
-///     that controls the character's LEFT ARM
-///     to shoot projectiles
-/// 
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 public class PlayerAnimationRig : MonoBehaviour
 {
+    public bool ShowDebug;
+
     [Header("Components Influencing this Animation Rig")]
     [SerializeField] private PlayerCombat playerCombat;
-
-    [Header("Animation Rig Components")]
-    [SerializeField] private MultiAimConstraint shoulderAim;
-    [SerializeField] private TwoBoneIKConstraint armAim;
     [Space]
-    [SerializeField] private Transform target;
-    [SerializeField] private Transform hint;
+
+    [Header("RIGHT Arm")]
+    [SerializeField] private MultiAimConstraint shoulderR;
+    [SerializeField] private TwoBoneIKConstraint armR;
+    [Space]
+    [SerializeField] private Transform targetR;
+    [SerializeField] private Transform hintR;
+    [Space]
+    [SerializeField] private Transform handBoneR;
+    [Space]
+    [SerializeField] private float targetRadiusR;
+    [SerializeField] private float targetHeightR;
+    [Space]
+    [SerializeField] private Vector3 hintOffsetR;
+    [Space]
+    [SerializeField] private Vector3 handRotationOffsetR;
+    [Space]
+
+    [Header("LEFT Arm")]
+    [SerializeField] private MultiAimConstraint shoulderL;
+    [SerializeField] private TwoBoneIKConstraint armL;
+    [Space]
+    [SerializeField] private Transform targetL;
+    [SerializeField] private Transform hintL;
+    [Space]
+    [SerializeField] private Transform handBoneL;
+    [Space]
+    [SerializeField] private Vector3 targetOffsetL;
+    [SerializeField] private Vector3 hintOffsetL;
+    [Space]
+    [SerializeField] private Vector3 handRotationOffsetL;
+    [Space]
 
     [Header("Animation Rig Settings")]
-    [SerializeField] [Range(0f, 1f)] private float targetWeight = 1f;
     [SerializeField] private float animationSpeed = 10f;
-    [SerializeField] private Vector3 elbowOffset;
+    [SerializeField] [Range(0f, 1f)] private float targetWeight = 1f;
 
     private CombatState _state;
     private bool _rigActive;
 
+    #region * Debugging
+    void OnDrawGizmos()
+    {
+        if (!ShowDebug) return;
+        // Target
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(targetR.position, 0.1f);
+        Gizmos.DrawSphere(targetL.position, 0.1f);
+        // Hint
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(hintR.position, 0.05f);
+        Gizmos.DrawSphere(hintL.position, 0.05f);
+    }
+    #endregion
+
+
     public void Initialize()
     {
-        shoulderAim.weight = 0f;
-        armAim.weight = 0f;
+        shoulderL.weight = 0f;
+        armL.weight = 0f;
+        shoulderR.weight = 0f;
+        armR.weight = 0f;
 
-        target.position = Vector3.zero;
-        hint.position = Vector3.zero;
+        targetL.position = Vector3.zero;
+        targetR.position = Vector3.zero;
+        hintL.position = Vector3.zero;
+        hintR.position = Vector3.zero;
 
         _rigActive = false;
     }
@@ -40,45 +82,87 @@ public class PlayerAnimationRig : MonoBehaviour
     //   if the player is currently performing a RANGED ATTACK
     public void UpdateRig()
     {
+        // "Should the rig be on/off?"
         _state = playerCombat.GetState();
-
         _rigActive = _state.CurrentAction is CombatAction.Ranged;
-
         if (_rigActive)
-            RaiseArm();
-        else 
-            LowerArm();
+        {
+            RaiseLeft();
+            RaiseRight();
+        }
+        else
+        {
+            LowerArms();
+        } 
     }
 
-    private void RaiseArm()
+    private void RaiseLeft()
     {
-        // Update TARGET position
-        target.position = _state.Target;
+        // TARGET
+        targetL.position = handBoneR.position;
+        targetL.localPosition += targetOffsetL;
 
-        // Update HINT position
-        var shoulder = shoulderAim.data.constrainedObject.transform;
-        var direction = (target.position - shoulder.position).normalized;
-        var targetPosition = shoulder.position
-                            + direction * elbowOffset.z     // forward offset
-                            + Vector3.up * elbowOffset.y    // up/down offset
-                            + Vector3.left * elbowOffset.x; // left/right offset
-        hint.position = targetPosition;
+        // HINT
+        hintL.localPosition = hintOffsetL;
 
-        // Lerp WEIGHT values to 100
-        shoulderAim.weight = armAim.weight = Mathf.Lerp
+        // APPLY Changes
+        shoulderL.weight = armL.weight = Mathf.Lerp
         (
-            shoulderAim.weight,
+            shoulderL.weight,
             targetWeight,
             1f - Mathf.Exp(-animationSpeed * Time.deltaTime)
         );
+
+        // Force hand to desired rotation
+        if (handBoneL)
+        {
+            var handDirection = (targetL.position - handBoneL.position).normalized;
+            handBoneL.rotation = Quaternion.LookRotation(handDirection, Vector3.up)
+                                * Quaternion.Euler(handRotationOffsetL);
+        }
     }
 
-    private void LowerArm()
+    private void RaiseRight()
     {
-        // * Lerp WEIGHT values to 0
-        shoulderAim.weight = armAim.weight = Mathf.Lerp
+        // TARGET
+        var start = transform.position;
+        var end = _state.Target;
+        start.y = end.y = targetHeightR;
+        var distance = end - start;
+        targetR.position = start + Vector3.ClampMagnitude(distance, targetRadiusR);
+
+        // HINT
+        hintR.localPosition = hintOffsetR;
+
+        // APPLY Changes
+        shoulderR.weight = armR.weight = Mathf.Lerp
         (
-            shoulderAim.weight,
+            shoulderR.weight,
+            targetWeight,
+            1f - Mathf.Exp(-animationSpeed * Time.deltaTime)
+        );
+
+        // Force hand to desired rotation
+        if (handBoneR)
+        {
+            var handDirection = (targetR.position - handBoneR.position).normalized;
+            handBoneR.rotation = Quaternion.LookRotation(handDirection, Vector3.up)
+                                * Quaternion.Euler(handRotationOffsetR);
+        }
+    }
+
+    private void LowerArms()
+    {
+        shoulderL.weight = armL.weight = Mathf.Lerp
+        (
+            shoulderL.weight,
+            0f,
+            1f - Mathf.Exp(-animationSpeed * Time.deltaTime)
+        );
+
+        shoulderR.weight = armR.weight = Mathf.Lerp
+        (
+            shoulderR.weight,
             0f,
             1f - Mathf.Exp(-animationSpeed * Time.deltaTime)
         );
