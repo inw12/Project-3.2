@@ -383,11 +383,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Enemy::Enemy
   enemyAI: {fileID: 7452434067175923134}
-  animationController: {fileID: 2172641294016679017}
   hitFeedback: {fileID: 7271059406618516646}
+  animationController: {fileID: 2172641294016679017}
   animator: {fileID: 6867951403096359160}
   armRig: {fileID: 3060464918924867118}
-  maxHealth: 5
+  maxHealth: 50
 --- !u!114 &7452434067175923134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -404,17 +404,17 @@ MonoBehaviour:
   ShowDebug: 0
   stateChangeCooldown: 2.25
   attackChance: 100
-  playerLayer:
+  targetLayer:
     serializedVersion: 2
     m_Bits: 384
   projectileSpawn: {fileID: 4707431086118746279}
   projectilePoolA: {fileID: 3597682941306077593}
   projectilePoolB: {fileID: 6723746909189752625}
+  playerDetectionRange: 100
   attacks:
   - {fileID: 11400000, guid: 8b46fb41b671240c0bcfb3e8049900ac, type: 2}
   - {fileID: 11400000, guid: efdf059b643730f41a4a7d2e5fd69734, type: 2}
   - {fileID: 11400000, guid: 4c3543a9d4e3f994185e6e2cea9516ba, type: 2}
-  playerDetectionRange: 100
   speed: 11
   movementRadius: 20
 --- !u!114 &7271059406618516646

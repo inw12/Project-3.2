@@ -28,12 +28,12 @@ public class EnemyAI : MonoBehaviour
     private float _cooldownTimer;
 
     [Header("Attacks")]
-    [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private LayerMask targetLayer;
     [SerializeField] private Transform projectileSpawn;
     [SerializeField] private ProjectilePool projectilePoolA;
     [SerializeField] private ProjectilePool projectilePoolB;
-    [SerializeField] private EnemyAttack[] attacks;
     [SerializeField] private float playerDetectionRange;
+    [SerializeField] private EnemyAttack[] attacks;
 
     [Header("Movement")]
     [SerializeField] private float speed = 10f;
@@ -172,14 +172,16 @@ public class EnemyAI : MonoBehaviour
     }
     #endregion
 
-    #region * State Machine Actions
+    #region * Movement
     // Movement START
     private void EnterMoveState(Vector3 position)
     {
         _state.CurrentAction = EnemyAction.Move;
         _state.MovementTarget = position;
     }
+    #endregion
 
+    #region * Attacks
     // Attack START
     private void EnterAttackState()
     {
@@ -195,7 +197,7 @@ public class EnemyAI : MonoBehaviour
         _state.CurrentAttack.Initialize();
     }
 
-    // Attack (main)
+    // ATTACK
     private void UpdateCurrentAttack()
     {
         // Attack END
@@ -222,7 +224,7 @@ public class EnemyAI : MonoBehaviour
                 ProjectilePool          = projectilePoolA,
                 SecondaryProjectilePool = projectilePoolB,
                 PlayerPosition          = _state.PlayerPosition,
-                PlayerLayer             = playerLayer,
+                PlayerLayer             = targetLayer,
                 HitboxSpawn             = projectileSpawn,
             };
 
@@ -249,7 +251,7 @@ public class EnemyAI : MonoBehaviour
             transform.position,
             playerDetectionRange,
             _detectionHits,
-            playerLayer
+            targetLayer
         );
 
         if (hits > 0)
