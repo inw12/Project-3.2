@@ -23,6 +23,7 @@ public struct CombatInput
 [RequireComponent(typeof(PlayerCombatRanged), typeof(PlayerCombatMelee))]
 public class PlayerCombat : MonoBehaviour
 {
+    #region * Variables
     [SerializeField] private PlayerParrybox parrybox;
     [SerializeField] private LayerMask targetLayer;
 
@@ -30,6 +31,7 @@ public class PlayerCombat : MonoBehaviour
     private PlayerCombatRanged _rangedAttack;
     private PlayerCombatMelee _meleeAttack;
 
+    // Input Status
     private bool _combatInputEnabled;
     private bool _parryInputEnabled;
 
@@ -46,8 +48,10 @@ public class PlayerCombat : MonoBehaviour
     // Action trackers
     private bool _meleeStarted;
     private bool _parryStarted;
+    #endregion
 
-    // Start()
+    #region * Initialization
+    // Called by 'Player.cs' in 'Start()' function
     public void Initialize(PlayerAnimationController animationController, CapsuleCollider hurtbox)
     {
         _rangedAttack = GetComponent<PlayerCombatRanged>();
@@ -63,8 +67,11 @@ public class PlayerCombat : MonoBehaviour
         _state.Target = Vector3.forward;
         _prevState = _state;
     }
+    #endregion
 
-    // Update()
+    #region * Update Functions
+    // Called by 'Player.cs' in 'Update()' function
+    //      - Reads/Records requested input from player
     public void UpdateInput(CombatInput input)
     {
         if (Player.Instance.GetCurrentMovementAction() is not MovementAction.Roll)
@@ -99,7 +106,8 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    // LateUpdate()
+    // Called by 'Player.cs' in 'LateUpdate()' function
+    //      - Updates current action
     public void UpdateCombatAction(float deltaTime)
     {
         _state.Target = _requestedMousePosition;
@@ -122,9 +130,9 @@ public class PlayerCombat : MonoBehaviour
 
         _prevState = _state;
     }
+    #endregion
 
-    #region *--- Combat Action Functions ------------------------------*
-    // PARRY
+    #region * PARRY
     private void HandleParryRequest(float deltaTime)
     {
         if (_requestedParry && !_parryStarted)
@@ -139,7 +147,9 @@ public class PlayerCombat : MonoBehaviour
         }
         parrybox.UpdateParrybox(ref _parryStarted, deltaTime);
     }
-    // MELEE
+    #endregion
+
+    #region * MELEE
     private void OnMeleeAttack(float deltaTime)
     {
         _meleeAttack.Attack(ref _state, ref _meleeStarted, ref _combatInputEnabled, deltaTime);
@@ -158,7 +168,9 @@ public class PlayerCombat : MonoBehaviour
             _meleeAttack.TriggerAttack();
         }
     }
-    // RANGED
+    #endregion
+
+    #region * RANGED
     private void OnRangedAttack(float deltaTime)
     {
         // Trigger Attack
@@ -170,15 +182,14 @@ public class PlayerCombat : MonoBehaviour
     #endregion
 
 
-    #region *--- Helper Functions -------------------------------------*
+    #region * Helper Functions 
     private void TryEnterNewState()
     {
         _state.CurrentAction = _requestedMelee ? CombatAction.Melee : _requestedRanged ? CombatAction.Ranged : _state.CurrentAction;
     }
     #endregion
 
-
-    #region *--- Public Getters/Setters ----------------------------------------*
+    #region * Getters/Setters
     // State Getters
     public CombatState GetState() => _state;
     public CombatState GetPrevState() => _prevState;
@@ -186,15 +197,13 @@ public class PlayerCombat : MonoBehaviour
     // CombatAction Setters
     public void SetCurrentCombatAction(CombatAction action) => _state.CurrentAction = action;
 
+    // Input Status Getters
     public bool CombatInputEnabled() => _combatInputEnabled;
     public bool ParryInputEnabled() => _parryInputEnabled;
     #endregion
-
-
     
-
-
-    #region *--- Public Methods to Influence Player Combat Actions ------------------------------*
+    #region * Gateway Functions
+    // Combat Input Toggle
     public void CombatInputEnabled(bool b)
     {
         if (!b)
@@ -202,10 +211,14 @@ public class PlayerCombat : MonoBehaviour
         else
             _combatInputEnabled = b;
     }
+
+    // Parry Input Toggle
     public void ParryInputEnabled(bool b)
     {
         _parryInputEnabled = b;
     }
+
+    // Reset state machine
     public void ExitCombatState()
     {
         _state.CurrentAction = CombatAction.None;
@@ -213,9 +226,8 @@ public class PlayerCombat : MonoBehaviour
         _meleeStarted = false;
         _meleeAttack.ResetCombo();
     }
+
+    // Melee Hitbox Toggle
     public void MeleeHitboxEnabled(bool b) => _meleeAttack.HitboxEnabled(b);
-    /// * Enable/Disable ATTACK inputs
-    /// * Enable/Disable PARRY inputs
-    /// * Enable/Disable ALL COMBAT inputs
     #endregion
 }
