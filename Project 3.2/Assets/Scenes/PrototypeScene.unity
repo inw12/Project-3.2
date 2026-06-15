@@ -1026,15 +1026,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: isActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: ShowDebug
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: attackChance
-      value: 100
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
