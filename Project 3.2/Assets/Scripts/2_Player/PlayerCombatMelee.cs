@@ -56,6 +56,7 @@ public class PlayerCombatMelee : MonoBehaviour
     #endregion
 
     #region * Debugging --------------------------------------------------
+    // Draw hitbox when active
     void OnDrawGizmos()
     {
         if (!ShowDebug) return;
@@ -68,11 +69,13 @@ public class PlayerCombatMelee : MonoBehaviour
     }
     #endregion
 
+    #region * Initialization
     public void Initialize(LayerMask targetLayer)
     {
         _targetLayer = targetLayer;
         ResetAttack();
     }
+    #endregion
 
     #region * Attack Implementation ---------------------------------------
     // Called by 'PlayerCombat.cs' in 'OnMeleeAttack()' (called every frame while in "Melee" state)
@@ -83,6 +86,8 @@ public class PlayerCombatMelee : MonoBehaviour
 
         // END
         if (_attackComplete) AttackEnd(ref state);
+        
+        UpdateHitbox();
     }
 
     // Attack START
@@ -113,12 +118,9 @@ public class PlayerCombatMelee : MonoBehaviour
         // * Active ------------------------------
         SetPhase(2);
         SetClipSpeed(meleeActiveClip, activeFrames);
-
-        // ****************************
-        // * insert hitbox logic here *
-        // ****************************
-
+        _hitboxEnabled = true;
         yield return new WaitForSeconds(ActiveDuration);
+        _hitboxEnabled = false;
 
         // * End ---------------------------------
         SetPhase(3);
@@ -146,11 +148,57 @@ public class PlayerCombatMelee : MonoBehaviour
     #endregion
     
     #region * Helper Functions --------------------------------------------------
-    private void UpdateHitbox(float deltaTime)
+
+    // Rotate towards cursor
+    private void RotateTowards(Vector3 target)
     {
+        // Snapshot target direction
+        var direction = (target - transform.position).normalized;
+
+        // Apply rotation
+        Player.Instance.SetRotation(Quaternion.LookRotation(direction));
+    }
+
+    // Sets Melee animation phase
+    private void SetPhase(int i) 
+    {
+        animationController.SetInteger(MeleePhase, i);
+    }
+
+    // Sets animator speed to target speed of current clip
+    private void SetClipSpeed(AnimationClip clip, int targetFrames)
+    {
+        if (clip == null) return;
+
+        var targetDuration = (float)targetFrames / _frameRate;
+
+        // Speed = ClipDuration / DesiredDuration
+        var targetSpeed = clip.length / targetDuration;
+
+        animationController.SetSpeed(targetSpeed);
+    }
+
+    // Sets animator speed back to 1
+    private void ResetAnimatorSpeed()
+    {
+        animationController.SetSpeed(1);
+    }
+
+    // Resets ALL variables
+    private void ResetAttack()
+    {
+        _attackStarted = _attackComplete = _hitstunActive = false;
+        _hitboxEnabled = false;
+        _hitstunTimer = 0f;
+        _alreadyHit.Clear();
+    }
+
+    // When active, searches for "IDamageable" objects in range
+    private void UpdateHitbox()
+    {
+        // Search for hits
         if (_hitboxEnabled)
         {
-            // Scan for collisions
             var hits = Physics.OverlapSphereNonAlloc
             (
                 hitboxSpawn.position,
@@ -159,11 +207,9 @@ public class PlayerCombatMelee : MonoBehaviour
                 _targetLayer
             );
 
-            // Trigger hit 
             if (hits > 0)
             {
                 var hit = _hits[0];
-
                 if (_alreadyHit.Add(hit))
                 {
                     // 1. Try applying damage
@@ -193,50 +239,13 @@ public class PlayerCombatMelee : MonoBehaviour
         // Update hitstun timer
         if (_hitstunActive)
         {
-            _hitstunTimer += deltaTime;
+            _hitstunTimer += Time.deltaTime;
             if (_hitstunTimer >= hitstunDuration)
             {
                 _hitstunActive = false;
                 animationController.SetHitstunActive(_hitstunActive);
             }
         }
-    }
-
-    public void HitboxEnabled(bool b) => _hitboxEnabled = b;
-
-    private void RotateTowards(Vector3 target)
-    {
-        // Snapshot target direction
-        var direction = (target - transform.position).normalized;
-
-        // Apply rotation
-        Player.Instance.SetRotation(Quaternion.LookRotation(direction));
-    }
-
-    private void SetPhase(int i) 
-    {
-        animationController.SetInteger(MeleePhase, i);
-    }
-    private void SetClipSpeed(AnimationClip clip, int targetFrames)
-    {
-        if (clip == null) return;
-
-        var targetDuration = (float)targetFrames / _frameRate;
-
-        // Speed = ClipDuration / DesiredDuration
-        var targetSpeed = clip.length / targetDuration;
-
-        animationController.SetSpeed(targetSpeed);
-    }
-    private void ResetAnimatorSpeed()
-    {
-        animationController.SetSpeed(1);
-    }
-    private void ResetAttack()
-    {
-        _attackStarted = _attackComplete = _hitboxEnabled = _hitstunActive = false;
-        _hitstunTimer = 0f;
-        _alreadyHit.Clear();
     }
     #endregion
 }

@@ -212,8 +212,5 @@ public class PlayerCombat : MonoBehaviour
         _state.CurrentAction = CombatAction.None;
         _parryStarted = false;
     }
-
-    // Melee Hitbox Toggle
-    public void MeleeHitboxEnabled(bool b) => _meleeAttack.HitboxEnabled(b);
     #endregion
 }

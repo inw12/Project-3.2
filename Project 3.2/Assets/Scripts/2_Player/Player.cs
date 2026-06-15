@@ -151,6 +151,7 @@ public class Player : MonoBehaviour
     {
         MovementInputEnabled(b);
         CombatInputEnabled(b);
+        ParryInputEnabled(b);
     }
     // Movement Inputs
     public void MovementInputEnabled(bool b) => playerMovement.MovementInputEnabled(b);
@@ -180,8 +181,6 @@ public class Player : MonoBehaviour
 
 
     #region * 'PlayerCombat' Access 
-    // Toggle Melee Hitbox
-    public void MeleeHitboxEnabled(bool b) => playerCombat.MeleeHitboxEnabled(b);
     // Combat Action Setter
     public void SetCurrentCombatAction(CombatAction action) => playerCombat.SetCurrentCombatAction(action);
     // Exit Combat State
