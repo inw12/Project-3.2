@@ -315,22 +315,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Player::MeleeAttack
   ShowDebug: 0
-  animationController: {fileID: 6384798146728278658}
   damage: 5
   speed: 10
   acceleration: 20
   duration: 0.1
-  meleeOuterRange: 8
-  meleeInnerRange: 2
-  trackingSpeedMultiplier: 1.5
+  animationController: {fileID: 6384798146728278658}
+  meleeStartClip: {fileID: 7400000, guid: 9b71c46a44738d24eacabbf9bf186fd8, type: 2}
+  meleeActiveClip: {fileID: 7400000, guid: 52c74dfe554492243ba2455c506c6c56, type: 2}
+  meleeEndClip: {fileID: 7400000, guid: 8097acc68c4b08f40acea58f8e58d729, type: 2}
+  startupFrames: 22
+  activeFrames: 3
+  endlagFrames: 48
   hitboxSpawn: {fileID: 3273669645737690981}
   hitboxRadius: 1.25
   knockbackDuration: 0.05
   knockbackStrength: 75
-  finalHitKnockbackMultiplier: 3
   hitstunDuration: 0.08
-  finalHitHitstunMultiplier: 1.5
-  comboBuffer: 0.4
 --- !u!114 &3674868859954319667
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,24 +6,29 @@ public class PlayerCombatMelee : MonoBehaviour
     public bool ShowDebug;
 
     #region * Variables --------------------------------------------------
-    [Header("Frame Data Settings")]
-    [SerializeField] private PlayerAnimationController animationController;
-    private static readonly int MeleeTrigger = Animator.StringToHash("MeleeTrigger");
-    [Space]
-    [SerializeField] private int startupFrames = 14;
-    [SerializeField] private int activeFrames = 3;
-    [SerializeField] private int endlagFrames = 20;
-    private float StartDuraction  => (float)startupFrames   / _frameRate;
-    private float ActiveDuraction => (float)activeFrames    / _frameRate;
-    private float EndlagDuraction => (float)endlagFrames    / _frameRate;
-    private readonly int _frameRate = 60;
-
     [Header("Stats")]
     [SerializeField] private float damage = 5f;
     [Space]
     [SerializeField] private float speed = 10f;
     [SerializeField] private float acceleration = 20f;
     [SerializeField] private float duration = 0.1f;
+
+    [Header("Animation")]
+    [SerializeField] private PlayerAnimationController animationController;
+    [SerializeField] private AnimationClip meleeStartClip;
+    [SerializeField] private AnimationClip meleeActiveClip;
+    [SerializeField] private AnimationClip meleeEndClip;
+    private static readonly int MeleeTrigger = Animator.StringToHash("MeleeTrigger");
+    private static readonly int MeleePhase = Animator.StringToHash("MeleePhase");
+
+    [Header("Frame Data")]
+    [SerializeField] private int startupFrames = 14;
+    [SerializeField] private int activeFrames = 3;
+    [SerializeField] private int endlagFrames = 20;
+    private float StartDuration  => (float)startupFrames   / _frameRate;
+    private float ActiveDuration => (float)activeFrames    / _frameRate;
+    private float EndlagDuration => (float)endlagFrames    / _frameRate;
+    private readonly int _frameRate = 60;
 
     [Header("Hitbox")]
     [SerializeField] private Transform hitboxSpawn;
@@ -83,35 +88,43 @@ public class PlayerCombatMelee : MonoBehaviour
     // Attack START
     private void AttackStart(ref CombatState state)
     {
-        Debug.Log("a");
-
         _attackStarted = true;
-
         animationController.SetTrigger(MeleeTrigger);
-
         StartCoroutine(MeleeAttack());
     }
 
     // Attack ACTIVE
     private IEnumerator MeleeAttack()
     {
-        Debug.Log("b");
-
         // * Start -------------------------------
+        SetPhase(1);
+        SetClipSpeed(meleeStartClip, startupFrames);
+        yield return new WaitForSeconds(StartDuration);
 
         // * Active ------------------------------
+        SetPhase(2);
+        SetClipSpeed(meleeActiveClip, activeFrames);
+
+        // ****************************
+        // * insert hitbox logic here *
+        // ****************************
+
+        yield return new WaitForSeconds(ActiveDuration);
 
         // * End ---------------------------------
+        SetPhase(3);
+        SetClipSpeed(meleeEndClip, endlagFrames);
+        yield return new WaitForSeconds(EndlagDuration);
 
-        yield return new WaitForSeconds(1f);
+        // * Reset -------------------------------
+        SetPhase(0);
+        ResetAnimatorSpeed();
         _attackComplete = true;
     }
 
     // Attack END
     private void AttackEnd(ref CombatState state)
     {
-        Debug.Log("c");
-
         state.CurrentAction = CombatAction.None;
         ResetAttack();
     }
@@ -176,6 +189,25 @@ public class PlayerCombatMelee : MonoBehaviour
 
     public void HitboxEnabled(bool b) => _hitboxEnabled = b;
 
+    private void SetPhase(int i) 
+    {
+        animationController.SetInteger(MeleePhase, i);
+    }
+    private void SetClipSpeed(AnimationClip clip, int targetFrames)
+    {
+        if (clip == null) return;
+
+        var targetDuration = (float)targetFrames / _frameRate;
+
+        // Speed = ClipDuration / DesiredDuration
+        var targetSpeed = clip.length / targetDuration;
+
+        animationController.SetSpeed(targetSpeed);
+    }
+    private void ResetAnimatorSpeed()
+    {
+        animationController.SetSpeed(1);
+    }
     private void ResetAttack()
     {
         _attackStarted = _attackComplete = _hitboxEnabled = _hitstunActive = false;

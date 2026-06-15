@@ -61,6 +61,18 @@ public class PlayerAnimationController : MonoBehaviour
         _prevCombatState = _combatState;
     }
 
+    #region * Animator Gateways
+    // Int
+    public void SetInteger(string s, int i) => _animator.SetInteger(s, i);
+    public void SetInteger(int i, int j) => _animator.SetInteger(i, j);
+    // Bool
+    public bool GetBoolean(string s) => _animator.GetBool(s);
+    public void SetBoolean(string s, bool b) => _animator.SetBool(s, b);
+    // Trigger
+    public void SetTrigger(string s) => _animator.SetTrigger(s);
+    public void SetTrigger(int i) => _animator.SetTrigger(i);
+    #endregion
+
     // Toggles "HitstunActive" bool
     public void SetHitstunActive(bool b)
     {
@@ -78,14 +90,7 @@ public class PlayerAnimationController : MonoBehaviour
     {
         _animator.Play("Idle");
         ResetParameters();
-    }
-
-    public void SetTrigger(string s) => _animator.SetTrigger(s);
-    public void SetTrigger(int i) => _animator.SetTrigger(i);
-
-    // Parameter Get/Set
-    public bool GetBoolean(string s) => _animator.GetBool(s);
-    public void SetBoolean(string s, bool b) => _animator.SetBool(s, b);
+    }    
 
     public void ResetParameters()
     {
@@ -95,4 +100,6 @@ public class PlayerAnimationController : MonoBehaviour
         _animator.SetInteger(CombatAction, 0);
         _animator.SetBool(HitstunActive, false);
     }
+
+    public void SetSpeed(float f) => _animator.speed = f;
 }
