@@ -28,12 +28,12 @@ public class EnemyAI : MonoBehaviour
     private float _cooldownTimer;
 
     [Header("Attacks")]
-    [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private LayerMask targetLayer;
     [SerializeField] private Transform projectileSpawn;
     [SerializeField] private ProjectilePool projectilePoolA;
     [SerializeField] private ProjectilePool projectilePoolB;
-    [SerializeField] private EnemyAttack[] attacks;
     [SerializeField] private float playerDetectionRange;
+    [SerializeField] private EnemyAttack[] attacks;
 
     [Header("Movement")]
     [SerializeField] private float speed = 10f;
@@ -48,11 +48,9 @@ public class EnemyAI : MonoBehaviour
     private Enemy _enemy;
     private EnemyAnimationController _animationController;
 
-    // Player Tracking
+    // Misc.
+    private bool _isActive; // <-------------------------------------- True/False if the state machine is active
     private readonly Collider[] _detectionHits = new Collider[10];  // OverlapSphereNonAlloc buffer for player detection
-
-    // Misc. Variables
-    private bool _isActive;         // true/false if the state machine is active
     #endregion
 
 
@@ -78,9 +76,8 @@ public class EnemyAI : MonoBehaviour
     }
     #endregion
     
-
     #region * Initialization
-    // Start()
+    // Called by 'Enemy.cs' in 'Start()' function
     public void Initialize(Enemy enemy, EnemyAnimationController controller)
     {
         _enemy = enemy;
@@ -97,12 +94,11 @@ public class EnemyAI : MonoBehaviour
     }
     #endregion
 
-
-    #region * Update
-    // Update()
+    #region * Update Functions
+    // Called by 'Enemy.cs' in 'Update()' function
     public void UpdateAI(float deltaTime)
     {
-        _isActive = isActive;   // for debugging  *DELETE Later*
+        _isActive = isActive;   // (delete later)
 
         // Track player position
         TrackPlayer();
@@ -133,7 +129,7 @@ public class EnemyAI : MonoBehaviour
             }
         }
     }
-    // LateUpdate()
+    // Called by 'Enemy.cs' in 'LateUpdate()' function
     public void LateUpdateAI(float deltaTime)
     {
         // Perform attack
@@ -142,7 +138,7 @@ public class EnemyAI : MonoBehaviour
         // Update Previous State
         _prevState = _state;
     }
-    // FixedUpdate()
+    // Called by 'Enemy.cs' in 'FixedUpdate()' function
     public void UpdateMovement(float fixedDeltaTime)
     {
         /// * Enemy can only move when...
@@ -176,15 +172,16 @@ public class EnemyAI : MonoBehaviour
     }
     #endregion
 
-
-    #region * State Machine Actions
+    #region * Movement
     // Movement START
     private void EnterMoveState(Vector3 position)
     {
         _state.CurrentAction = EnemyAction.Move;
         _state.MovementTarget = position;
     }
+    #endregion
 
+    #region * Attacks
     // Attack START
     private void EnterAttackState()
     {
@@ -227,7 +224,7 @@ public class EnemyAI : MonoBehaviour
                 ProjectilePool          = projectilePoolA,
                 SecondaryProjectilePool = projectilePoolB,
                 PlayerPosition          = _state.PlayerPosition,
-                PlayerLayer             = playerLayer,
+                PlayerLayer             = targetLayer,
                 HitboxSpawn             = projectileSpawn,
             };
 
@@ -237,7 +234,6 @@ public class EnemyAI : MonoBehaviour
     }
     #endregion
 
-
     #region * Helper Functions 
     // Returns a random Vector3 position within given radius (projected onto y-axis)
     private Vector3 GetRandomPosition(float radius)
@@ -246,6 +242,8 @@ public class EnemyAI : MonoBehaviour
         target = Vector3.ProjectOnPlane(target, Vector3.up);
         return target;
     }
+
+    // Updates '_state.PlayerPosition' (if player in range)
     private void TrackPlayer()
     {
         var hits = Physics.OverlapSphereNonAlloc
@@ -253,7 +251,7 @@ public class EnemyAI : MonoBehaviour
             transform.position,
             playerDetectionRange,
             _detectionHits,
-            playerLayer
+            targetLayer
         );
 
         if (hits > 0)
@@ -264,20 +262,20 @@ public class EnemyAI : MonoBehaviour
     }
     #endregion
 
-
-    #region * Movement Access
+    #region * Gateway Functions
     // Set movement target
     public void SetMovementTarget(Vector3 position) => _state.MovementTarget = position;
+
     // Set character rotation
     public void RotateTowards(Vector3 direction) => transform.rotation = Quaternion.LookRotation(direction);
-    #endregion
 
-    #region * Public Access 
     // State Getters
     public EnemyState GetState() => _state;
     public EnemyState GetPrevState() => _prevState;
+
     // Enable/Disable Enemy AI
     public void EnemyActive(bool b) => _isActive = b;
+
     // Reset Enemy AI
     public void SetToIdle()
     {
@@ -287,6 +285,8 @@ public class EnemyAI : MonoBehaviour
 
         _cooldownTimer = 0f;
     }
+
+    // Returns player position
     public Vector3 GetPlayerPosition() => _state.PlayerPosition;
     #endregion
 }

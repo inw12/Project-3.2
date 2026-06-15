@@ -193,7 +193,7 @@ public class PlayerCombatMelee : MonoBehaviour
 
                         var targetDuration = _comboCounter == 4 ? hitstunDuration * finalHitHitstunMultiplier : hitstunDuration;
 
-                        StartCoroutine(h.TriggerHitstun(targetDuration));
+                        h.TriggerHitstun(targetDuration);
                     }
 
                     // 3. Try applying knockback

@@ -3,7 +3,9 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
 
+    [Header("Debugging Settings")]
     public bool ShowDebug;
+    public Vector2 DebugPosition;
 
     [Header("Core Components")]
     [SerializeField] private PlayerMovement playerMovement;
@@ -20,6 +22,8 @@ public class Player : MonoBehaviour
     [SerializeField] private CapsuleCollider hurtboxCollider;
     [SerializeField] private CapsuleCollider parrybox;
     [SerializeField] private LayerMask groundLayer;
+    [Space]
+    [SerializeField] private GameObject weaponModel;
 
     // Player Input
     private PlayerInput _input;
@@ -27,19 +31,26 @@ public class Player : MonoBehaviour
 
     private Vector3 _mousePosition;
 
-
+    #region * Debug
     void OnGUI()
     {
         if (!ShowDebug) return;
-        GUILayout.Label($"Movement Action: {GetCurrentMovementAction()}");
-        GUILayout.Label($"Combat Action: {GetCurrentCombatAction()}");
-        GUILayout.Label($"Movement Input Enabled: {playerMovement.MovementInputEnabled()}");
-        GUILayout.Label($"Combat Input Enabled: {playerCombat.CombatInputEnabled()}");
-        GUILayout.Label($"Parry Input Enabled: {playerCombat.ParryInputEnabled()}");
+
+        var moveState = playerMovement.GetState();
+        var combatState = playerCombat.GetState();
+
+        var debugMessage =    $"Movement: {moveState.CurrentAction}\n"
+                            + $"Velocity: {moveState.Velocity}\n\n"
+                            + $"Combat: {combatState.CurrentAction}\n\n"
+                            + $"Movement Input Enabled: {playerMovement.MovementInputEnabled()}\n"
+                            + $"Combat Input Enabled: {playerCombat.CombatInputEnabled()}\n"
+                            + $"Parry Input Enabled: {playerCombat.ParryInputEnabled()}";
+        GUI.Label(new Rect(DebugPosition.x, DebugPosition.y, 500, 250), debugMessage);
     }
+    #endregion
 
 
-    // Singleton Initialization
+    #region * Initialization
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -50,8 +61,6 @@ public class Player : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
-
-    // Component Initialization
     void Start()
     {
         // Player Input 
@@ -70,7 +79,10 @@ public class Player : MonoBehaviour
         // Hurtbox
         hurtbox.Initialize(animationController);
     }
+    #endregion
 
+
+    #region * Input
     void Update()
     {
         // Record Mouse Position in World Space
@@ -99,6 +111,7 @@ public class Player : MonoBehaviour
         };
         playerCombat.UpdateInput(combatInput);
     }
+    #endregion
 
     /// <summary>
     /// * Updates...
@@ -132,7 +145,7 @@ public class Player : MonoBehaviour
     void OnDisable() => _input.Dispose();
 
 
-    #region *--- Player Input Access --------------------------------------------------*
+    #region * Player Input Access 
     // ALL Inputs
     public void InputEnabled(bool b) 
     {
@@ -148,13 +161,13 @@ public class Player : MonoBehaviour
     #endregion
 
 
-    #region *--- Current Action Getters --------------------------------------------------*
+    #region * Current Action Getters 
     public MovementAction GetCurrentMovementAction() => playerMovement.GetState().CurrentAction;
     public CombatAction GetCurrentCombatAction() => playerCombat.GetState().CurrentAction;
     #endregion
 
 
-    #region *--- 'PlayerMovement' Access ----------------------*
+    #region * 'PlayerMovement' Access 
     // Set Velocity
     public void SetVelocity(Vector3 velocity, float acceleration) => playerMovement.SetVelocity(velocity, acceleration);
     // Set Rotation
@@ -166,7 +179,7 @@ public class Player : MonoBehaviour
     #endregion
 
 
-    #region *--- 'PlayerCombat' Access ----------------------*
+    #region * 'PlayerCombat' Access 
     // Toggle Melee Hitbox
     public void MeleeHitboxEnabled(bool b) => playerCombat.MeleeHitboxEnabled(b);
     // Combat Action Setter
@@ -176,7 +189,7 @@ public class Player : MonoBehaviour
     #endregion
 
 
-    #region *--- Animation Controller Access ----------*
+    #region * Animation Controller Access 
     public void SetBoolean(string s, bool b) => animationController.SetBoolean(s, b);
     #endregion
 
