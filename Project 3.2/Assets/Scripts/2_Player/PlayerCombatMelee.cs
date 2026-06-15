@@ -50,6 +50,7 @@ public class PlayerCombatMelee : MonoBehaviour
     // 'OverlapSphereNonAlloc' buffers
     private readonly Collider[] _hits   = new Collider[10];   
 
+    // Action trackers
     private bool _attackStarted;
     private bool _attackComplete;
     #endregion
@@ -70,7 +71,6 @@ public class PlayerCombatMelee : MonoBehaviour
     public void Initialize(LayerMask targetLayer)
     {
         _targetLayer = targetLayer;
-
         ResetAttack();
     }
 
@@ -89,13 +89,22 @@ public class PlayerCombatMelee : MonoBehaviour
     private void AttackStart(ref CombatState state)
     {
         _attackStarted = true;
-        animationController.SetTrigger(MeleeTrigger);
+
+        // 1. Disable Player input (for the duration of this attack)
+        Player.Instance.InputEnabled(false);
+
+        // 2. Rotate character towards cursor
+        RotateTowards(state.Target);
+
+        // 3. Start Melee Coroutine
         StartCoroutine(MeleeAttack());
     }
 
     // Attack ACTIVE
     private IEnumerator MeleeAttack()
     {
+        animationController.SetTrigger(MeleeTrigger);
+
         // * Start -------------------------------
         SetPhase(1);
         SetClipSpeed(meleeStartClip, startupFrames);
@@ -125,7 +134,13 @@ public class PlayerCombatMelee : MonoBehaviour
     // Attack END
     private void AttackEnd(ref CombatState state)
     {
+        // 1. Re-enable Player input
+        Player.Instance.InputEnabled(true);
+
+        // 2. Exit from 'Melee' state
         state.CurrentAction = CombatAction.None;
+
+        // 3. Reset ALL variables
         ResetAttack();
     }
     #endregion
@@ -188,6 +203,15 @@ public class PlayerCombatMelee : MonoBehaviour
     }
 
     public void HitboxEnabled(bool b) => _hitboxEnabled = b;
+
+    private void RotateTowards(Vector3 target)
+    {
+        // Snapshot target direction
+        var direction = (target - transform.position).normalized;
+
+        // Apply rotation
+        Player.Instance.SetRotation(Quaternion.LookRotation(direction));
+    }
 
     private void SetPhase(int i) 
     {
