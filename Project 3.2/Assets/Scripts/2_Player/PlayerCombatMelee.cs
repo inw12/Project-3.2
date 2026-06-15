@@ -1,27 +1,29 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 public class PlayerCombatMelee : MonoBehaviour
 {
     public bool ShowDebug;
 
-    [Header("Required Components")]
+    #region * Variables --------------------------------------------------
+    [Header("Frame Data Settings")]
     [SerializeField] private PlayerAnimationController animationController;
-    private LayerMask _targetLayer;
+    private static readonly int MeleeTrigger = Animator.StringToHash("MeleeTrigger");
+    [Space]
+    [SerializeField] private int startupFrames = 14;
+    [SerializeField] private int activeFrames = 3;
+    [SerializeField] private int endlagFrames = 20;
+    private float StartDuraction  => (float)startupFrames   / _frameRate;
+    private float ActiveDuraction => (float)activeFrames    / _frameRate;
+    private float EndlagDuraction => (float)endlagFrames    / _frameRate;
+    private readonly int _frameRate = 60;
 
     [Header("Stats")]
     [SerializeField] private float damage = 5f;
-
-    [Header("Movement | Stats")]
+    [Space]
     [SerializeField] private float speed = 10f;
     [SerializeField] private float acceleration = 20f;
     [SerializeField] private float duration = 0.1f;
-    private Vector3 _velocity;
-    private float _movementTimer;
-
-    [Header("Movement | Enemy Tracking")]
-    [SerializeField] private float meleeOuterRange = 8f;                            // distance from player in which player will "track" the target when performing melee
-    [SerializeField] private float meleeInnerRange = 2.5f;                          // distance from player in which to stop "tracking"
-    [SerializeField] [Range(1f, 5f)] private float trackingSpeedMultiplier = 1.5f;   // speed multiplier used when "tracking" a target
 
     [Header("Hitbox")]
     [SerializeField] private Transform hitboxSpawn;
@@ -32,29 +34,22 @@ public class PlayerCombatMelee : MonoBehaviour
     [Header("Knockback")]
     [SerializeField] private float knockbackDuration = 0.2f;
     [SerializeField] private float knockbackStrength = 10f;
-    [SerializeField] [Range(1f, 10f)] private float finalHitKnockbackMultiplier = 5f;
 
     [Header("Hitstun")]
     [SerializeField] private float hitstunDuration = 0.2f;
-    [SerializeField] [Range(1f, 10f)] private float finalHitHitstunMultiplier = 2f;
     private bool _hitstunActive;
     private float _hitstunTimer;
 
-    [Header("Combo")]
-    [SerializeField] private float comboBuffer = 0.4f;
-    private const int MaxCombo = 4;
-    private int _comboCounter;
-    private float _comboTimer;
+    private LayerMask _targetLayer;
 
     // 'OverlapSphereNonAlloc' buffers
     private readonly Collider[] _hits   = new Collider[10];   
-    private readonly Collider[] _outer  = new Collider[10];   
-    private readonly Collider[] _inner  = new Collider[10];   
 
-    // Movement/Rotation during melee
-    private bool _directionCaptured;
-    private bool _rotationTriggered;
+    private bool _attackStarted;
+    private bool _attackComplete;
+    #endregion
 
+    #region * Debugging --------------------------------------------------
     void OnDrawGizmos()
     {
         if (!ShowDebug) return;
@@ -64,101 +59,65 @@ public class PlayerCombatMelee : MonoBehaviour
             Gizmos.color = Color.teal;
             Gizmos.DrawWireSphere(hitboxSpawn.position, hitboxRadius);
         }
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, meleeOuterRange);
-        Gizmos.color = Color.orange;
-        Gizmos.DrawWireSphere(transform.position, meleeInnerRange);
     }
+    #endregion
 
     public void Initialize(LayerMask targetLayer)
     {
-        ResetCombo();
         _targetLayer = targetLayer;
+
+        ResetAttack();
     }
 
-    public void TriggerAttack()
+    #region * Attack Implementation ---------------------------------------
+    // Called by 'PlayerCombat.cs' in 'OnMeleeAttack()' (called every frame while in "Melee" state)
+    public void Attack(ref CombatState state)
     {
-        // Reset Everything
-        _comboTimer = 0f;
-        _movementTimer = 0f;
+        // START
+        if (!_attackStarted) AttackStart(ref state);
 
-        _alreadyHit.Clear();
-        _directionCaptured = false;
-        _rotationTriggered = false;
-
-        // Update Combo Counter
-        _comboCounter = _comboCounter == MaxCombo ? 0 : _comboCounter;
-        _comboCounter++;
-        _comboCounter = Mathf.Clamp(_comboCounter, 0, MaxCombo);
-
-        // Update Animation Controller
-        animationController.TriggerMeleeAnimation(_comboCounter);
+        // END
+        if (_attackComplete) AttackEnd(ref state);
     }
 
-    // Update()
-    public void Attack(ref CombatState state, ref bool meleeStarted, ref bool inputEnabled, float deltaTime)
+    // Attack START
+    private void AttackStart(ref CombatState state)
     {
-        // Exit Melee State once timer exceeds combo input buffer
-        if (_comboTimer > comboBuffer) 
-        {
-            state.CurrentAction = CombatAction.None;
-            meleeStarted = false;
-            ResetCombo();
-            Player.Instance.MovementInputEnabled(true);
-        }
+        Debug.Log("a");
 
-        // Only increment timer while inputs are enabled
-        // (inputs are disabled during melee animation and enabled afterwards)
-        if (inputEnabled) _comboTimer += deltaTime;
-        
-        _movementTimer += deltaTime;
+        _attackStarted = true;
 
+        animationController.SetTrigger(MeleeTrigger);
 
-        #region *- Target Tracking Implementation ----------*
-        // "Where are we moving towards?"
-        var outerHits = Physics.OverlapSphereNonAlloc
-        (
-            transform.position,
-            meleeOuterRange,
-            _outer,
-            _targetLayer
-        );
-        var innerHits = Physics.OverlapSphereNonAlloc
-        (
-            transform.position,
-            meleeInnerRange,
-            _inner,
-            _targetLayer
-        );
-        // * tracking logic goes here *
-        #endregion
-
-
-        // Snapshot target direction
-        var direction = transform.forward;
-        if (!_directionCaptured)
-        {
-            _directionCaptured = true;
-            direction = (state.Target - transform.position).normalized;
-        }
-
-        // Update Velocity
-        _velocity = direction * speed;
-        _velocity = _movementTimer < duration ? _velocity : Vector3.zero;   // reset velocity if duration is up
-        _velocity = innerHits == 0 ? _velocity : Vector3.zero;              // reset velocity if target reached inner range
-        Player.Instance.SetVelocity(_velocity, acceleration);
-
-        // Apply Rotation
-        if (!_rotationTriggered)
-        {
-            _rotationTriggered = true;
-            Player.Instance.SetRotation(Quaternion.LookRotation(direction));
-        }
-
-        UpdateHitbox(deltaTime);
+        StartCoroutine(MeleeAttack());
     }
 
+    // Attack ACTIVE
+    private IEnumerator MeleeAttack()
+    {
+        Debug.Log("b");
+
+        // * Start -------------------------------
+
+        // * Active ------------------------------
+
+        // * End ---------------------------------
+
+        yield return new WaitForSeconds(1f);
+        _attackComplete = true;
+    }
+
+    // Attack END
+    private void AttackEnd(ref CombatState state)
+    {
+        Debug.Log("c");
+
+        state.CurrentAction = CombatAction.None;
+        ResetAttack();
+    }
+    #endregion
+    
+    #region * Helper Functions --------------------------------------------------
     private void UpdateHitbox(float deltaTime)
     {
         if (_hitboxEnabled)
@@ -191,16 +150,13 @@ public class PlayerCombatMelee : MonoBehaviour
                         _hitstunTimer = 0f;
                         animationController.SetHitstunActive(_hitstunActive);
 
-                        var targetDuration = _comboCounter == 4 ? hitstunDuration * finalHitHitstunMultiplier : hitstunDuration;
-
-                        h.TriggerHitstun(targetDuration);
+                        h.TriggerHitstun(hitstunDuration);
                     }
 
                     // 3. Try applying knockback
                     if (hit.TryGetComponent(out IKnockable k))
                     {
-                        var targetKnockback = _comboCounter == 4 ? knockbackStrength * finalHitKnockbackMultiplier : knockbackStrength;
-                        k.TriggerKnockback(transform.forward, targetKnockback, knockbackDuration);
+                        k.TriggerKnockback(transform.forward, knockbackStrength, knockbackDuration);
                     }
                 }
             }
@@ -218,12 +174,13 @@ public class PlayerCombatMelee : MonoBehaviour
         }
     }
 
-    public void ResetCombo()
-    {
-        _comboCounter   = 0;
-        _comboTimer     = 0f;
-        _movementTimer  = 0f;
-    }
-
     public void HitboxEnabled(bool b) => _hitboxEnabled = b;
+
+    private void ResetAttack()
+    {
+        _attackStarted = _attackComplete = _hitboxEnabled = _hitstunActive = false;
+        _hitstunTimer = 0f;
+        _alreadyHit.Clear();
+    }
+    #endregion
 }

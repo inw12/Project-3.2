@@ -15,7 +15,6 @@ public class PlayerAnimationController : MonoBehaviour
     private static readonly int MovementAction  = Animator.StringToHash("MovementAction");
     private static readonly int CombatAction    = Animator.StringToHash("CombatAction");
     private static readonly int MeleeTrigger    = Animator.StringToHash("MeleeTrigger");
-    private static readonly int ComboCount      = Animator.StringToHash("ComboCount");
     private static readonly int HitstunActive   = Animator.StringToHash("HitstunActive");
     private static readonly int ParryTrigger    = Animator.StringToHash("ParryTrigger");
     private static readonly int HitTrigger      = Animator.StringToHash("HitTrigger");    
@@ -62,13 +61,6 @@ public class PlayerAnimationController : MonoBehaviour
         _prevCombatState = _combatState;
     }
 
-    // Triggers Melee attack animation & updates "ComboCount"
-    public void TriggerMeleeAnimation(int combo)
-    {
-        _animator.SetTrigger(MeleeTrigger);
-        _animator.SetInteger(ComboCount, combo);
-    }
-
     // Toggles "HitstunActive" bool
     public void SetHitstunActive(bool b)
     {
@@ -89,6 +81,7 @@ public class PlayerAnimationController : MonoBehaviour
     }
 
     public void SetTrigger(string s) => _animator.SetTrigger(s);
+    public void SetTrigger(int i) => _animator.SetTrigger(i);
 
     // Parameter Get/Set
     public bool GetBoolean(string s) => _animator.GetBool(s);
@@ -100,7 +93,6 @@ public class PlayerAnimationController : MonoBehaviour
         _animator.SetFloat(yVelocity, 0f);
         _animator.SetInteger(MovementAction, 0);
         _animator.SetInteger(CombatAction, 0);
-        _animator.SetInteger(ComboCount, 0);
         _animator.SetBool(HitstunActive, false);
     }
 }
