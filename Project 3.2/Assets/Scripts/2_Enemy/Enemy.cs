@@ -6,11 +6,11 @@ using System.Collections;
 public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 {
     #region * Variables
-    [Header("Enemy Components")]
+    [Header("Unity Components")]
     [SerializeField] private EnemyAI enemyAI;
-    [SerializeField] private EnemyAnimationController animationController;
-    [Space]
     [SerializeField] private EnemyHitFeedback hitFeedback;
+    [Space]
+    [SerializeField] private EnemyAnimationController animationController;
     [SerializeField] private Animator animator;
     [SerializeField] private EnemyArmRig armRig;
 
@@ -18,31 +18,27 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     [SerializeField] private float maxHealth = 100f;
     private float _currentHealth;
 
-    public event Action OnDeath;
-
     private Rigidbody _rb;
-    private Coroutine _hitstunCoroutine;
-    private Coroutine _knockbackCoroutine;
+    public event Action OnDeath;
 
     // Animator Parameters
     private static readonly int KnockbackTrigger = Animator.StringToHash("KnockbackTrigger");
     private static readonly int Hitstun = Animator.StringToHash("InHitstun");
 
-    // Hitstun 
+    // Hitstun & Knockback
     private float _timeScale;
     private bool _inHitstun;
+    private Coroutine _hitstunCoroutine;
+    private Coroutine _knockbackCoroutine;
     #endregion
 
-
-    #region * Unity Methods
+    #region * Initialization
     void Start()
     {
-        // Initialization
         animationController.Initialize();
+        armRig.Initialize();
         enemyAI.Initialize(this, animationController);
         hitFeedback.Initialize();
-
-        armRig.Initialize();
 
         _rb = GetComponent<Rigidbody>();
 
@@ -50,20 +46,24 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
         _timeScale = 1f;
         _inHitstun = false;
     }
+    #endregion
+
+    #region * Update Functions
     void Update()
     {
         var deltaTime = Time.deltaTime * _timeScale;
 
+        // State Machine logic
         enemyAI.UpdateAI(deltaTime);
     }
     void LateUpdate()
     {
         var deltaTime = Time.deltaTime * _timeScale;
 
-        // Update Enemy AI
+        // State Machine current action
         enemyAI.LateUpdateAI(deltaTime);
 
-        // Update Animation Parameters based on Enemy State
+        // Animation Parameters based on Enemy State
         var state = enemyAI.GetState();
         var animationContext = new EnemyAnimatorContext
         {
@@ -73,20 +73,20 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
         };
         animationController.UpdateAnimator(animationContext);
 
+        // Arm rig
         armRig.UpdateRig();
 
-        // Update Hit Feedback effect when taking damage
+        // Hit Feedback when taking damage
         if (hitFeedback) hitFeedback.UpdateEnemyModel(deltaTime);
     }
     void FixedUpdate()
     {
         var fixedDeltaTime = Time.fixedDeltaTime * _timeScale;
 
-        // Update Movement
+        // Movement from State Machine
         enemyAI.UpdateMovement(fixedDeltaTime);
     }
     #endregion
-
 
     #region * 'IDamageable'
     public float MaxHealth => maxHealth;
@@ -112,7 +112,6 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
         _currentHealth = Mathf.Clamp(_currentHealth, 0f, maxHealth);
     }
     #endregion
-
 
     #region * 'IKnockable'
     public void TriggerKnockback() => throw new NotImplementedException();
@@ -155,12 +154,19 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     }
     #endregion
 
-
     #region * 'IHitstunnable' 
     public float TimeScale => _timeScale;
     public bool InHitstun => _inHitstun;
 
-    public IEnumerator TriggerHitstun(float duration)
+    public void TriggerHitstun(float duration)
+    {
+        // Interupt coroutine if previously running
+        if (_hitstunCoroutine != null) StopCoroutine(_hitstunCoroutine);
+
+        // Start Coroutine
+        _hitstunCoroutine = StartCoroutine(HitstunCoroutine(duration));
+    }
+    private IEnumerator HitstunCoroutine(float duration)
     {
         _timeScale = 0f;
         _inHitstun = true;
@@ -172,10 +178,10 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     }
     #endregion
 
-
-    #region * Public Accessors 
+    #region * Gateway Functions
     // Set TimeScale
     public void SetTimeScale(float t) => _timeScale = t;
+
     // Set to Idle
     public void SetToIdle() 
     {
@@ -183,13 +189,6 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
         animationController.SetToIdle();
         ArmRigEnabled(false);
     }
-    #endregion
-
-
-    #region * Function Extensions
-    /// <summary>
-    /// *** Gateway for functions from enemy-related scripts *** 
-    /// </summary>
     
     // Toggle Enemy State Machine
     public void EnemyActive(bool b) => enemyAI.EnemyActive(b);
@@ -208,10 +207,8 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
     // Arm Rig Toggle
     public void ArmRigEnabled(bool b) => armRig.ArmRigEnabled(b);
-    #endregion
 
-
-    #region * Animator Access 
+    // Animator Access
     public void SetInteger(string s, int i) => animationController.SetInteger(s, i);
     public int GetInteger(string s)         => animationController.GetInteger(s);
     public void SetFloat(string s, int i)   => animationController.SetFloat(s, i);
