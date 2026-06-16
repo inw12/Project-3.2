@@ -45,6 +45,9 @@ public class PlayerCombatMelee : MonoBehaviour
     private bool _hitstunActive;
     private float _hitstunTimer;
 
+    [Header("VFX")]
+    [SerializeField] private PlayerSword sword;
+
     private LayerMask _targetLayer;
 
     // 'OverlapSphereNonAlloc' buffers
@@ -113,18 +116,21 @@ public class PlayerCombatMelee : MonoBehaviour
         // * Start -------------------------------
         SetPhase(1);
         SetClipSpeed(meleeStartClip, startupFrames);
-        yield return new WaitForSeconds(StartDuration);
+        //yield return new WaitForSeconds(StartDuration);
+        yield return StartCoroutine(sword.Open(StartDuration));
 
         // * Active ------------------------------
         SetPhase(2);
         SetClipSpeed(meleeActiveClip, activeFrames);
         _hitboxEnabled = true;
-        yield return new WaitForSeconds(ActiveDuration);
+        //yield return new WaitForSeconds(ActiveDuration);
+        yield return StartCoroutine(sword.Idle(ActiveDuration));
         _hitboxEnabled = false;
 
         // * End ---------------------------------
         SetPhase(3);
         SetClipSpeed(meleeEndClip, endlagFrames);
+        StartCoroutine(sword.Close(0.33f));
         yield return new WaitForSeconds(EndlagDuration);
 
         // * Reset -------------------------------
