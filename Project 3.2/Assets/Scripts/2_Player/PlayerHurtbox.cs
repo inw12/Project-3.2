@@ -1,11 +1,13 @@
 using UnityEngine;
+[RequireComponent(typeof(CapsuleCollider))]
 public class PlayerHurtbox : MonoBehaviour, IDamageable, IKnockable
 {
     #region * Variables --------------------------------------------------
     [SerializeField] private float maxHealth = 100f;
-    private HealthContext _currentHealth;
 
+    private HealthContext _currentHealth;
     private PlayerAnimationController _animationController;
+    private CapsuleCollider _hurtbox;
     #endregion
 
 
@@ -13,8 +15,8 @@ public class PlayerHurtbox : MonoBehaviour, IDamageable, IKnockable
     public void Initialize(PlayerAnimationController animationController)
     {
         _currentHealth = new HealthContext(maxHealth);
-
         _animationController = animationController;
+        _hurtbox = GetComponent<CapsuleCollider>();
     }
     #endregion
 
@@ -47,7 +49,11 @@ public class PlayerHurtbox : MonoBehaviour, IDamageable, IKnockable
     #endregion
 
 
-    #region * Public Getters --------------------------------------------------
+    #region * Public Access --------------------------------------------------
+    // Returns current health status
     public HealthContext GetHealthStatus() => _currentHealth;
+
+    // Toggles hurtbox capsule on/off
+    public void HurtboxEnabled(bool b) => _hurtbox.enabled = b;
     #endregion
 }

@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerAnimationRig animationRig;
 
     [Header("Health/Hurtbox")]
-    [SerializeField] private PlayerHurtbox hurtbox;
+    [SerializeField] private PlayerHurtbox hurtbox; // basically a HP component
 
     [Header("Misc")]
     [SerializeField] private CapsuleCollider hurtboxCollider;

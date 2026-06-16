@@ -11,6 +11,8 @@ public class PlayerParrybox : MonoBehaviour, IParrybox
     private CapsuleCollider _parrybox;
     private CapsuleCollider _hurtbox;
     private PlayerAnimationController _animationController;
+
+    private bool _parryTriggered;
     #endregion
 
 
@@ -22,6 +24,7 @@ public class PlayerParrybox : MonoBehaviour, IParrybox
 
         _parrybox = GetComponent<CapsuleCollider>();
         _parrybox.enabled = false;
+        _parryTriggered = false;
 
         _hurtbox = hurtbox;
 
@@ -40,10 +43,10 @@ public class PlayerParrybox : MonoBehaviour, IParrybox
         {
             _parryTimer += deltaTime;
 
-            if (_parryTimer > parryDuration)
+            if (_parryTimer > parryDuration && parryStarted)
             {
                 _parryTimer = 0f;
-                ParryboxEnabled(false);
+                ParryboxEnabled(false); // * PROBLEM HERE *
                 parryStarted = false;
             }
         }
