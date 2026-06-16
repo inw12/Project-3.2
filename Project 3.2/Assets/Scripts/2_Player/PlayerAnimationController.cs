@@ -15,7 +15,6 @@ public class PlayerAnimationController : MonoBehaviour
     private static readonly int MovementAction  = Animator.StringToHash("MovementAction");
     private static readonly int CombatAction    = Animator.StringToHash("CombatAction");
     private static readonly int MeleeTrigger    = Animator.StringToHash("MeleeTrigger");
-    private static readonly int ComboCount      = Animator.StringToHash("ComboCount");
     private static readonly int HitstunActive   = Animator.StringToHash("HitstunActive");
     private static readonly int ParryTrigger    = Animator.StringToHash("ParryTrigger");
     private static readonly int HitTrigger      = Animator.StringToHash("HitTrigger");    
@@ -62,12 +61,26 @@ public class PlayerAnimationController : MonoBehaviour
         _prevCombatState = _combatState;
     }
 
-    // Triggers Melee attack animation & updates "ComboCount"
-    public void TriggerMeleeAnimation(int combo)
-    {
-        _animator.SetTrigger(MeleeTrigger);
-        _animator.SetInteger(ComboCount, combo);
-    }
+    #region * Animation Events
+    // Toggle TrailRenderer activity on Player weapon
+    public event Action OnSwordTrailEnabled;
+    public event Action OnSwordTrailDisabled;
+    public void EnableSwordTrail() => OnSwordTrailEnabled?.Invoke();
+    public void DisableSwordTrail() => OnSwordTrailDisabled?.Invoke();
+    #endregion
+
+
+    #region * Animator Gateways
+    // Int
+    public void SetInteger(string s, int i) => _animator.SetInteger(s, i);
+    public void SetInteger(int i, int j) => _animator.SetInteger(i, j);
+    // Bool
+    public bool GetBoolean(string s) => _animator.GetBool(s);
+    public void SetBoolean(string s, bool b) => _animator.SetBool(s, b);
+    // Trigger
+    public void SetTrigger(string s) => _animator.SetTrigger(s);
+    public void SetTrigger(int i) => _animator.SetTrigger(i);
+    #endregion
 
     // Toggles "HitstunActive" bool
     public void SetHitstunActive(bool b)
@@ -86,13 +99,7 @@ public class PlayerAnimationController : MonoBehaviour
     {
         _animator.Play("Idle");
         ResetParameters();
-    }
-
-    public void SetTrigger(string s) => _animator.SetTrigger(s);
-
-    // Parameter Get/Set
-    public bool GetBoolean(string s) => _animator.GetBool(s);
-    public void SetBoolean(string s, bool b) => _animator.SetBool(s, b);
+    }    
 
     public void ResetParameters()
     {
@@ -100,7 +107,8 @@ public class PlayerAnimationController : MonoBehaviour
         _animator.SetFloat(yVelocity, 0f);
         _animator.SetInteger(MovementAction, 0);
         _animator.SetInteger(CombatAction, 0);
-        _animator.SetInteger(ComboCount, 0);
         _animator.SetBool(HitstunActive, false);
     }
+
+    public void SetSpeed(float f) => _animator.speed = f;
 }
