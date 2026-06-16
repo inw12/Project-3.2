@@ -61,6 +61,15 @@ public class PlayerAnimationController : MonoBehaviour
         _prevCombatState = _combatState;
     }
 
+    #region * Animation Events
+    // Toggle TrailRenderer activity on Player weapon
+    public event Action OnSwordTrailEnabled;
+    public event Action OnSwordTrailDisabled;
+    public void EnableSwordTrail() => OnSwordTrailEnabled?.Invoke();
+    public void DisableSwordTrail() => OnSwordTrailDisabled?.Invoke();
+    #endregion
+
+
     #region * Animator Gateways
     // Int
     public void SetInteger(string s, int i) => _animator.SetInteger(s, i);

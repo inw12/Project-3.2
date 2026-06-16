@@ -6,12 +6,14 @@ public class PlayerSword : MonoBehaviour
 {
     // Trail Renderer
     [SerializeField] private TrailRenderer trailRenderer;
+    [SerializeField] private PlayerAnimationController animationController;
 
     // Line Renderer
     private LineRenderer _lr;
     private Vector2 _dimensions;
     private float _currentLength;
 
+    #region * Initialization
     public void Initialize(Vector2 dimensions, float trailSize, float trailDuration)
     {
         // Line Renderer
@@ -24,7 +26,8 @@ public class PlayerSword : MonoBehaviour
 
 
         // Trail Renderer
-        trailRenderer.enabled = false;
+        trailRenderer.enabled = true;
+        trailRenderer.emitting = false;
         // - position
         var targetPos = new Vector3(0f, 0f, dimensions.y / 2f);
         trailRenderer.gameObject.transform.localPosition = targetPos;
@@ -33,6 +36,17 @@ public class PlayerSword : MonoBehaviour
         // - time/duration
         trailRenderer.time = trailDuration;
     }
+    void OnEnable()
+    {
+        animationController.OnSwordTrailEnabled += EnableTrailRenderer;
+        animationController.OnSwordTrailDisabled += DisableTrailRenderer;
+    }
+    void OnDisable()
+    {
+        animationController.OnSwordTrailEnabled -= EnableTrailRenderer;
+        animationController.OnSwordTrailDisabled += DisableTrailRenderer;
+    }
+    #endregion
 
     void LateUpdate()
     {
@@ -49,12 +63,10 @@ public class PlayerSword : MonoBehaviour
         _lr.SetPosition(1, tip);
     }
 
-    #region * Public Access
+    #region * On/Off Coroutines
     public IEnumerator Open(float duration)
     {
         _lr.enabled = true;
-        trailRenderer.enabled = true;
-
         var timer = 0f;
         
         while (timer < duration)
@@ -77,7 +89,6 @@ public class PlayerSword : MonoBehaviour
 
     public IEnumerator Close(float duration)
     {
-        trailRenderer.enabled = false;
         var timer = 0f;
         
         while (timer < duration)
@@ -91,5 +102,10 @@ public class PlayerSword : MonoBehaviour
         _currentLength = 0f;
         _lr.enabled = false;
     }
+    #endregion
+
+    #region * Animation Event Functions
+    private void EnableTrailRenderer() => trailRenderer.emitting = true;
+    private void DisableTrailRenderer() => trailRenderer.emitting = false;
     #endregion
 }
