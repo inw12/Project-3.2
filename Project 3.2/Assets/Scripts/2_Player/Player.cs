@@ -34,7 +34,6 @@ public class Player : MonoBehaviour
     #endregion
 
 
-
     #region * Debug --------------------------------------------------
     void OnGUI()
     {
@@ -43,7 +42,8 @@ public class Player : MonoBehaviour
         var moveState = playerMovement.GetState();
         var combatState = playerCombat.GetState();
 
-        var debugMessage =    $"Movement: {moveState.CurrentAction}\n"
+        var debugMessage =    $"HP: {hurtbox.GetHealthStatus().CurrentHealth} / {hurtbox.GetHealthStatus().MaxHealth}\n\n"
+                            + $"Movement: {moveState.CurrentAction}\n"
                             + $"Velocity: {moveState.Velocity}\n\n"
                             + $"Combat: {combatState.CurrentAction}\n\n"
                             + $"Movement Input Enabled: {playerMovement.MovementInputEnabled()}\n"
