@@ -323,18 +323,18 @@ MonoBehaviour:
   meleeStartClip: {fileID: 7400000, guid: 9b71c46a44738d24eacabbf9bf186fd8, type: 2}
   meleeActiveClip: {fileID: 7400000, guid: 52c74dfe554492243ba2455c506c6c56, type: 2}
   meleeEndClip: {fileID: 7400000, guid: 8097acc68c4b08f40acea58f8e58d729, type: 2}
-  startupFrames: 22
-  activeFrames: 3
-  endlagFrames: 45
+  startupFrames: 21
+  activeFrames: 4
+  endlagFrames: 46
   hitboxSpawn: {fileID: 3273669645737690981}
   hitboxRadius: 2
-  knockbackDuration: 0.085
-  knockbackStrength: 500
-  hitstunDuration: 0.12
+  knockbackDuration: 0.1
+  knockbackStrength: 450
+  hitstunDuration: 0.13
   swordFX: {fileID: 3137524284266187346}
   swordDimensions: {x: 0.1, y: 2}
-  trailSize: 0.66
-  trailDuration: 0.07
+  trailSize: 0.6
+  trailDuration: 0.08
 --- !u!114 &3674868859954319667
 MonoBehaviour:
   m_ObjectHideFlags: 0
