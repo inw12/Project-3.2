@@ -46,7 +46,10 @@ public class PlayerCombatMelee : MonoBehaviour
     private float _hitstunTimer;
 
     [Header("VFX")]
-    [SerializeField] private PlayerSword sword;
+    [SerializeField] private PlayerSword swordFX;
+    [SerializeField] private Vector2 swordDimensions;
+    [SerializeField] [Range(0f, 1f)] private float trailSize;
+    [SerializeField] private float trailDuration;
 
     private LayerMask _targetLayer;
 
@@ -77,6 +80,9 @@ public class PlayerCombatMelee : MonoBehaviour
     {
         _targetLayer = targetLayer;
         ResetAttack();
+
+        // vfx
+        swordFX.Initialize(swordDimensions, trailSize, trailDuration);
     }
     #endregion
 
@@ -117,20 +123,20 @@ public class PlayerCombatMelee : MonoBehaviour
         SetPhase(1);
         SetClipSpeed(meleeStartClip, startupFrames);
         //yield return new WaitForSeconds(StartDuration);
-        yield return StartCoroutine(sword.Open(StartDuration));
+        yield return StartCoroutine(swordFX.Open(StartDuration));
 
         // * Active ------------------------------
         SetPhase(2);
         SetClipSpeed(meleeActiveClip, activeFrames);
         _hitboxEnabled = true;
         //yield return new WaitForSeconds(ActiveDuration);
-        yield return StartCoroutine(sword.Idle(ActiveDuration));
+        yield return StartCoroutine(swordFX.Idle(ActiveDuration));
         _hitboxEnabled = false;
 
         // * End ---------------------------------
         SetPhase(3);
         SetClipSpeed(meleeEndClip, endlagFrames);
-        StartCoroutine(sword.Close(0.33f));
+        StartCoroutine(swordFX.Close(0.33f));
         yield return new WaitForSeconds(EndlagDuration);
 
         // * Reset -------------------------------

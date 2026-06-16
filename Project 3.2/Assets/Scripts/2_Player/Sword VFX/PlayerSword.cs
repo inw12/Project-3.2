@@ -4,19 +4,34 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class PlayerSword : MonoBehaviour
 {
-    [SerializeField] private Transform spawn;
-    [SerializeField] private Vector2 swordDimensions;   // x: width, y: length
+    // Trail Renderer
+    [SerializeField] private TrailRenderer trailRenderer;
 
+    // Line Renderer
     private LineRenderer _lr;
+    private Vector2 _dimensions;
     private float _currentLength;
 
-    void Awake()
+    public void Initialize(Vector2 dimensions, float trailSize, float trailDuration)
     {
+        // Line Renderer
         _lr = GetComponent<LineRenderer>();
         _lr.enabled = false;
 
+        _dimensions = dimensions;
         _lr.positionCount = 2;
-        _lr.startWidth = _lr.endWidth = swordDimensions.x;
+        _lr.startWidth = _lr.endWidth = _dimensions.x;
+
+
+        // Trail Renderer
+        trailRenderer.enabled = false;
+        // - position
+        var targetPos = new Vector3(0f, 0f, dimensions.y / 2f);
+        trailRenderer.gameObject.transform.localPosition = targetPos;
+        // - starting width
+        trailRenderer.startWidth = dimensions.y * trailSize;
+        // - time/duration
+        trailRenderer.time = trailDuration;
     }
 
     void LateUpdate()
@@ -27,8 +42,8 @@ public class PlayerSword : MonoBehaviour
 
     private void UpdateLine()
     {
-        var origin = spawn.position;
-        var tip = origin + spawn.forward * (swordDimensions.y * _currentLength);
+        var origin = transform.position;
+        var tip = origin + transform.forward * (_dimensions.y * _currentLength);
 
         _lr.SetPosition(0, origin);
         _lr.SetPosition(1, tip);
@@ -38,6 +53,8 @@ public class PlayerSword : MonoBehaviour
     public IEnumerator Open(float duration)
     {
         _lr.enabled = true;
+        trailRenderer.enabled = true;
+
         var timer = 0f;
         
         while (timer < duration)
@@ -60,6 +77,7 @@ public class PlayerSword : MonoBehaviour
 
     public IEnumerator Close(float duration)
     {
+        trailRenderer.enabled = false;
         var timer = 0f;
         
         while (timer < duration)
