@@ -1,27 +1,24 @@
 using UnityEngine;
 public class PlayerHurtbox : MonoBehaviour, IDamageable, IKnockable
 {
-    public bool ShowDebug;
-    [Space]
-
+    #region * Variables --------------------------------------------------
     [SerializeField] private float maxHealth = 100f;
     private float _currentHealth;
 
     private PlayerAnimationController _animationController;
+    #endregion
 
-    void OnGUI()
-    {
-        if (!ShowDebug) return;
-        GUILayout.Label($"Current HP: {_currentHealth} / {maxHealth}");
-    }
 
+    #region * Initialization --------------------------------------------------
     public void Initialize(PlayerAnimationController animationController)
     {
         _currentHealth = maxHealth;
         _animationController = animationController;
     }
+    #endregion
 
-    #region *--- 'IDamageable' --------------------------------------------------*
+
+    #region * 'IDamageable' Functions --------------------------------------------------
     public float MaxHealth => maxHealth;
     public float CurrentHealth => _currentHealth;
 
@@ -37,7 +34,8 @@ public class PlayerHurtbox : MonoBehaviour, IDamageable, IKnockable
     }
     #endregion
 
-    #region *--- 'IKnockable' --------------------------------------------------*
+
+    #region * 'IKnockable' Functions --------------------------------------------------
     public void TriggerKnockback()
     {
         _animationController.SetTrigger("HitTrigger");

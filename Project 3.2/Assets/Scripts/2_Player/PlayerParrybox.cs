@@ -2,6 +2,7 @@ using UnityEngine;
 [RequireComponent(typeof(CapsuleCollider))]
 public class PlayerParrybox : MonoBehaviour, IParrybox
 {
+    #region * Variables --------------------------------------------------
     [SerializeField] private float parryDuration = 0.5f;
     [SerializeField] private float parryCooldown = 1f;
     private float _parryTimer;
@@ -10,8 +11,10 @@ public class PlayerParrybox : MonoBehaviour, IParrybox
     private CapsuleCollider _parrybox;
     private CapsuleCollider _hurtbox;
     private PlayerAnimationController _animationController;
+    #endregion
 
-    // Start()
+
+    #region * Initialization --------------------------------------------------
     public void Initialize(PlayerAnimationController animationController, CapsuleCollider hurtbox)
     {
         _parryTimer = 0f;
@@ -24,7 +27,10 @@ public class PlayerParrybox : MonoBehaviour, IParrybox
 
         _animationController = animationController;
     }
+    #endregion
 
+
+    #region * Update() --------------------------------------------------
     public void UpdateParrybox(ref bool parryStarted, float deltaTime)
     {
         _cooldownTimer += deltaTime;
@@ -42,9 +48,27 @@ public class PlayerParrybox : MonoBehaviour, IParrybox
             }
         }
     }
+    #endregion
 
-    #region *--- Public Methods to Enable/Disable/Trigger Parry ----------*
+
+    #region * 'IParrybox' Functions --------------------------------------------------
+    public void TriggerParry()
+    {
+        _cooldownTimer = parryCooldown;
+
+        // Update Animator
+        _animationController.TriggerParry();
+
+        // * parry effect implementation here *
+    }
+    #endregion
+
+
+    #region * Public Access
+    // Returns true/false if another parry can be inputted
     public bool CanParry() => _cooldownTimer > parryCooldown;
+
+    // Toggles parrybox on/off
     public void ParryboxEnabled(bool active)
     {
         // Parrybox ON
@@ -60,15 +84,6 @@ public class PlayerParrybox : MonoBehaviour, IParrybox
             _parrybox.enabled = false;
             _hurtbox.enabled = true;
         }
-    }
-    public void TriggerParry()
-    {
-        _cooldownTimer = parryCooldown;
-
-        // Update Animator
-        _animationController.TriggerParry();
-
-        // * parry effect implementation here *
     }
     #endregion
 }
