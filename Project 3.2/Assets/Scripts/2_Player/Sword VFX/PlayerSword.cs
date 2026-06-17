@@ -108,4 +108,11 @@ public class PlayerSword : MonoBehaviour
     private void EnableTrailRenderer() => trailRenderer.emitting = true;
     private void DisableTrailRenderer() => trailRenderer.emitting = false;
     #endregion
+
+    public void SwordEnabled(bool b)
+    {
+        _lr.enabled = b;
+        trailRenderer.emitting = b;
+    }
+    public void TrailRendererEnabled(bool b) => trailRenderer.emitting = b;
 }
