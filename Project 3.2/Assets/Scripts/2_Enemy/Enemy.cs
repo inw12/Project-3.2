@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
     [Header("Stats")]
     [SerializeField] private float maxHealth = 100f;
-    private float _currentHealth;
+    private HealthContext _currentHealth;
 
     private Rigidbody _rb;
     public event Action OnDeath;
@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
         _rb = GetComponent<Rigidbody>();
 
-        _currentHealth = maxHealth;
+        _currentHealth = new HealthContext(maxHealth);
         _timeScale = 1f;
         _inHitstun = false;
     }
@@ -89,27 +89,24 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     #endregion
 
     #region * 'IDamageable'
-    public float MaxHealth => maxHealth;
-    public float CurrentHealth => _currentHealth;
+    public HealthContext Health => _currentHealth;
 
     public void DecreaseHealth(float amount)
     {
-        _currentHealth -= amount;
-        _currentHealth = Mathf.Clamp(_currentHealth, 0f, maxHealth);
+        _currentHealth.CurrentHealth -= amount;
+        _currentHealth.CurrentHealth = Mathf.Clamp(_currentHealth.CurrentHealth, 0f, maxHealth);
 
         if (hitFeedback) hitFeedback.TriggerHitFeedback();
 
-        Debug.Log($"Current HP: {_currentHealth} / {maxHealth}");
-
-        if (_currentHealth <= 0f)
+        if (_currentHealth.CurrentHealth <= 0f)
         {
             OnDeath?.Invoke();
         }
     }
     public void IncreaseHealth(float amount)
     {
-        _currentHealth += amount;
-        _currentHealth = Mathf.Clamp(_currentHealth, 0f, maxHealth);
+        _currentHealth.CurrentHealth += amount;
+        _currentHealth.CurrentHealth = Mathf.Clamp(_currentHealth.CurrentHealth, 0f, maxHealth);
     }
     #endregion
 

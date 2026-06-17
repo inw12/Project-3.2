@@ -128,6 +128,8 @@ public class PlayerMovement : MonoBehaviour
                 _rollData.Triggered = false;
                 _movementInputEnabled = true;
                 _hurtbox.enabled = true;
+
+                _rollData.Timer = 0f;
             }
         }
         // Regular Movement

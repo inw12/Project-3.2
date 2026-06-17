@@ -101,7 +101,6 @@ public class PlayerCombat : MonoBehaviour
             _requestedRanged = _requestedMelee = false;
 
             _requestedParry = _parryStarted = false;
-            parrybox.ParryboxEnabled(false);
         }
     }
 
@@ -144,6 +143,7 @@ public class PlayerCombat : MonoBehaviour
                 parrybox.ParryboxEnabled(true);
             }
         }
+
         parrybox.UpdateParrybox(ref _parryStarted, deltaTime);
     }
     #endregion

@@ -22,11 +22,18 @@ public class PlayerCombatRanged : MonoBehaviour
         _fireTimer = fireRate;
     }
 
+    void Update()
+    {
+        // * Magic Number: 100 *
+        // Just to make it so that it's not ALWAYS incrementing
+        if (_fireTimer <= 100f) _fireTimer += Time.deltaTime;
+    }
+
     // Update()
     public void Attack(ref CombatState state, float deltaTime)
     {
         // Increment Fire Rate Timer
-        _fireTimer += deltaTime;
+        //_fireTimer += deltaTime;
 
         // Calculate Projectile Direction
         var source = Vector3.ProjectOnPlane(projectileSpawn.position, Vector3.up);

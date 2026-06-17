@@ -3,6 +3,7 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
 
+    #region * Variables --------------------------------------------------
     [Header("Debugging Settings")]
     public bool ShowDebug;
     public Vector2 DebugPosition;
@@ -16,7 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerAnimationRig animationRig;
 
     [Header("Health/Hurtbox")]
-    [SerializeField] private PlayerHurtbox hurtbox;
+    [SerializeField] private PlayerHurtbox hurtbox; // basically a HP component
 
     [Header("Misc")]
     [SerializeField] private CapsuleCollider hurtboxCollider;
@@ -30,8 +31,10 @@ public class Player : MonoBehaviour
     private bool _inputEnabled;
 
     private Vector3 _mousePosition;
+    #endregion
 
-    #region * Debug
+
+    #region * Debug --------------------------------------------------
     void OnGUI()
     {
         if (!ShowDebug) return;
@@ -39,7 +42,8 @@ public class Player : MonoBehaviour
         var moveState = playerMovement.GetState();
         var combatState = playerCombat.GetState();
 
-        var debugMessage =    $"Movement: {moveState.CurrentAction}\n"
+        var debugMessage =    $"HP: {hurtbox.GetHealthStatus().CurrentHealth} / {hurtbox.GetHealthStatus().MaxHealth}\n\n"
+                            + $"Movement: {moveState.CurrentAction}\n"
                             + $"Velocity: {moveState.Velocity}\n\n"
                             + $"Combat: {combatState.CurrentAction}\n\n"
                             + $"Movement Input Enabled: {playerMovement.MovementInputEnabled()}\n"
@@ -48,6 +52,7 @@ public class Player : MonoBehaviour
         GUI.Label(new Rect(DebugPosition.x, DebugPosition.y, 500, 250), debugMessage);
     }
     #endregion
+
 
 
     #region * Initialization
@@ -79,10 +84,12 @@ public class Player : MonoBehaviour
         // Hurtbox
         hurtbox.Initialize(animationController);
     }
+    void OnDisable() => _input.Dispose();
     #endregion
 
 
-    #region * Input
+
+    #region * Player Input
     void Update()
     {
         // Record Mouse Position in World Space
@@ -113,13 +120,9 @@ public class Player : MonoBehaviour
     }
     #endregion
 
-    /// <summary>
-    /// * Updates...
-    ///     - Player Rotation
-    ///     - Player Combat Action
-    ///     - Animation Controller
-    ///     - Animation Rig
-    /// </summary>
+
+
+    #region * LateUpdate() --------------------------------------------------
     void LateUpdate()
     {
         var deltaTime = Time.deltaTime;
@@ -134,18 +137,21 @@ public class Player : MonoBehaviour
         animationController.UpdateAnimator();
         animationRig.UpdateRig();
     }
+    #endregion
 
-    // Updates Player Movement
+
+
+    #region * FixedUpdate() --------------------------------------------------
     void FixedUpdate()
     {
         var fixedDeltaTime = Time.fixedDeltaTime;
         playerMovement.UpdateMovement(fixedDeltaTime);
     }
+    #endregion
 
-    void OnDisable() => _input.Dispose();
 
 
-    #region * Player Input Access 
+    #region * Input Gateway --------------------------------------------------
     // ALL Inputs
     public void InputEnabled(bool b) 
     {
@@ -153,34 +159,43 @@ public class Player : MonoBehaviour
         CombatInputEnabled(b);
         ParryInputEnabled(b);
     }
+    
     // Movement Inputs
     public void MovementInputEnabled(bool b) => playerMovement.MovementInputEnabled(b);
+    
     // Combat Inputs
     public void CombatInputEnabled(bool b) => playerCombat.CombatInputEnabled(b);
+    
     // Parry Input
     public void ParryInputEnabled(bool b) => playerCombat.ParryInputEnabled(b);
     #endregion
 
 
-    #region * Current Action Getters 
+
+    #region * Current Action Getters --------------------------------------------------
     public MovementAction GetCurrentMovementAction() => playerMovement.GetState().CurrentAction;
     public CombatAction GetCurrentCombatAction() => playerCombat.GetState().CurrentAction;
     #endregion
 
 
-    #region * 'PlayerMovement' Access 
+
+    #region * 'PlayerMovement' Gateway --------------------------------------------------
     // Set Velocity
     public void SetVelocity(Vector3 velocity, float acceleration) => playerMovement.SetVelocity(velocity, acceleration);
+
     // Set Rotation
     public void SetRotation(Quaternion rotation) => playerMovement.SetRotation(rotation);
+    
     // CharacterController Toggle
     public void CharacterControllerEnabled(bool b) => playerMovement.CharacterControllerEnabled(b);
+    
     // Exit Movement State
     public void ExitMovementState() => playerMovement.ExitMovementState();
     #endregion
 
 
-    #region * 'PlayerCombat' Access 
+
+    #region * 'PlayerCombat' Gateway --------------------------------------------------
     // Combat Action Setter
     public void SetCurrentCombatAction(CombatAction action) => playerCombat.SetCurrentCombatAction(action);
     // Exit Combat State
@@ -188,7 +203,8 @@ public class Player : MonoBehaviour
     #endregion
 
 
-    #region * Animation Controller Access 
+
+    #region * Animation Controller Gateway -------------------------------------------------- 
     public void SetBoolean(string s, bool b) => animationController.SetBoolean(s, b);
     #endregion
 

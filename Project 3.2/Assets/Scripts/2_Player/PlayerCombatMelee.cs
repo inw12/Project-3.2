@@ -154,8 +154,9 @@ public class PlayerCombatMelee : MonoBehaviour
         // 2. Exit from 'Melee' state
         state.CurrentAction = CombatAction.None;
 
-        // 3. Reset ALL variables
+        // 3. Reset ALL variables + Make sure everything is turned off
         ResetAttack();
+        swordFX.SwordEnabled(false);
     }
     #endregion
     

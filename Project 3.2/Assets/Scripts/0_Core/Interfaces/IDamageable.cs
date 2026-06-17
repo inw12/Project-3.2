@@ -1,7 +1,6 @@
 public interface IDamageable
 {
-    float MaxHealth     { get; }
-    float CurrentHealth { get; }
+    HealthContext Health { get; }
 
     void DecreaseHealth(float amount);
     void IncreaseHealth(float amount);
