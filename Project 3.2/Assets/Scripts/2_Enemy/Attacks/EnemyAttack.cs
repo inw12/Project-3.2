@@ -17,6 +17,7 @@ public struct EnemyAttackContext
 public abstract class EnemyAttack : ScriptableObject
 {
     // Attack identifier
+    public string attackName;
     public int attackID;
 
     // Attack runtime controllers

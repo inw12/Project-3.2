@@ -69,13 +69,14 @@ public class EnemyAI : MonoBehaviour
     void OnGUI()
     {
         if (!ShowDebug) return;
-        var debugText = $"Current State: {_state.CurrentAction} ({(int)_state.CurrentAction})\n"
-                        + $"Current Attack: {_state.CurrentAttack?.attackID ?? 0}\n"
-                        + $"State Machine Cooldown: {_cooldownTimer:F2} sec\n"
+        var debugText =   $"HP: {_enemy.Health.CurrentHealth} / {_enemy.Health.MaxHealth}\n\n"
+                        + $"Current State: {_state.CurrentAction} ({(int)_state.CurrentAction})\n"
+                        + $"Current Attack: {(_state.CurrentAttack != null ? _state.CurrentAttack.attackName : " ")}\n"
+                        + $"State Machine Cooldown: {_cooldownTimer:F2} / {stateChangeCooldown:F2}\n"
                         + $"Player Position: {_state.PlayerPosition}\n";
         var altText = "EnemyAI Disabled";
         var result = _isActive ? debugText : altText;
-        GUI.Label(new Rect(10, 10, 300, 100), result);
+        GUI.Label(new Rect(15, 15, 500, 250), result);
     }
     #endregion
     

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ef011aeebfa342eeb4666502ecff17c, type: 3}
   m_Name: ScatterShot
   m_EditorClassIdentifier: Enemy::ScatterShot
+  attackName: ScatterShot
   attackID: 1
   attackStarted: 1
   attackComplete: 1

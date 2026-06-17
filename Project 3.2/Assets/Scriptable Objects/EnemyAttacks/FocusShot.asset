@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e749318a4ba896f4fa59b069e20bc401, type: 3}
   m_Name: FocusShot
   m_EditorClassIdentifier: Enemy::FocusShot
+  attackName: FocusShot
   attackID: 3
   attackStarted: 0
   attackComplete: 0

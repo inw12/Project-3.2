@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfb1e0bbeed3cb249a4c6089cb275e65, type: 3}
   m_Name: MeteorShower
   m_EditorClassIdentifier: Enemy::MeteorShower
+  attackName: MeteorShower
   attackID: 4
   attackStarted: 0
   attackComplete: 0
