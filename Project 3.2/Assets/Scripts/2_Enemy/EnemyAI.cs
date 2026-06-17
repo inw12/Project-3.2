@@ -53,6 +53,7 @@ public class EnemyAI : MonoBehaviour
     // Misc.
     private bool _isActive; // <-------------------------------------- True/False if the state machine is active
     private readonly Collider[] _detectionHits = new Collider[10];  // OverlapSphereNonAlloc buffer for player detection
+    private bool _rotationSet;  // set rotation once in movement logic
     #endregion
 
 
@@ -155,14 +156,20 @@ public class EnemyAI : MonoBehaviour
             // If destination reached, EXIT movement state
             if (_rb.position == _state.MovementTarget)
             {
+                _rotationSet = false;
                 _animationController.SetBool("AttackActive", false);
                 _enemy.SetToIdle();
                 return;
             }
 
-            // Rotate towards movement target
-            var direction = (_state.MovementTarget - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
-            transform.rotation = Quaternion.LookRotation(direction);
+            // Rotate towards target
+            if (!_rotationSet)
+            {
+                _rotationSet = true;
+                var rotationTarget      = _state.CurrentAction is EnemyAction.Attack ? _state.PlayerPosition : _state.MovementTarget;
+                var rotationDirection   = (rotationTarget - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
+                transform.rotation = Quaternion.LookRotation(rotationDirection);
+            }
 
             // Calculate amount to move this frame
             var next = Vector3.MoveTowards

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public struct EnemyAnimatorContext
@@ -46,10 +47,16 @@ public class EnemyAnimationController : MonoBehaviour
     {
         // Velocity
         var velocity = transform.InverseTransformDirection(context.Velocity.normalized);
-        _animator.SetFloat(xVelocity, velocity.x);
-        _animator.SetFloat(yVelocity, velocity.z);
+        var x = MathF.Round(velocity.x, 2);
+        var y = MathF.Round(velocity.z, 2);
+        _animator.SetFloat(xVelocity, x);
+        _animator.SetFloat(yVelocity, y);
+
+        // Current Action
         _animator.SetInteger(CurrentAction, context.CurrentAction);
+        // Attack ID
         _animator.SetInteger(AttackID, context.AttackID);
+        // Hitstun
         _animator.SetBool(InHitstun, context.InHitstun);
     }
 
