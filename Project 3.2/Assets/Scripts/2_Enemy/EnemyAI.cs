@@ -7,6 +7,8 @@ public struct EnemyState
 
     public Vector3 PlayerPosition;
     public Vector3 MovementTarget;
+
+    public Vector3 Velocity;
 }
 public enum EnemyAction
 {
@@ -98,7 +100,14 @@ public class EnemyAI : MonoBehaviour
     // Called by 'Enemy.cs' in 'Update()' function
     public void UpdateAI(float deltaTime)
     {
-        _isActive = isActive;   // (delete later)
+        // Update Previous State
+        _prevState = _state;
+
+        // Toggle state machine activity (delete later)
+        _isActive = isActive;
+
+        // Update Velocity
+        _state.Velocity = _rb.linearVelocity;
 
         // Track player position
         TrackPlayer();
@@ -134,9 +143,6 @@ public class EnemyAI : MonoBehaviour
     {
         // Perform attack
         if (_state.CurrentAction is EnemyAction.Attack) UpdateCurrentAttack();
-
-        // Update Previous State
-        _prevState = _state;
     }
     // Called by 'Enemy.cs' in 'FixedUpdate()' function
     public void UpdateMovement(float fixedDeltaTime)

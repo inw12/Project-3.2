@@ -67,6 +67,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
         var state = enemyAI.GetState();
         var animationContext = new EnemyAnimatorContext
         {
+            Velocity        = state.Velocity,
             CurrentAction   = (int)state.CurrentAction,
             AttackID        = state.CurrentAttack != null ? state.CurrentAttack.attackID : -1,
             InHitstun       = _inHitstun

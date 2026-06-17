@@ -2,6 +2,7 @@ using UnityEngine;
 
 public struct EnemyAnimatorContext
 {
+    public Vector3 Velocity;
     public int CurrentAction;
     public int AttackID;
     public bool InHitstun;
@@ -14,6 +15,8 @@ public class EnemyAnimationController : MonoBehaviour
     //
     // * "High Level" Parameters
     //      - Parameters used by Enemy scripts
+    private static readonly int xVelocity           = Animator.StringToHash("xVelocity");
+    private static readonly int yVelocity           = Animator.StringToHash("yVelocity");
     private static readonly int CurrentAction       = Animator.StringToHash("CurrentAction");
     private static readonly int AttackID            = Animator.StringToHash("AttackID");  
     private static readonly int AttackActive        = Animator.StringToHash("AttackActive");    // used to toggle attacks during animation states
@@ -41,6 +44,10 @@ public class EnemyAnimationController : MonoBehaviour
 
     public void UpdateAnimator(EnemyAnimatorContext context)
     {
+        // Velocity
+        var velocity = transform.InverseTransformDirection(context.Velocity.normalized);
+        _animator.SetFloat(xVelocity, velocity.x);
+        _animator.SetFloat(yVelocity, velocity.z);
         _animator.SetInteger(CurrentAction, context.CurrentAction);
         _animator.SetInteger(AttackID, context.AttackID);
         _animator.SetBool(InHitstun, context.InHitstun);
