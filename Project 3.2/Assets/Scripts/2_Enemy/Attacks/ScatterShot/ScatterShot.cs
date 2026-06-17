@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy Attacks/Ranged/ScatterShot")]
 public class ScatterShot : EnemyRangedAttack
@@ -19,6 +20,10 @@ public class ScatterShot : EnemyRangedAttack
     [SerializeField] private float burstProjectileSpeed;
     [SerializeField] private float burstRange;
 
+    [Header("AoE Burst - NEW")]
+    [SerializeField] private ShockwaveMesh shockwaveMesh;
+    [SerializeField] private ShockwaveHitbox shockwaveHitbox;
+    [SerializeField] private float _expansionDuration = 1f;
 
     // Timers & Counters
     private float _fireTimer;
@@ -87,8 +92,11 @@ public class ScatterShot : EnemyRangedAttack
             // Fire AoE Burst
             if (_shotCount >= shotsToBurst)
             {
-                Burst(context);
                 _shotCount = 0;
+
+                PerformShockwave(context);
+                
+                //Burst(context);
             }
 
             _fireTimer = 0f;
@@ -117,5 +125,27 @@ public class ScatterShot : EnemyRangedAttack
             // Fire projectile
             context.SecondaryProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
         }
+    }
+
+    private void PerformShockwave(EnemyAttackContext context)
+    {
+        // Spawn ring and hitbox at the player's feet (Y grounded)
+        Vector3 origin = new Vector3(context.HitboxSpawn.position.x, 0.5f, context.HitboxSpawn.position.z);
+
+        ShockwaveMesh   ring   = Instantiate(shockwaveMesh,   origin, Quaternion.identity);
+        ShockwaveHitbox hitbox = Instantiate(shockwaveHitbox, origin, Quaternion.identity);
+
+        // Subscribe to hit events
+        hitbox.OnHit += (hit) =>
+        {
+            
+        };
+
+        // Run both coroutines in parallel
+        ring.Expand(_expansionDuration);
+        hitbox.Expand(_expansionDuration);
+        
+
+        Destroy(hitbox.gameObject);
     }
 }
