@@ -14,42 +14,45 @@ public class ShockwavePool : MonoBehaviour
         // Initialize Pool
         _pool = new ObjectPool<GameObject>
         (
-            CreateProjectile,
-            OnGetProjectile,
-            OnReleaseProjectile,
-            OnDestroyProjectile,
+            CreateItem,
+            OnGetItem,
+            OnReleaseItem,
+            OnDestroyItem,
             true,
             defaultCapacity,
             maxCapacity
         );
     }
 
-    private GameObject CreateProjectile()
+    private GameObject CreateItem()
     {
         var p = Instantiate(shockwavePrefab, null);
         return p;
     }
 
-    private void OnGetProjectile(GameObject item)
+    private void OnGetItem(GameObject item)
     {
         item.SetActive(true);
     }
 
-    private void OnReleaseProjectile(GameObject item)
+    private void OnReleaseItem(GameObject item)
     {
         item.SetActive(false);
     }
 
-    private void OnDestroyProjectile(GameObject item) => Destroy(item);
+    private void OnDestroyItem(GameObject item) => Destroy(item);
 
     public void Get(ShockwaveStats stats)
     {
         GameObject item = _pool.Get();
         if (item.TryGetComponent(out Shockwave s))
-        {
             s.Initialize(stats);
-        }
     }
     
-    public void Release(GameObject item) => _pool.Release(item);
+    public void Release(GameObject item) 
+    {
+        if (item.TryGetComponent(out Shockwave s))
+            s.ResetShockwave();
+        _pool.Release(item);
+    }
 }

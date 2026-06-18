@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 public struct ShockwaveStats
 {
@@ -15,6 +16,8 @@ public struct ShockwaveStats
 public class Shockwave : MonoBehaviour
 {
     #region * Variables --------------------------------------------------
+    private ShockwaveStats _stats;
+
     // Mesh Variables
     [SerializeField] private Material ringMaterial;
     [SerializeField] private int meshSegments;
@@ -23,27 +26,24 @@ public class Shockwave : MonoBehaviour
     private MaterialPropertyBlock _propBlock;
     private static readonly int OpacityID = Shader.PropertyToID("_Opacity");
 
-    private ShockwaveStats _stats;
+    // Hitbox Variables
+    private readonly HashSet<Collider> _hits = new();   // recording what has/hasn't been hit
 
     // Progress tracking
-    private bool _shockwaveStarted;
-    private bool _shockwaveComplete;
     private float _timeElapsed;
     #endregion
 
 
     public void Initialize(ShockwaveStats stats)
     {
+        ResetShockwave();
         _stats = stats;
         transform.position = _stats.Spawn;
 
-        _shockwaveStarted = true;
-        _shockwaveComplete = false;
-        _timeElapsed = 0f;
-
         // Mesh
-        _meshFilter            = gameObject.AddComponent<MeshFilter>();
-        _meshRenderer          = gameObject.AddComponent<MeshRenderer>();
+        _meshFilter     = gameObject.TryGetComponent(out MeshFilter mf)     ? mf : gameObject.AddComponent<MeshFilter>();
+        _meshRenderer   = gameObject.TryGetComponent(out MeshRenderer mr)   ? mr : gameObject.AddComponent<MeshRenderer>();
+
         _meshRenderer.material = ringMaterial;
         _propBlock             = new MaterialPropertyBlock();
         _meshFilter.mesh = new Mesh { name = "ShockwaveMesh" };
@@ -57,11 +57,35 @@ public class Shockwave : MonoBehaviour
         _timeElapsed += deltaTime;
 
         // Return to object pool after duation
-        if (_timeElapsed >= _stats.Duration && !_shockwaveComplete) 
+        if (_timeElapsed >= _stats.Duration) _stats.ObjectPool.Release(gameObject);
+
+
+        var t           = Mathf.Clamp01(_timeElapsed / _stats.Duration);
+        var outerRadius = Mathf.Lerp(0f, _stats.Radius, t);
+        var innerRadius = Mathf.Max(0f, outerRadius - _stats.Width);
+
+        // All colliders within the outer radius
+        Collider[] outerHits = Physics.OverlapSphere
+        (
+            transform.position, 
+            outerRadius, 
+            _stats.TargetLayer
+        );
+
+        foreach (Collider hit in outerHits)
         {
-            _shockwaveComplete = true;
-            _shockwaveStarted = false;
-            _stats.ObjectPool.Release(gameObject);
+            if (_hits.Contains(hit)) continue;
+
+            // Check the collider is outside the inner radius — i.e. in the ring band
+            var dist = Vector3.Distance(transform.position, hit.ClosestPoint(transform.position));
+            if (dist >= innerRadius)
+            {
+                if (hit.gameObject.TryGetComponent(out IDamageable i))
+                {
+                    _hits.Add(hit);
+                    i.DecreaseHealth(_stats.Damage);
+                }
+            }
         }
     }
     #endregion
@@ -70,22 +94,19 @@ public class Shockwave : MonoBehaviour
     #region * Movement
     void FixedUpdate()
     {
-        if (!_shockwaveComplete)
-        {
-            float t           = Mathf.Clamp01(_timeElapsed / _stats.Duration);
-            float outerRadius = Mathf.Lerp(0f, _stats.Radius, t);
+        float t           = Mathf.Clamp01(_timeElapsed / _stats.Duration);
+        float outerRadius = Mathf.Lerp(0f, _stats.Radius, t);
 
-            // Inner radius is always exactly _ringWidth behind the outer edge
-            float innerRadius = Mathf.Max(0f, outerRadius - _stats.Width);
+        // Inner radius is always exactly _ringWidth behind the outer edge
+        float innerRadius = Mathf.Max(0f, outerRadius - _stats.Width);
 
-            float opacity = 1f - Mathf.Pow(t, 2f);
+        float opacity = 1f - Mathf.Pow(t, 2f);
 
-            RebuildMesh(innerRadius, outerRadius);
+        RebuildMesh(innerRadius, outerRadius);
 
-            _meshRenderer.GetPropertyBlock(_propBlock);
-            _propBlock.SetFloat(OpacityID, opacity);
-            _meshRenderer.SetPropertyBlock(_propBlock);
-        }
+        _meshRenderer.GetPropertyBlock(_propBlock);
+        _propBlock.SetFloat(OpacityID, opacity);
+        _meshRenderer.SetPropertyBlock(_propBlock);
     }
     #endregion
 
@@ -131,6 +152,11 @@ public class Shockwave : MonoBehaviour
         mesh.triangles = triangles;
         mesh.uv        = uvs;
         mesh.RecalculateNormals();
+    }
+    public void ResetShockwave()
+    {
+        _timeElapsed = 0f;
+        _hits.Clear();
     }
     #endregion
 }
