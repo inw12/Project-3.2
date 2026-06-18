@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc5bdcc39aad0de42b32ed655da98498, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Resources::Shockwave
-  ringMaterial: {fileID: 2100000, guid: 45de7efd3818ee14bba35b304e0c189f, type: 2}
+  ringMaterial: {fileID: 2100000, guid: e89d565ddef43ef40a390e08a512d43c, type: 2}
   meshSegments: 64

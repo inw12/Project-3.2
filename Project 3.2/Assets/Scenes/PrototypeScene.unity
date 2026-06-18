@@ -985,10 +985,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 297166827221407259, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: c4d1c422089abe844920b1df192a1f03, type: 2}
     - target: {fileID: 1482431793822368523, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: DebugPosition.y
       value: 650
       objectReference: {fileID: 0}
+    - target: {fileID: 3085632902407800257, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: c4d1c422089abe844920b1df192a1f03, type: 2}
     - target: {fileID: 7770372466890364425, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: m_IsActive
       value: 1

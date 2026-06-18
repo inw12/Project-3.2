@@ -30,6 +30,6 @@ MonoBehaviour:
   burstProjectileSpeed: 15
   burstRange: 50
   shockwaveDamage: 1
-  maxRadius: 10
-  duration: 2.5
-  width: 0.33
+  maxRadius: 50
+  duration: 3.5
+  width: 0.5
