@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Enemy::FocusShot
   attackName: FocusShot
   attackID: 3
-  attackStarted: 0
-  attackComplete: 0
+  attackStarted: 1
+  attackComplete: 1
   requiresMovement: 0
-  damage: 5
+  damage: 10
   fireRate: 1
-  projectileSpeed: 100
-  range: 100
-  laserWidth: 0
-  chargeTime: 3
-  fireDelay: 0.3
+  projectileSpeed: 300
+  range: 30
+  laserWidth: 0.66
+  chargeTime: 2.4
+  fireDelay: 0.05
   chargeAnimation: {fileID: 7400000, guid: 59cf7b9b2ec69694496ecebc7bf45093, type: 2}
   delayAnimation: {fileID: 7400000, guid: 82dfa679c8a7685469590aabaab078a6, type: 2}
   laserPrefab: {fileID: 3727698956186454656, guid: 39d261d46ee97114689644fd2be448fa, type: 3}
