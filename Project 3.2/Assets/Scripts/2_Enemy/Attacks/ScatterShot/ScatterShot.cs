@@ -21,9 +21,10 @@ public class ScatterShot : EnemyRangedAttack
     [SerializeField] private float burstRange;
 
     [Header("AoE Burst - NEW")]
-    [SerializeField] private ShockwaveMesh shockwaveMesh;
-    [SerializeField] private ShockwaveHitbox shockwaveHitbox;
-    [SerializeField] private float _expansionDuration = 1f;
+    [SerializeField] private float shockwaveDamage;
+    [SerializeField] private float maxRadius;
+    [SerializeField] private float duration;
+    [SerializeField] private float width;
 
     // Timers & Counters
     private float _fireTimer;
@@ -94,8 +95,21 @@ public class ScatterShot : EnemyRangedAttack
             {
                 _shotCount = 0;
 
-                PerformShockwave(context);
-                
+                var shockwaveSpawn = context.Enemy.transform.position;
+                shockwaveSpawn.y = 0.2f;    // * magic number alert!
+                var shockwaveStats = new ShockwaveStats
+                {
+                    Radius  = maxRadius,
+                    Width   = width,
+                    Duration    = duration,
+                    Damage  = shockwaveDamage,
+                    TargetLayer = context.PlayerLayer,
+                    Spawn   = shockwaveSpawn,
+                    ObjectPool  = context.ShockwavePool
+                };
+                context.ShockwavePool.Get(shockwaveStats);
+
+                //PerformShockwave(context);
                 //Burst(context);
             }
 
@@ -125,27 +139,5 @@ public class ScatterShot : EnemyRangedAttack
             // Fire projectile
             context.SecondaryProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
         }
-    }
-
-    private void PerformShockwave(EnemyAttackContext context)
-    {
-        // Spawn ring and hitbox at the player's feet (Y grounded)
-        Vector3 origin = new Vector3(context.HitboxSpawn.position.x, 0.5f, context.HitboxSpawn.position.z);
-
-        ShockwaveMesh   ring   = Instantiate(shockwaveMesh,   origin, Quaternion.identity);
-        ShockwaveHitbox hitbox = Instantiate(shockwaveHitbox, origin, Quaternion.identity);
-
-        // Subscribe to hit events
-        hitbox.OnHit += (hit) =>
-        {
-            
-        };
-
-        // Run both coroutines in parallel
-        ring.Expand(_expansionDuration);
-        hitbox.Expand(_expansionDuration);
-        
-
-        Destroy(hitbox.gameObject);
     }
 }

@@ -29,6 +29,7 @@ MonoBehaviour:
   burstProjectileCount: 40
   burstProjectileSpeed: 15
   burstRange: 50
-  shockwaveMesh: {fileID: 5078177149200071112, guid: 10f722594153c4e4f9386d94ce211184, type: 3}
-  shockwaveHitbox: {fileID: 8554336763980231662, guid: f1d69456a5586294caee567f59efb4f5, type: 3}
-  _expansionDuration: 2
+  shockwaveDamage: 1
+  maxRadius: 10
+  duration: 2.5
+  width: 0.33

@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db494a91b38d11948ad3a483a3b30dd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Enemy::ShockwaveMesh
-  _maxRadius: 30
+  _maxRadius: 50
   _ringWidth: 0.6
   _ringSegments: 64
   _ringMaterial: {fileID: 2100000, guid: 45de7efd3818ee14bba35b304e0c189f, type: 2}

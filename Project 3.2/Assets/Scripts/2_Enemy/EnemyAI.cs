@@ -34,6 +34,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Transform projectileSpawn;
     [SerializeField] private ProjectilePool projectilePoolA;
     [SerializeField] private ProjectilePool projectilePoolB;
+    [SerializeField] private ShockwavePool shockwavePool;
     [SerializeField] private float playerDetectionRange;
     [SerializeField] private EnemyAttack[] attacks;
 
@@ -237,6 +238,7 @@ public class EnemyAI : MonoBehaviour
                 AnimationController     = _animationController,
                 ProjectilePool          = projectilePoolA,
                 SecondaryProjectilePool = projectilePoolB,
+                ShockwavePool           = shockwavePool,
                 PlayerPosition          = _state.PlayerPosition,
                 PlayerLayer             = targetLayer,
                 HitboxSpawn             = projectileSpawn,
