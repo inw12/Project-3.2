@@ -92,7 +92,7 @@ public class Shockwave : MonoBehaviour
 
 
     #region * Movement
-    void FixedUpdate()
+    void LateUpdate()
     {
         float t           = Mathf.Clamp01(_timeElapsed / _stats.Duration);
         float outerRadius = Mathf.Lerp(0f, _stats.Radius, t);
