@@ -15,15 +15,6 @@ public struct LaserStats
 [RequireComponent(typeof(LineRenderer))]
 public class Laser : MonoBehaviour
 {
-    // * delete later *
-    // Temp Stats
-    public float damage;
-    public float speed;
-    public float range;
-    public float width;
-    public LayerMask targetLayer;
-    // ****************
-
     [SerializeField] private float hitboxRadius;
     [SerializeField] private float dissipateSpeed;
 
@@ -40,23 +31,6 @@ public class Laser : MonoBehaviour
 
     private Vector3 _current;
     private Vector3 _next;
-
-    void Start()
-    {
-        _lineRenderer = GetComponent<LineRenderer>();
-        _lineRenderer.SetPosition(0, transform.position);
-        _lineRenderer.SetPosition(1, transform.position);
-        _lineRenderer.startWidth = width;
-
-        _current    = _lineRenderer.GetPosition(0);
-        _next       = _lineRenderer.GetPosition(1);
-
-        _distanceThisFrame = _distanceTraveled = 0f;
-
-        _isActive = true;
-
-        _alreadyHit.Clear();
-    }
 
     public void Initialize(LaserStats stats)
     {
@@ -80,9 +54,9 @@ public class Laser : MonoBehaviour
 
     void Update()
     {
-        _distanceThisFrame = speed * Time.deltaTime;
+        _distanceThisFrame = _stats.Speed * Time.deltaTime;
         _current = _lineRenderer.GetPosition(1);
-        _next = _current + (Vector3.forward * _distanceThisFrame);
+        _next = _current + (_stats.Direction * _distanceThisFrame);
 
         // 1. Perform Movement
         if (_isActive)
@@ -111,7 +85,7 @@ public class Laser : MonoBehaviour
             direction,
             _hits,
             _distanceThisFrame,
-            targetLayer
+            _stats.TargetLayer
         );
 
         if (hits > 0) HandleHit();
@@ -127,34 +101,18 @@ public class Laser : MonoBehaviour
         {
             if (hit.gameObject.TryGetComponent(out IDamageable i))
             {
-                i.DecreaseHealth(damage);
+                i.DecreaseHealth(_stats.Damage);
             }
         }
     }
 
-    // Lerp to 0 -> Destroy()
-    private void Despawn()
-    {
-        if (_isActive) _isActive = false;
-
-        // Reduce laser width over time
-        _lineRenderer.startWidth = Mathf.Lerp
-        (
-            _lineRenderer.startWidth,
-            0f,
-            1f - Mathf.Exp(-dissipateSpeed * Time.deltaTime)
-        );
-
-        // Remove object once width reaches a certain point
-        if (_lineRenderer.startWidth <= 0.05f) 
-        {
-            Destroy(gameObject);
-        }
-    }
-
+    // Despawn laser if conditions are met
     private void TryDespawn()
     {
-        if (_distanceThisFrame > range || !_isActive)
+        // * Despawn when:
+        //      - Max range achieved
+        //      - Something was hit
+        if (_distanceTraveled > _stats.Range || !_isActive)
         {
             // Reduce laser width over time
             _lineRenderer.startWidth = Mathf.Lerp

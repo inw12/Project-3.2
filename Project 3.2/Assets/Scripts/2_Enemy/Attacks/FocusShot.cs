@@ -2,6 +2,10 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy Attacks/Ranged/FocusShot")]
 public class FocusShot : EnemyRangedAttack
 {
+    [Header("Laser Stats")]
+    [SerializeField] private float laserWidth;
+
+
     [Header("Charge Up Info")]
     [SerializeField] private float chargeTime;
     [SerializeField] private float fireDelay;   // amount of time between reaching fully charged and then firing
@@ -13,6 +17,8 @@ public class FocusShot : EnemyRangedAttack
     [SerializeField] private AnimationClip delayAnimation;
     private static readonly int PlaybackSpeedA = Animator.StringToHash("PlaybackSpeedA");
     private static readonly int PlaybackSpeedB = Animator.StringToHash("PlaybackSpeedB");
+
+    [SerializeField] private GameObject laserPrefab;
 
     private Vector3 _target;
 
@@ -53,7 +59,7 @@ public class FocusShot : EnemyRangedAttack
                 // Fire!
                 if (_delayTimer >= fireDelay)
                 {
-                    FireProjectile(context);
+                    Shoot(context);
                     attackComplete = true;
                 }
 
@@ -75,18 +81,21 @@ public class FocusShot : EnemyRangedAttack
         }
     }
 
-    private void FireProjectile(EnemyAttackContext context)
+    private void Shoot(EnemyAttackContext context)
     {
         // Initialize Projectile Stats
-        var stats = new ProjectileStats
+        var stats = new LaserStats
         {
-            Damage = damage,
-            Speed = projectileSpeed,
-            Range = range,
-            Direction = (_target - context.Enemy.transform.position).normalized
+            Damage      = damage,
+            Speed       = projectileSpeed,
+            Range       = range,
+            Width       = laserWidth,
+            Origin      = context.HitboxSpawn.position,
+            Direction   = (_target - context.Enemy.transform.position).normalized,
+            TargetLayer = context.PlayerLayer
         };
 
-        // Get Projectile from Object Pool
-        context.ProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
+        var laser = Instantiate(laserPrefab);
+        laser.GetComponent<Laser>().Initialize(stats);
     }
 }
