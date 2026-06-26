@@ -4,6 +4,8 @@ public struct MeteorStats
 {
     public float Damage;
     public float Radius;
+    public float Duration;
+
     public Vector3 Spawn;
     public LayerMask TargetLayer;
     public MeteorPool ObjectPool;
@@ -11,35 +13,24 @@ public struct MeteorStats
 
 public class Meteor : MonoBehaviour
 {
-    // * delete later *
-    public float damage;
-    public float radius;
-    public LayerMask targetMask;
-    public AttackIndicator attackIndicator;
-    public float duration;
-
+    [SerializeField] private AttackIndicator attackIndicator;
     private MeteorStats _stats;
 
     // hit detection
-    private Collider[] _hits = new Collider[5];
+    private readonly Collider[] _hits = new Collider[5];
 
     public void Initialize(MeteorStats stats)
     {
         _stats = stats;
-    }
 
-    void OnEnable()     => attackIndicator.OnComplete += HandleHit;
-    void OnDisable()    => attackIndicator.OnComplete -= HandleHit;
-
-    void Start()
-    {
-        attackIndicator.Initialize(duration);
-        transform.localScale = new Vector3(radius, radius, radius);
+        attackIndicator.Initialize(_stats.Duration);
+        transform.position = _stats.Spawn;
+        transform.localScale = new Vector3(_stats.Radius, _stats.Radius, _stats.Radius);
     }
 
     void Update()
     {
-        
+        attackIndicator.UpdateIndicator();
     }
 
     private void HandleHit()
@@ -48,9 +39,9 @@ public class Meteor : MonoBehaviour
         var hits = Physics.OverlapSphereNonAlloc
         (
             transform.position,
-            radius,
+            _stats.Radius,
             _hits,
-            targetMask
+            _stats.TargetLayer
         );
 
         // Hit detection
@@ -60,9 +51,13 @@ public class Meteor : MonoBehaviour
 
             if (hit.gameObject.TryGetComponent(out IDamageable i))
             {
-                i.DecreaseHealth(damage);
-                Destroy(gameObject);
+                i.DecreaseHealth(_stats.Damage);
             }
         }
+        
+        Destroy(gameObject);
     }
+
+    void OnEnable()     => attackIndicator.OnComplete += HandleHit;
+    void OnDisable()    => attackIndicator.OnComplete -= HandleHit;
 }

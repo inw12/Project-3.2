@@ -7,8 +7,8 @@ public struct EnemyAttackContext
     
     public ProjectilePool ProjectilePool;
     public ProjectilePool SecondaryProjectilePool;
-
     public ShockwavePool ShockwavePool;
+    public MeteorPool MeteorPool;
 
     public Vector3 PlayerPosition;
     public LayerMask PlayerLayer;

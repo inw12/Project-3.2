@@ -32,11 +32,14 @@ public class EnemyAI : MonoBehaviour
     [Header("Attacks")]
     [SerializeField] private LayerMask targetLayer;
     [SerializeField] private Transform projectileSpawn;
+    [SerializeField] private float playerDetectionRange;
+    [SerializeField] private EnemyAttack[] attacks;
+
+    [Header("Object Pools")]
     [SerializeField] private ProjectilePool projectilePoolA;
     [SerializeField] private ProjectilePool projectilePoolB;
     [SerializeField] private ShockwavePool shockwavePool;
-    [SerializeField] private float playerDetectionRange;
-    [SerializeField] private EnemyAttack[] attacks;
+    [SerializeField] private MeteorPool meteorPool;
 
     [Header("Movement")]
     [SerializeField] private float speed = 10f;
@@ -239,6 +242,7 @@ public class EnemyAI : MonoBehaviour
                 ProjectilePool          = projectilePoolA,
                 SecondaryProjectilePool = projectilePoolB,
                 ShockwavePool           = shockwavePool,
+                MeteorPool              = meteorPool,
                 PlayerPosition          = _state.PlayerPosition,
                 PlayerLayer             = targetLayer,
                 HitboxSpawn             = projectileSpawn,

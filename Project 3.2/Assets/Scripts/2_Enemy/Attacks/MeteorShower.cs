@@ -5,6 +5,9 @@ public class MeteorShower : EnemyAreaAttack
     [Header("Attack Indicator")]
     [SerializeField] private float radius;      // size of attack indicator
     [SerializeField] private float chargeTime;  // how long until indicator is filled?
+    [SerializeField] private float cooldown;    // time between meteor spawns
+
+    private MeteorPool _meteorPool;
 
     public override void Initialize()
     {

@@ -42,17 +42,15 @@ public class MeteorPool : MonoBehaviour
 
     private void OnDestroyItem(GameObject item) => Destroy(item);
 
-    public void Get(ShockwaveStats stats)
+    public void Get(MeteorStats stats)
     {
         GameObject item = _pool.Get();
-        if (item.TryGetComponent(out Shockwave s))
-            s.Initialize(stats);
+        if (item.TryGetComponent(out Meteor m))
+            m.Initialize(stats);
     }
     
     public void Release(GameObject item) 
     {
-        if (item.TryGetComponent(out Shockwave s))
-            s.ResetShockwave();
         _pool.Release(item);
     }
 }

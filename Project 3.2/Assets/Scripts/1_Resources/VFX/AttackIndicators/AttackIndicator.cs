@@ -23,7 +23,7 @@ public abstract class AttackIndicator : MonoBehaviour
         _elapsed = 0f;
     }
 
-    void Update()
+    public void UpdateIndicator()
     {
         // - Update duration progress
         _elapsed += Time.deltaTime;
@@ -36,6 +36,7 @@ public abstract class AttackIndicator : MonoBehaviour
         if (_elapsed >= _duration)
         {
             OnComplete?.Invoke();
+            this.enabled = false;
             //Destroy(gameObject);
         }
     }
