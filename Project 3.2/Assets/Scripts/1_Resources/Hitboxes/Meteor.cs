@@ -39,7 +39,7 @@ public class Meteor : MonoBehaviour
         var hits = Physics.OverlapSphereNonAlloc
         (
             transform.position,
-            _stats.Radius,
+            _stats.Radius / 2f,
             _hits,
             _stats.TargetLayer
         );

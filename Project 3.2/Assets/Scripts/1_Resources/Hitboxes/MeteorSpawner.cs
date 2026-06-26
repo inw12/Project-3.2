@@ -24,6 +24,7 @@ public class MeteorSpawner : MonoBehaviour
 
     [HideInInspector] public bool _completed;
 
+
     public void Initialize(MeteorSpawnerContext context)
     {
         _context = context;
@@ -61,7 +62,7 @@ public class MeteorSpawner : MonoBehaviour
 
     private Vector3 GetRandomSpawn()
     {
-        var rand = Random.insideUnitSphere * _context.Radius;
+        var rand = Random.insideUnitSphere * _context.SpawnRadius;
         rand.y = 0f;
         return rand;
     }
