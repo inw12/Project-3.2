@@ -4,6 +4,8 @@ public class MeteorShower : EnemyAreaAttack
 {
     [Space]
     [SerializeField] private MeteorSpawner meteorSpawner;
+    [SerializeField] private float timeToIdle;      // amount of time that 'Attack' is called for before returning to idle
+    private float _idleTimer;
 
     [Header("Meteor Stats")]
     [SerializeField] private float radius;          // size of attack indicator
@@ -23,11 +25,13 @@ public class MeteorShower : EnemyAreaAttack
         requiresMovement = false;
 
         attackStarted = attackComplete = false;
+        _idleTimer = 0f;
     }
 
-
     public override void Attack(EnemyAttackContext context)
-    {     
+    {
+        _idleTimer += Time.deltaTime;
+
         if (!attackStarted)
         {
             attackStarted = true;
@@ -48,11 +52,10 @@ public class MeteorShower : EnemyAreaAttack
             _spawner.Initialize(spawnerContext);
         }
 
-        if (_spawner && _spawner._completed)
+        if (_idleTimer >= timeToIdle)
         {
             attackComplete = true;
             _spawner.DestroySpawner();
         }
     }
-
 }
