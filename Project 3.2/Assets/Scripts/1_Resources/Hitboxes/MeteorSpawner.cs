@@ -1,46 +1,58 @@
 using UnityEngine;
+
+public class MeteorSpawnerContext
+{
+    // Spawner Stats
+    public float SpawnRadius;
+    public int SpawnAmount;
+    public float SpawnCooldown;
+    public MeteorPool MeteorPool;
+
+    // Meteor Stats
+    public float Damage;
+    public float Radius;
+    public float Duration;
+    public LayerMask TargetMask;
+}
+
 public class MeteorSpawner : MonoBehaviour
 {
-    [Header("Spawner Stats")]
-    [SerializeField] private float spawnRadius;
-    [SerializeField] private int spawnAmount;
-    [SerializeField] private float cooldown;
-    [SerializeField] private MeteorPool meteorPool;
-    [Header("Meteor Stats")]
-    [SerializeField] private float damage;
-    [SerializeField] private float radius;
-    [SerializeField] private float duration;
-    [SerializeField] private LayerMask targetMask;
+    private MeteorSpawnerContext _context;
 
     private int _meteorCounter;
     private float _spawnTimer;
 
-    void Start()
+    [HideInInspector] public bool _completed;
+
+    public void Initialize(MeteorSpawnerContext context)
     {
+        _context = context;
         _meteorCounter = 0;
         _spawnTimer = 0f;
     }
 
     void Update()
     {   
-        if (_meteorCounter >= spawnAmount)
+        if (_meteorCounter >= _context.SpawnAmount)
         {
-            Destroy(gameObject);
+            _completed = true;
         }
 
         _spawnTimer += Time.deltaTime;
-        if (_spawnTimer >= cooldown)
+
+        // Spawn new meteor
+        if (_spawnTimer >= _context.SpawnCooldown && _meteorCounter < _context.SpawnAmount)
         {
             var stats = new MeteorStats
             {
-                Damage      = damage,
-                Radius      = radius,
-                Duration    = duration,
+                Damage      = _context.Damage,
+                Radius      = _context.Radius,
+                Duration    = _context.Duration,
                 Spawn       = GetRandomSpawn(),
-                TargetLayer = targetMask,
-                ObjectPool  = meteorPool
+                TargetLayer = _context.TargetMask,
+                ObjectPool  = _context.MeteorPool
             };
-            meteorPool.Get(stats);
+            _context.MeteorPool.Get(stats);
 
             _spawnTimer = 0f;
             _meteorCounter++;
@@ -49,8 +61,10 @@ public class MeteorSpawner : MonoBehaviour
 
     private Vector3 GetRandomSpawn()
     {
-        var rand = Random.insideUnitSphere * spawnRadius;
+        var rand = Random.insideUnitSphere * _context.Radius;
         rand.y = 0f;
         return rand;
     }
+
+    public void DestroySpawner() => Destroy(gameObject);
 }

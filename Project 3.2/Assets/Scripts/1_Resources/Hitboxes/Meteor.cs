@@ -55,7 +55,8 @@ public class Meteor : MonoBehaviour
             }
         }
         
-        Destroy(gameObject);
+        // Release from object pool
+        _stats.ObjectPool.Release(gameObject);
     }
 
     void OnEnable()     => attackIndicator.OnComplete += HandleHit;
