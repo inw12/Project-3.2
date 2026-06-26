@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     {
         animationController.Initialize();
         armRig.Initialize();
-        enemyAI.Initialize(this, animationController);
+        enemyAI.Initialize(this);
         hitFeedback.Initialize();
 
         _rb = GetComponent<Rigidbody>();

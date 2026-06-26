@@ -32,10 +32,6 @@ public class EnemyAnimationController : MonoBehaviour
     private static readonly int InParryPhase        = Animator.StringToHash("InParryPhase");
     #endregion
 
-    #region * Animation Events
-    
-    #endregion
-
     private Animator _animator;
 
     public void Initialize()
@@ -85,5 +81,10 @@ public class EnemyAnimationController : MonoBehaviour
         _animator.SetBool(InHitstun, false);
         _animator.Play("Idle");
     }
+    #endregion
+
+
+    #region * Animation Events
+    public void AttackActiveOn() => _animator.SetBool(AttackActive, true);
     #endregion
 }

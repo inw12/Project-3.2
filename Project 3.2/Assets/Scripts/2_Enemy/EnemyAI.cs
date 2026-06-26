@@ -24,6 +24,9 @@ public class EnemyAI : MonoBehaviour
     public bool ShowDebug;
 
     #region * Variables
+    [Space]
+    [SerializeField] private EnemyAnimationController animationController;
+
     [Header("State Machine Control")]
     [SerializeField] private float stateChangeCooldown = 5f;
     [SerializeField] [Range(0f, 100f)] private float attackChance = 50f;    // % chance that the state machine will choose to attack over movement
@@ -52,7 +55,6 @@ public class EnemyAI : MonoBehaviour
     // Unity Components
     private Rigidbody _rb;
     private Enemy _enemy;
-    private EnemyAnimationController _animationController;
 
     // Misc.
     private bool _isActive; // <-------------------------------------- True/False if the state machine is active
@@ -86,11 +88,10 @@ public class EnemyAI : MonoBehaviour
     
     #region * Initialization
     // Called by 'Enemy.cs' in 'Start()' function
-    public void Initialize(Enemy enemy, EnemyAnimationController controller)
+    public void Initialize(Enemy enemy)
     {
         _enemy = enemy;
         _rb = GetComponent<Rigidbody>();
-        _animationController = controller;
 
         SetToIdle();
 
@@ -99,6 +100,7 @@ public class EnemyAI : MonoBehaviour
 
         _cooldownTimer = 0f;
         _isActive = true;
+
     }
     #endregion
 
@@ -162,7 +164,7 @@ public class EnemyAI : MonoBehaviour
             if (_rb.position == _state.MovementTarget)
             {
                 _rotationSet = false;
-                _animationController.SetBool("AttackActive", false);
+                animationController.SetBool("AttackActive", false);
                 _enemy.SetToIdle();
                 return;
             }
@@ -221,13 +223,13 @@ public class EnemyAI : MonoBehaviour
         // Attack END
         if (!_state.CurrentAttack || _state.CurrentAttack.attackComplete)
         {
-            _animationController.SetBool("AttackActive", false);
+            animationController.SetBool("AttackActive", false);
             SetToIdle();
             return;
         }
 
         // Attack IDLE
-        if (_animationController.GetBool("AttackActive"))
+        if (animationController.GetBool("AttackActive"))
         {
             // Adjust projectile spawn to be at player height
             Vector3 targetSpawn = projectileSpawn.position;
@@ -238,7 +240,7 @@ public class EnemyAI : MonoBehaviour
             var context = new EnemyAttackContext
             {
                 Enemy                   = gameObject.GetComponent<Enemy>(),
-                AnimationController     = _animationController,
+                AnimationController     = animationController,
                 ProjectilePool          = projectilePoolA,
                 SecondaryProjectilePool = projectilePoolB,
                 ShockwavePool           = shockwavePool,

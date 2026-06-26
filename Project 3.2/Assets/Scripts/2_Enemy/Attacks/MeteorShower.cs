@@ -25,8 +25,9 @@ public class MeteorShower : EnemyAreaAttack
         attackStarted = attackComplete = false;
     }
 
+
     public override void Attack(EnemyAttackContext context)
-    {
+    {     
         if (!attackStarted)
         {
             attackStarted = true;
@@ -53,4 +54,5 @@ public class MeteorShower : EnemyAreaAttack
             _spawner.DestroySpawner();
         }
     }
+
 }

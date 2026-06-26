@@ -28,7 +28,7 @@ public class MeteorSpawner : MonoBehaviour
     {
         _context = context;
         _meteorCounter = 0;
-        _spawnTimer = 0f;
+        _spawnTimer = context.SpawnCooldown;
     }
 
     void Update()
