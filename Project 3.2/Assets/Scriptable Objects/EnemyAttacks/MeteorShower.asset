@@ -14,16 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Enemy::MeteorShower
   attackName: MeteorShower
   attackID: 4
-  attackStarted: 1
-  attackComplete: 1
+  attackStarted: 0
+  attackComplete: 0
   requiresMovement: 0
   damage: 5
   meteorSpawner: {fileID: 8865642840806148965, guid: cc63df66ae146d040aa125be8034c56d, type: 3}
-  radius: 7.5
-  chargeTime: 1.66
+  timeToIdle: 0.8
+  radius: 8
+  chargeTime: 1.5
   targetMask:
     serializedVersion: 2
     m_Bits: 384
-  SpawnerRadius: 12
-  SpawnAmount: 5
+  SpawnerRadius: 15
+  SpawnAmount: 6
   SpawnCooldown: 0.8

@@ -55,7 +55,7 @@ public class MeteorShower : EnemyAreaAttack
         if (_idleTimer >= timeToIdle)
         {
             attackComplete = true;
-            _spawner.DestroySpawner();
+            //_spawner.DestroySpawner();
         }
     }
 }

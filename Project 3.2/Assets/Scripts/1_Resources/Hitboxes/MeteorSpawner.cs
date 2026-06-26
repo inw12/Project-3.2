@@ -22,8 +22,6 @@ public class MeteorSpawner : MonoBehaviour
     private int _meteorCounter;
     private float _spawnTimer;
 
-    [HideInInspector] public bool _completed;
-
 
     public void Initialize(MeteorSpawnerContext context)
     {
@@ -36,7 +34,7 @@ public class MeteorSpawner : MonoBehaviour
     {   
         if (_meteorCounter >= _context.SpawnAmount)
         {
-            _completed = true;
+            Destroy(gameObject);
         }
 
         _spawnTimer += Time.deltaTime;
@@ -66,6 +64,4 @@ public class MeteorSpawner : MonoBehaviour
         rand.y = 0f;
         return rand;
     }
-
-    public void DestroySpawner() => Destroy(gameObject);
 }
