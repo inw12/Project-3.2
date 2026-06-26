@@ -239,7 +239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Player::Player
   ShowDebug: 1
-  DebugPosition: {x: 20, y: 700}
+  DebugPosition: {x: 20, y: 650}
   playerMovement: {fileID: 5204891853911126009}
   playerCombat: {fileID: 9160193776550035463}
   animationController: {fileID: 6384798146728278658}
@@ -299,7 +299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Player::RangedAttack
   damage: 1
   fireRate: 0.4
-  projectileSpeed: 75
+  projectileSpeed: 100
   projectileRange: 75
   projectileSpawn: {fileID: 2144842615113618037}
 --- !u!114 &47124724488737220
@@ -3766,7 +3766,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 45de7efd3818ee14bba35b304e0c189f, type: 2}
+  - {fileID: 2100000, guid: c4d1c422089abe844920b1df192a1f03, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4001,6 +4001,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8561724288009958390}
   - component: {fileID: 92549145353397025}
+  - component: {fileID: 4215330524790412206}
   m_Layer: 0
   m_Name: Pistol
   m_TagString: Untagged
@@ -4052,6 +4053,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4215330524790412206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2187499763031129408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb0b9a12c1dd30c4da204a42e12a2423, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::WeaponRotationLock
+  playerCombat: {fileID: 9160193776550035463}
 --- !u!1 &2198890702035956257
 GameObject:
   m_ObjectHideFlags: 0
@@ -6153,7 +6167,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 45de7efd3818ee14bba35b304e0c189f, type: 2}
+  - {fileID: 2100000, guid: c4d1c422089abe844920b1df192a1f03, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6412,7 +6426,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa973d66cb8c448acbdeefbe4ffe1bfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Player::PlayerHurtbox
-  ShowDebug: 0
   maxHealth: 100
 --- !u!1 &3364621209944536219
 GameObject:

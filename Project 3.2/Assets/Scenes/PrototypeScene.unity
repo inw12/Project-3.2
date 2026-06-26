@@ -839,17 +839,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 895460604}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1312690529 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9160193776550035463, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-  m_PrefabInstance: {fileID: 1526657071655407713}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0171239230a4a454e8b3df8c3f59723a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Player::PlayerCombat
 --- !u!1 &1385405018
 GameObject:
   m_ObjectHideFlags: 0
@@ -1065,26 +1054,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 297166827221407259, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: c4d1c422089abe844920b1df192a1f03, type: 2}
-    - target: {fileID: 1482431793822368523, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      propertyPath: DebugPosition.y
-      value: 650
-      objectReference: {fileID: 0}
-    - target: {fileID: 3085632902407800257, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: c4d1c422089abe844920b1df192a1f03, type: 2}
-    - target: {fileID: 7770372466890364425, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7946168105190167132, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      propertyPath: projectileSpeed
-      value: 100
-      objectReference: {fileID: 0}
     - target: {fileID: 9183493435168247240, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1128,29 +1097,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2187499763031129408, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1526657071655407718}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
---- !u!1 &1526657071655407714 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2187499763031129408, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-  m_PrefabInstance: {fileID: 1526657071655407713}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1526657071655407718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1526657071655407714}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb0b9a12c1dd30c4da204a42e12a2423, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Player::WeaponRotationLock
-  playerCombat: {fileID: 1312690529}
 --- !u!1001 &4707600413473519260
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1162,18 +1110,6 @@ PrefabInstance:
     - target: {fileID: 1354778989664995145, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: m_Name
       value: TrainingDummy
-      objectReference: {fileID: 0}
-    - target: {fileID: 2267873816034923315, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: m_Weight
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3189738783838732195, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: m_Data.m_MaxLimit
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 4481789441953731918, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: maxHealth
-      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5448100723142779783, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1215,63 +1151,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6867951403096359160, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'B-upperArm.R'\n\tTransform 'B-shoulder.R'\n\tTransform
-        'B-chest'\n\tTransform 'B-forearm.R'\n\tTransform 'B-hand.R'\n\tTransform
-        'B-upperArm.R'\n\tTransform 'B-shoulder.R'\n\tTransform 'B-chest'\n\tTransform
-        'B-forearm.R'\n\tTransform 'B-hand.R'\n\tand more ..."
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: isActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: ShowDebug
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: meteorPool
       value: 
       objectReference: {fileID: 290245633}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: attackChance
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: shockwavePool
       value: 
       objectReference: {fileID: 1881086221}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: attacks.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: animationController
-      value: 
-      objectReference: {fileID: 8037206068912205261}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: stateChangeCooldown
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: 'attacks.Array.data[0]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 6d95bb58fa24c9b41916db508bdff92c, type: 2}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: 'attacks.Array.data[1]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 4c3543a9d4e3f994185e6e2cea9516ba, type: 2}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: 'attacks.Array.data[2]'
-      value: 
-      objectReference: {fileID: 11400000, guid: efdf059b643730f41a4a7d2e5fd69734, type: 2}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: 'attacks.Array.data[3]'
-      value: 
-      objectReference: {fileID: 11400000, guid: efdf059b643730f41a4a7d2e5fd69734, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1299,17 +1186,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b371238ad03b140adb8e54fe03e4d8c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Enemy::EnemyCombo
---- !u!114 &8037206068912205261 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2172641294016679017, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-  m_PrefabInstance: {fileID: 4707600413473519260}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a6ce673bc6bf34093accdbcdf01b4ecc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Enemy::EnemyAnimationController
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
