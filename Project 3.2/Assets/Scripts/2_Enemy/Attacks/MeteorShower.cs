@@ -8,10 +8,10 @@ public class MeteorShower : EnemyAreaAttack
 
     public override void Initialize()
     {
-        requiresMovement = false;
-        attackStarted = attackComplete = false;
-
         _attackShape = AreaAttackShape.Circle;
+        requiresMovement = false;
+
+        attackStarted = attackComplete = false;
     }
 
     /// * DESIRED BEHAVIOR:
