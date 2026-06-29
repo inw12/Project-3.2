@@ -125,6 +125,9 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
         // Rotation enemy towards player
         _rb.MoveRotation(Quaternion.LookRotation(-direction));
 
+        // Set to Idle
+        SetToIdle();
+
         // Start knockback coroutine
         _knockbackCoroutine = StartCoroutine(KnockbackRoutine(direction, force, duration));
     }
