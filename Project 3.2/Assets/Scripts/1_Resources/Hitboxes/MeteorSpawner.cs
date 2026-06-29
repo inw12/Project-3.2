@@ -6,6 +6,7 @@ public class MeteorSpawnerContext
     public float SpawnRadius;
     public int SpawnAmount;
     public float SpawnCooldown;
+    public ProjectilePool ProjectilePool;
     public MeteorPool MeteorPool;
 
     // Meteor Stats
@@ -49,7 +50,8 @@ public class MeteorSpawner : MonoBehaviour
                 Duration    = _context.Duration,
                 Spawn       = GetRandomSpawn(),
                 TargetLayer = _context.TargetMask,
-                ObjectPool  = _context.MeteorPool
+                ObjectPool  = _context.MeteorPool,
+                ProjectilePool = _context.ProjectilePool
             };
             _context.MeteorPool.Get(stats);
 

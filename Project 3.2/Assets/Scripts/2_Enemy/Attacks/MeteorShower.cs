@@ -44,6 +44,7 @@ public class MeteorShower : EnemyAreaAttack
                 SpawnAmount = SpawnAmount,
                 SpawnCooldown = SpawnCooldown,
                 MeteorPool = context.MeteorPool,
+                ProjectilePool = context.SecondaryProjectilePool,
                 Damage = damage,
                 Radius = radius,
                 Duration = chargeTime,

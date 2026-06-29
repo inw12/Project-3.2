@@ -9,11 +9,18 @@ public struct MeteorStats
     public Vector3 Spawn;
     public LayerMask TargetLayer;
     public MeteorPool ObjectPool;
+
+    // Projectile Spawns
+    public float ProjectileDamage;
+    public ProjectilePool ProjectilePool;
 }
 
 public class Meteor : MonoBehaviour
 {
     [SerializeField] private AttackIndicator attackIndicator;
+    [SerializeField] private int burstProjectileCount;
+    [SerializeField] private float burstProjectileSpeed;
+    [SerializeField] private float burstProjectileRange;
     private MeteorStats _stats;
 
     // hit detection
@@ -35,6 +42,9 @@ public class Meteor : MonoBehaviour
 
     private void HandleHit()
     {
+        // Spawn Projectiles
+        ProjectileBurst();
+
         // Scan for hits
         var hits = Physics.OverlapSphereNonAlloc
         (
@@ -61,4 +71,32 @@ public class Meteor : MonoBehaviour
 
     void OnEnable()     => attackIndicator.OnComplete += HandleHit;
     void OnDisable()    => attackIndicator.OnComplete -= HandleHit;
+
+    private void ProjectileBurst()
+    {
+        var angleStep = 360f / burstProjectileCount;
+        for (int i = 0; i < burstProjectileCount; i++)
+        {
+            // Calculate direction
+            var angle = i * angleStep;
+            var rad = angle * Mathf.Deg2Rad;
+            var direction = new Vector3(Mathf.Sin(rad), 0f, Mathf.Cos(rad));
+        
+            // Initialize projectile stats
+            var stats = new ProjectileStats
+            {
+                Damage = _stats.ProjectileDamage,
+                Speed = burstProjectileSpeed,
+                Range = burstProjectileRange,
+                Direction = direction
+            };
+
+            // Fire projectile
+            Transform spawn = transform;
+            Vector3 spawnPos = transform.position;
+            spawnPos.y = 1f;
+            spawn.position = spawnPos;
+            _stats.ProjectilePool.Get(stats, spawn, _stats.TargetLayer);
+        }
+    }
 }

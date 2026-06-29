@@ -1161,7 +1161,7 @@ PrefabInstance:
       objectReference: {fileID: 1881086221}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: attacks.Array.size
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: stateChangeCooldown
@@ -1170,11 +1170,11 @@ PrefabInstance:
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: 'attacks.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 4c3543a9d4e3f994185e6e2cea9516ba, type: 2}
+      objectReference: {fileID: 11400000, guid: 8b46fb41b671240c0bcfb3e8049900ac, type: 2}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: 'attacks.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: 8b46fb41b671240c0bcfb3e8049900ac, type: 2}
+      objectReference: {fileID: 11400000, guid: efdf059b643730f41a4a7d2e5fd69734, type: 2}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: 'attacks.Array.data[3]'
       value: 

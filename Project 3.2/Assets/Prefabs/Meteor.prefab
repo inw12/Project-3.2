@@ -149,3 +149,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Resources::Meteor
   attackIndicator: {fileID: 9006504374739602523}
+  burstProjectileCount: 50
+  burstProjectileSpeed: 15
+  burstProjectileRange: 70
