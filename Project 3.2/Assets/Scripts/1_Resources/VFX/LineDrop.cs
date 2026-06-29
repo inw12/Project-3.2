@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(LineRenderer))]
 public class LineDrop : MonoBehaviour
 {
+    [SerializeField] private ParticleSystem particles;
     [SerializeField] private Transform spawn;
     [SerializeField] private float speed;
     [SerializeField] private float startWidth;
@@ -16,6 +17,8 @@ public class LineDrop : MonoBehaviour
 
     private bool _floorHit;
 
+    private bool _particlesTriggered;
+
     void Start()
     {
         _lr = GetComponent<LineRenderer>();
@@ -28,12 +31,12 @@ public class LineDrop : MonoBehaviour
 
         _distanceThisFrame = 0f;
 
-        _floorHit = false;
+        _floorHit = _particlesTriggered = false;
     }
 
     void Update()
     {
-        if (_lr.GetPosition(0).y <= 0f)
+        if (_lr.GetPosition(0).y <= 0f && !particles.isPlaying)
         {
             Destroy(gameObject);
         }
@@ -55,6 +58,15 @@ public class LineDrop : MonoBehaviour
             _lr.SetPosition(0, _next);
         }
 
-        _floorHit = _lr.GetPosition(1).y <= 0f;
+        if (_lr.GetPosition(1).y <= 0f)
+        {
+            _floorHit = true;
+
+            if (!_particlesTriggered)
+            {
+                _particlesTriggered = true;
+                particles.Play();
+            }
+        }
     }
 }
