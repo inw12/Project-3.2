@@ -152,3 +152,4 @@ MonoBehaviour:
   burstProjectileCount: 50
   burstProjectileSpeed: 15
   burstProjectileRange: 70
+  lineDrop: {fileID: 1518163969073442146, guid: ede672a7e53fa80459e05f8c0f7863a9, type: 3}

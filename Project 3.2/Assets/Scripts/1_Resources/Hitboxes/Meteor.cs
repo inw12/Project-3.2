@@ -17,11 +17,15 @@ public struct MeteorStats
 
 public class Meteor : MonoBehaviour
 {
+    [Header("Stats")]
     [SerializeField] private AttackIndicator attackIndicator;
     [SerializeField] private int burstProjectileCount;
     [SerializeField] private float burstProjectileSpeed;
     [SerializeField] private float burstProjectileRange;
     private MeteorStats _stats;
+
+    [Header("VFX")]
+    [SerializeField] private GameObject lineDrop;
 
     // hit detection
     private readonly Collider[] _hits = new Collider[5];
@@ -42,6 +46,8 @@ public class Meteor : MonoBehaviour
 
     private void HandleHit()
     {
+        _ = Instantiate(lineDrop, transform.position, Quaternion.identity);
+
         // Spawn Projectiles
         ProjectileBurst();
 

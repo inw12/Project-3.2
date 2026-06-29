@@ -1152,6 +1152,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
+      propertyPath: isActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: meteorPool
       value: 
       objectReference: {fileID: 290245633}
@@ -1165,7 +1169,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: stateChangeCooldown
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: 'attacks.Array.data[1]'
