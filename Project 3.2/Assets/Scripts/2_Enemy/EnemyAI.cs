@@ -7,6 +7,8 @@ public struct EnemyState
 
     public Vector3 PlayerPosition;
     public Vector3 MovementTarget;
+
+    public Vector3 Velocity;
 }
 public enum EnemyAction
 {
@@ -22,18 +24,26 @@ public class EnemyAI : MonoBehaviour
     public bool ShowDebug;
 
     #region * Variables
+    [Space]
+    [SerializeField] private EnemyAnimationController animationController;
+
     [Header("State Machine Control")]
     [SerializeField] private float stateChangeCooldown = 5f;
     [SerializeField] [Range(0f, 100f)] private float attackChance = 50f;    // % chance that the state machine will choose to attack over movement
     private float _cooldownTimer;
 
     [Header("Attacks")]
+    [SerializeField] private LayerMask playerLayer;
     [SerializeField] private LayerMask targetLayer;
     [SerializeField] private Transform projectileSpawn;
-    [SerializeField] private ProjectilePool projectilePoolA;
-    [SerializeField] private ProjectilePool projectilePoolB;
     [SerializeField] private float playerDetectionRange;
     [SerializeField] private EnemyAttack[] attacks;
+
+    [Header("Object Pools")]
+    [SerializeField] private ProjectilePool projectilePoolA;
+    [SerializeField] private ProjectilePool projectilePoolB;
+    [SerializeField] private ShockwavePool shockwavePool;
+    [SerializeField] private MeteorPool meteorPool;
 
     [Header("Movement")]
     [SerializeField] private float speed = 10f;
@@ -46,11 +56,11 @@ public class EnemyAI : MonoBehaviour
     // Unity Components
     private Rigidbody _rb;
     private Enemy _enemy;
-    private EnemyAnimationController _animationController;
 
     // Misc.
     private bool _isActive; // <-------------------------------------- True/False if the state machine is active
     private readonly Collider[] _detectionHits = new Collider[10];  // OverlapSphereNonAlloc buffer for player detection
+    private bool _rotationSet;  // set rotation once in movement logic
     #endregion
 
 
@@ -66,23 +76,23 @@ public class EnemyAI : MonoBehaviour
     void OnGUI()
     {
         if (!ShowDebug) return;
-        var debugText = $"Current State: {_state.CurrentAction} ({(int)_state.CurrentAction})\n"
-                        + $"Current Attack: {_state.CurrentAttack?.attackID ?? 0}\n"
-                        + $"State Machine Cooldown: {_cooldownTimer:F2} sec\n"
+        var debugText =   $"HP: {_enemy.Health.CurrentHealth} / {_enemy.Health.MaxHealth}\n\n"
+                        + $"Current State: {_state.CurrentAction} ({(int)_state.CurrentAction})\n"
+                        + $"Current Attack: {(_state.CurrentAttack != null ? _state.CurrentAttack.attackName : " ")}\n"
+                        + $"State Machine Cooldown: {_cooldownTimer:F2} / {stateChangeCooldown:F2}\n"
                         + $"Player Position: {_state.PlayerPosition}\n";
         var altText = "EnemyAI Disabled";
         var result = _isActive ? debugText : altText;
-        GUI.Label(new Rect(10, 10, 300, 100), result);
+        GUI.Label(new Rect(15, 15, 500, 250), result);
     }
     #endregion
     
     #region * Initialization
     // Called by 'Enemy.cs' in 'Start()' function
-    public void Initialize(Enemy enemy, EnemyAnimationController controller)
+    public void Initialize(Enemy enemy)
     {
         _enemy = enemy;
         _rb = GetComponent<Rigidbody>();
-        _animationController = controller;
 
         SetToIdle();
 
@@ -91,6 +101,7 @@ public class EnemyAI : MonoBehaviour
 
         _cooldownTimer = 0f;
         _isActive = true;
+
     }
     #endregion
 
@@ -98,7 +109,14 @@ public class EnemyAI : MonoBehaviour
     // Called by 'Enemy.cs' in 'Update()' function
     public void UpdateAI(float deltaTime)
     {
-        _isActive = isActive;   // (delete later)
+        // Update Previous State
+        _prevState = _state;
+
+        // Toggle state machine activity (delete later)
+        _isActive = isActive;
+
+        // Update Velocity
+        _state.Velocity = _rb.linearVelocity;
 
         // Track player position
         TrackPlayer();
@@ -134,9 +152,6 @@ public class EnemyAI : MonoBehaviour
     {
         // Perform attack
         if (_state.CurrentAction is EnemyAction.Attack) UpdateCurrentAttack();
-
-        // Update Previous State
-        _prevState = _state;
     }
     // Called by 'Enemy.cs' in 'FixedUpdate()' function
     public void UpdateMovement(float fixedDeltaTime)
@@ -149,14 +164,20 @@ public class EnemyAI : MonoBehaviour
             // If destination reached, EXIT movement state
             if (_rb.position == _state.MovementTarget)
             {
-                _animationController.SetBool("AttackActive", false);
+                _rotationSet = false;
+                animationController.SetBool("AttackActive", false);
                 _enemy.SetToIdle();
                 return;
             }
 
-            // Rotate towards movement target
-            var direction = (_state.MovementTarget - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
-            transform.rotation = Quaternion.LookRotation(direction);
+            // Rotate towards target
+            if (!_rotationSet)
+            {
+                _rotationSet = true;
+                var rotationTarget      = _state.CurrentAction is EnemyAction.Attack ? _state.PlayerPosition : _state.MovementTarget;
+                var rotationDirection   = (rotationTarget - Vector3.ProjectOnPlane(transform.position, Vector3.up)).normalized;
+                transform.rotation = Quaternion.LookRotation(rotationDirection);
+            }
 
             // Calculate amount to move this frame
             var next = Vector3.MoveTowards
@@ -203,13 +224,13 @@ public class EnemyAI : MonoBehaviour
         // Attack END
         if (!_state.CurrentAttack || _state.CurrentAttack.attackComplete)
         {
-            _animationController.SetBool("AttackActive", false);
+            animationController.SetBool("AttackActive", false);
             SetToIdle();
             return;
         }
 
         // Attack IDLE
-        if (_animationController.GetBool("AttackActive"))
+        if (animationController.GetBool("AttackActive"))
         {
             // Adjust projectile spawn to be at player height
             Vector3 targetSpawn = projectileSpawn.position;
@@ -220,9 +241,11 @@ public class EnemyAI : MonoBehaviour
             var context = new EnemyAttackContext
             {
                 Enemy                   = gameObject.GetComponent<Enemy>(),
-                AnimationController     = _animationController,
+                AnimationController     = animationController,
                 ProjectilePool          = projectilePoolA,
                 SecondaryProjectilePool = projectilePoolB,
+                ShockwavePool           = shockwavePool,
+                MeteorPool              = meteorPool,
                 PlayerPosition          = _state.PlayerPosition,
                 PlayerLayer             = targetLayer,
                 HitboxSpawn             = projectileSpawn,
@@ -251,7 +274,7 @@ public class EnemyAI : MonoBehaviour
             transform.position,
             playerDetectionRange,
             _detectionHits,
-            targetLayer
+            playerLayer
         );
 
         if (hits > 0)

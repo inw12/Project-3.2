@@ -1,0 +1,143 @@
+using System.Collections;
+using UnityEngine;
+[CreateAssetMenu(menuName = "Enemy Attacks/Ranged/ScatterShot")]
+public class ScatterShot : EnemyRangedAttack
+{
+    [Header("Duration")]
+    [SerializeField] private float durationMin;
+    [SerializeField] private float durationMax;
+    private float _duration;
+
+    [Header("Number of Projectiles per Attack Instance")]
+    [SerializeField] private int shotMin;
+    [SerializeField] private int shotMax;
+
+    [Space]
+    [Header("AoE Burst")]
+    [SerializeField] private int shotsToBurst;
+    [SerializeField] private int burstProjectileCount;
+    [Space]
+    [SerializeField] private float burstProjectileSpeed;
+    [SerializeField] private float burstRange;
+
+    [Header("AoE Burst - NEW")]
+    [SerializeField] private float shockwaveDamage;
+    [SerializeField] private float maxRadius;
+    [SerializeField] private float duration;
+    [SerializeField] private float width;
+
+    // Timers & Counters
+    private float _fireTimer;
+    private float _durationTimer;
+    private int _shotCount;
+
+    public override void Initialize()
+    {
+        // Does this attack require movement?
+        requiresMovement = false;
+
+        // Reset timers + counters
+        _fireTimer = fireRate;
+        _durationTimer = 0f;
+        _shotCount = 0;
+
+        // Reset logic checks
+        attackStarted = false;
+        attackComplete = false;
+    }
+
+    // Called in 'Update()' in EnemyAI.cs
+    public override void Attack(EnemyAttackContext context)
+    {
+        // Attack START
+        if (!attackStarted)
+        {
+            attackStarted = true;
+            _duration = Random.Range(durationMin, durationMax);
+        }
+
+        // Update timers
+        var deltaTime = Time.deltaTime;
+        _durationTimer += deltaTime;
+        _fireTimer += deltaTime;
+
+        // Attack END
+        attackComplete = _durationTimer >= _duration;
+
+        // Attack Implementation
+        if (_fireTimer >= fireRate && !attackComplete)
+        {
+            var amount = Random.Range(shotMin, shotMax + 1);
+            for (int i = 0; i < amount; i++)
+            {
+                // Get Random Direction
+                Vector2 randomCircle = Random.insideUnitCircle;
+                Vector3 randomPoint = new(randomCircle.x, 0f, randomCircle.y);
+                randomPoint = randomPoint.normalized;
+
+                // Initialize Projectile Stats
+                var stats = new ProjectileStats
+                {
+                    Damage = damage,
+                    Speed = projectileSpeed,
+                    Range = range,
+                    Direction = randomPoint
+                };
+
+                // Get Projectile from Object Pool
+                context.ProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
+            }
+
+            _shotCount++;
+
+            // Fire AoE Burst
+            if (_shotCount >= shotsToBurst)
+            {
+                _shotCount = 0;
+
+                var shockwaveSpawn = context.Enemy.transform.position;
+                shockwaveSpawn.y = 0.2f;    // * magic number alert!
+                var shockwaveStats = new ShockwaveStats
+                {
+                    Radius  = maxRadius,
+                    Width   = width,
+                    Duration    = duration,
+                    Damage  = shockwaveDamage,
+                    TargetLayer = context.PlayerLayer,
+                    Spawn   = shockwaveSpawn,
+                    ObjectPool  = context.ShockwavePool
+                };
+                context.ShockwavePool.Get(shockwaveStats);
+
+                //PerformShockwave(context);
+                //Burst(context);
+            }
+
+            _fireTimer = 0f;
+        }
+    }
+
+    private void Burst(EnemyAttackContext context)
+    {
+        var angleStep = 360f / burstProjectileCount;
+        for (int i = 0; i < burstProjectileCount; i++)
+        {
+            // Calculate direction
+            var angle = i * angleStep;
+            var rad = angle * Mathf.Deg2Rad;
+            var direction = new Vector3(Mathf.Sin(rad), 0f, Mathf.Cos(rad));
+
+            // Initialize projectile stats
+            var stats = new ProjectileStats
+            {
+                Damage = damage,
+                Speed = burstProjectileSpeed,
+                Range = burstRange,
+                Direction = direction
+            };
+
+            // Fire projectile
+            context.SecondaryProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
+        }
+    }
+}

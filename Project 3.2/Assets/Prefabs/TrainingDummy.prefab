@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b342d8ce5c2fd48b8fa3147d48d1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Animation.Rigging::UnityEngine.Animations.Rigging.Rig
-  m_Weight: 1
+  m_Weight: 0
   m_Effectors: []
 --- !u!114 &3060464918924867118
 MonoBehaviour:
@@ -387,7 +387,7 @@ MonoBehaviour:
   animationController: {fileID: 2172641294016679017}
   animator: {fileID: 6867951403096359160}
   armRig: {fileID: 3060464918924867118}
-  maxHealth: 50
+  maxHealth: 100
 --- !u!114 &7452434067175923134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,21 +400,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 127d7d369e45049ff9eb6d9c47ebcc5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Enemy::EnemyAI
-  isActive: 0
-  ShowDebug: 0
-  stateChangeCooldown: 2.25
+  isActive: 1
+  ShowDebug: 1
+  animationController: {fileID: 2172641294016679017}
+  stateChangeCooldown: 1
   attackChance: 100
   targetLayer:
     serializedVersion: 2
     m_Bits: 384
   projectileSpawn: {fileID: 4707431086118746279}
-  projectilePoolA: {fileID: 3597682941306077593}
-  projectilePoolB: {fileID: 6723746909189752625}
   playerDetectionRange: 100
   attacks:
-  - {fileID: 11400000, guid: 8b46fb41b671240c0bcfb3e8049900ac, type: 2}
-  - {fileID: 11400000, guid: efdf059b643730f41a4a7d2e5fd69734, type: 2}
-  - {fileID: 11400000, guid: 4c3543a9d4e3f994185e6e2cea9516ba, type: 2}
+  - {fileID: 11400000, guid: 6d95bb58fa24c9b41916db508bdff92c, type: 2}
+  projectilePoolA: {fileID: 3597682941306077593}
+  projectilePoolB: {fileID: 6723746909189752625}
+  shockwavePool: {fileID: 0}
+  meteorPool: {fileID: 0}
   speed: 11
   movementRadius: 20
 --- !u!114 &7271059406618516646
@@ -960,7 +961,7 @@ MonoBehaviour:
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
     m_MinLimit: 0
-    m_MaxLimit: 90
+    m_MaxLimit: 80
     m_AimAxis: 4
     m_UpAxis: 2
     m_WorldUpType: 0

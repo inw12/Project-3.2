@@ -111,6 +111,6 @@ public abstract class Projectile : MonoBehaviour
     }
 
     // Projectile Movement
-    protected virtual void FixedUpdate() => Move();
+    protected virtual void LateUpdate() => Move();
     protected abstract void Move();
 }

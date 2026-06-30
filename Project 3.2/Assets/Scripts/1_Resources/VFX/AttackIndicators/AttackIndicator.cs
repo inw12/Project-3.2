@@ -12,23 +12,18 @@ public abstract class AttackIndicator : MonoBehaviour
     protected float _elapsed;
 
     // Event/Action Signal
-    private Action _onComplete;
+    public event Action OnComplete;
 
-
-    public void Initialize(float duration, Action onComplete, Vector3 scale)
+    public void Initialize(float duration)
     {
         _mr = GetComponent<MeshRenderer>();
         _mpb = new MaterialPropertyBlock();
 
         _duration = duration;
         _elapsed = 0f;
-
-        transform.localScale = scale;
-
-        _onComplete = onComplete;
     }
 
-    void Update()
+    public void UpdateIndicator()
     {
         // - Update duration progress
         _elapsed += Time.deltaTime;
@@ -40,8 +35,9 @@ public abstract class AttackIndicator : MonoBehaviour
         // - END of Attack Indicator
         if (_elapsed >= _duration)
         {
-            _onComplete?.Invoke();
-            Destroy(gameObject);
+            OnComplete?.Invoke();
+            this.enabled = false;
+            //Destroy(gameObject);
         }
     }
 

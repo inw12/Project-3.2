@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     {
         animationController.Initialize();
         armRig.Initialize();
-        enemyAI.Initialize(this, animationController);
+        enemyAI.Initialize(this);
         hitFeedback.Initialize();
 
         _rb = GetComponent<Rigidbody>();
@@ -67,6 +67,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
         var state = enemyAI.GetState();
         var animationContext = new EnemyAnimatorContext
         {
+            Velocity        = state.Velocity,
             CurrentAction   = (int)state.CurrentAction,
             AttackID        = state.CurrentAttack != null ? state.CurrentAttack.attackID : -1,
             InHitstun       = _inHitstun
@@ -123,6 +124,9 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
         // Rotation enemy towards player
         _rb.MoveRotation(Quaternion.LookRotation(-direction));
+
+        // Set to Idle
+        SetToIdle();
 
         // Start knockback coroutine
         _knockbackCoroutine = StartCoroutine(KnockbackRoutine(direction, force, duration));

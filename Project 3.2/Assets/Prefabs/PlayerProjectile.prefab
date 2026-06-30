@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d45ac8658b9734e639cbd950d4f2a999, type: 2}
+  - {fileID: 2100000, guid: c4d1c422089abe844920b1df192a1f03, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -125,7 +125,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e085126c632e4074bf83dc6241802fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Resources::Projectile_Basic
-  hitLayers:
-    serializedVersion: 2
-    m_Bits: 512
   hitboxRadius: 0.75

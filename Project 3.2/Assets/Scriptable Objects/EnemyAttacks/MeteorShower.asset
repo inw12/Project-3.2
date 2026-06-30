@@ -12,10 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfb1e0bbeed3cb249a4c6089cb275e65, type: 3}
   m_Name: MeteorShower
   m_EditorClassIdentifier: Enemy::MeteorShower
+  attackName: MeteorShower
   attackID: 4
   attackStarted: 0
   attackComplete: 0
   requiresMovement: 0
-  damage: 1
-  radius: 1
-  chargeTime: 2
+  damage: 5
+  meteorSpawner: {fileID: 8865642840806148965, guid: cc63df66ae146d040aa125be8034c56d, type: 3}
+  timeToIdle: 1.25
+  radius: 9
+  chargeTime: 1.25
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 384
+  SpawnerRadius: 15
+  SpawnAmount: 5
+  SpawnCooldown: 1

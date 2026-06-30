@@ -2,6 +2,10 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy Attacks/Ranged/FocusShot")]
 public class FocusShot : EnemyRangedAttack
 {
+    [Header("Laser Stats")]
+    [SerializeField] private float laserWidth;
+
+
     [Header("Charge Up Info")]
     [SerializeField] private float chargeTime;
     [SerializeField] private float fireDelay;   // amount of time between reaching fully charged and then firing
@@ -14,12 +18,18 @@ public class FocusShot : EnemyRangedAttack
     private static readonly int PlaybackSpeedA = Animator.StringToHash("PlaybackSpeedA");
     private static readonly int PlaybackSpeedB = Animator.StringToHash("PlaybackSpeedB");
 
+    [SerializeField] private GameObject laserPrefab;
+    [SerializeField] private GameObject attackIndicatorPrefab;
+    private LaserIndicator _attackIndicator;
+
     private Vector3 _target;
 
     public override void Initialize()
     {
         requiresMovement = attackStarted = attackComplete = false;
         _chargeTimer = _delayTimer = 0f;
+
+        _attackIndicator = null;
     }
 
     public override void Attack(EnemyAttackContext context)
@@ -28,6 +38,13 @@ public class FocusShot : EnemyRangedAttack
         if (!attackStarted) 
         {
             attackStarted = true;
+
+            // attack indicator
+            var atkInd = Instantiate(attackIndicatorPrefab);
+            _attackIndicator = atkInd.GetComponent<LaserIndicator>();
+            var indicatorSpawn = context.Enemy.transform.position;
+            indicatorSpawn.y = 1.25f;
+            _attackIndicator.Initialize(indicatorSpawn, context.PlayerPosition, chargeTime, context.Enemy.transform.position);
 
             context.AnimationController.SetAttackActive(true);
 
@@ -50,10 +67,14 @@ public class FocusShot : EnemyRangedAttack
             // Charged Up!
             if (_chargeTimer >= chargeTime)
             {
+                var origin = context.Enemy.transform.position;
+                origin.y = 1f;
+                if (_attackIndicator) _attackIndicator.PlayShootEffects(origin);
+
                 // Fire!
                 if (_delayTimer >= fireDelay)
                 {
-                    FireProjectile(context);
+                    Shoot(context);
                     attackComplete = true;
                 }
 
@@ -71,22 +92,32 @@ public class FocusShot : EnemyRangedAttack
                 target.y = 0f;
                 var direction = (target - context.Enemy.transform.position).normalized;
                 context.Enemy.RotateTowards(direction);
+
+                // update attack indicator
+                if (_attackIndicator)
+                {
+                    _target.y = 1f;
+                    _attackIndicator.SetEndPosition(_target);
+                }
             }
         }
     }
 
-    private void FireProjectile(EnemyAttackContext context)
+    private void Shoot(EnemyAttackContext context)
     {
         // Initialize Projectile Stats
-        var stats = new ProjectileStats
+        var stats = new LaserStats
         {
-            Damage = damage,
-            Speed = projectileSpeed,
-            Range = range,
-            Direction = (_target - context.Enemy.transform.position).normalized
+            Damage      = damage,
+            Speed       = projectileSpeed,
+            Range       = range,
+            Width       = laserWidth,
+            Origin      = context.HitboxSpawn.position,
+            Direction   = (_target - context.Enemy.transform.position).normalized,
+            TargetLayer = context.PlayerLayer
         };
 
-        // Get Projectile from Object Pool
-        context.ProjectilePool.Get(stats, context.HitboxSpawn, context.PlayerLayer);
+        var laser = Instantiate(laserPrefab);
+        laser.GetComponent<Laser>().Initialize(stats);
     }
 }

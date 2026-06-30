@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a67c0113b03b29d49b1ed73b33b276c1, type: 3}
   m_Name: StrafeShot
   m_EditorClassIdentifier: Enemy::StrafeShot
+  attackName: StrafeShot
   attackID: 2
   attackStarted: 1
   attackComplete: 0
   requiresMovement: 1
   damage: 1
-  fireRate: 0.4325
-  projectileSpeed: 28
-  range: 75
+  fireRate: 0.24
+  projectileSpeed: 29
+  range: 70
   minMoveDistance: 14
   maxMoveDistance: 18

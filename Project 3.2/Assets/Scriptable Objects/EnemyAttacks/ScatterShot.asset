@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ef011aeebfa342eeb4666502ecff17c, type: 3}
   m_Name: ScatterShot
   m_EditorClassIdentifier: Enemy::ScatterShot
+  attackName: ScatterShot
   attackID: 1
-  attackStarted: 1
-  attackComplete: 1
+  attackStarted: 0
+  attackComplete: 0
   requiresMovement: 0
   damage: 1
   fireRate: 0.1
@@ -28,3 +29,7 @@ MonoBehaviour:
   burstProjectileCount: 40
   burstProjectileSpeed: 15
   burstRange: 50
+  shockwaveDamage: 1
+  maxRadius: 50
+  duration: 3.5
+  width: 0.5

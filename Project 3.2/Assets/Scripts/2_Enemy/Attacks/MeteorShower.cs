@@ -2,28 +2,61 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Enemy Attacks/Area/MeteorShower")]
 public class MeteorShower : EnemyAreaAttack
 {
-    [Header("Attack Indicator")]
-    [SerializeField] private float radius;      // size of attack indicator
-    [SerializeField] private float chargeTime;  // how long until indicator is filled?
+    [Space]
+    [SerializeField] private MeteorSpawner meteorSpawner;
+    [SerializeField] private float timeToIdle;      // amount of time that 'Attack' is called for before returning to idle
+    private float _idleTimer;
+
+    [Header("Meteor Stats")]
+    [SerializeField] private float radius;          // size of attack indicator
+    [SerializeField] private float chargeTime;      // how long until indicator is filled?
+    [SerializeField] private LayerMask targetMask;  // what are we hitting?
+
+    [Header("Spawner Stats")]
+    [SerializeField] private float SpawnerRadius;
+    [SerializeField] private int SpawnAmount;
+    [SerializeField] private float SpawnCooldown;
+
+    private MeteorSpawner _spawner;
 
     public override void Initialize()
     {
-        requiresMovement = false;
-        attackStarted = attackComplete = false;
-
         _attackShape = AreaAttackShape.Circle;
+        requiresMovement = false;
+
+        attackStarted = attackComplete = false;
+        _idleTimer = 0f;
     }
 
-    /// * DESIRED BEHAVIOR:
-    ///     1. Finds n random positions to attack
-    ///     2. Starts a coroutine to start the attack
-    ///     3. Spawns n "meteors" (attack indicators -> active hitbox) over the course of m seconds
-    /// 
-    /// - Once triggered, runs INDEPENDENTLY from 'EnemyAI'
-    /// - "Enemy snaps his fingers, and multiple meteors spawn around him (cascading; not all at once)."
-    /// - "Enemy should be free to act upon triggering this action." 
     public override void Attack(EnemyAttackContext context)
     {
-        // * implementation here *
+        _idleTimer += Time.deltaTime;
+
+        if (!attackStarted)
+        {
+            attackStarted = true;
+
+            // Spawn the spawner
+            _spawner = Instantiate(meteorSpawner, context.Enemy.gameObject.transform.position, Quaternion.identity);
+            var spawnerContext = new MeteorSpawnerContext
+            {
+                SpawnRadius = SpawnerRadius,
+                SpawnAmount = SpawnAmount,
+                SpawnCooldown = SpawnCooldown,
+                MeteorPool = context.MeteorPool,
+                ProjectilePool = context.SecondaryProjectilePool,
+                Damage = damage,
+                Radius = radius,
+                Duration = chargeTime,
+                TargetMask = targetMask
+            };
+            _spawner.Initialize(spawnerContext);
+        }
+
+        if (_idleTimer >= timeToIdle)
+        {
+            attackComplete = true;
+            //_spawner.DestroySpawner();
+        }
     }
 }
