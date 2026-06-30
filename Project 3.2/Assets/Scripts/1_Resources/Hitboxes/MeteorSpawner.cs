@@ -51,7 +51,8 @@ public class MeteorSpawner : MonoBehaviour
                 Spawn       = GetRandomSpawn(),
                 TargetLayer = _context.TargetMask,
                 ObjectPool  = _context.MeteorPool,
-                ProjectilePool = _context.ProjectilePool
+                ProjectilePool = _context.ProjectilePool,
+                ProjectileDamage = _context.Damage
             };
             _context.MeteorPool.Get(stats);
 
