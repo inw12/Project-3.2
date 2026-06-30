@@ -19,6 +19,8 @@ public class FocusShot : EnemyRangedAttack
     private static readonly int PlaybackSpeedB = Animator.StringToHash("PlaybackSpeedB");
 
     [SerializeField] private GameObject laserPrefab;
+    [SerializeField] private GameObject attackIndicatorPrefab;
+    private LaserIndicator _attackIndicator;
 
     private Vector3 _target;
 
@@ -26,6 +28,8 @@ public class FocusShot : EnemyRangedAttack
     {
         requiresMovement = attackStarted = attackComplete = false;
         _chargeTimer = _delayTimer = 0f;
+
+        _attackIndicator = null;
     }
 
     public override void Attack(EnemyAttackContext context)
@@ -34,6 +38,13 @@ public class FocusShot : EnemyRangedAttack
         if (!attackStarted) 
         {
             attackStarted = true;
+
+            // attack indicator
+            var atkInd = Instantiate(attackIndicatorPrefab);
+            _attackIndicator = atkInd.GetComponent<LaserIndicator>();
+            var indicatorSpawn = context.Enemy.transform.position;
+            indicatorSpawn.y = 1.25f;
+            _attackIndicator.Initialize(indicatorSpawn, context.PlayerPosition);
 
             context.AnimationController.SetAttackActive(true);
 
@@ -59,6 +70,7 @@ public class FocusShot : EnemyRangedAttack
                 // Fire!
                 if (_delayTimer >= fireDelay)
                 {
+                    Destroy(_attackIndicator.gameObject);
                     Shoot(context);
                     attackComplete = true;
                 }
@@ -77,6 +89,13 @@ public class FocusShot : EnemyRangedAttack
                 target.y = 0f;
                 var direction = (target - context.Enemy.transform.position).normalized;
                 context.Enemy.RotateTowards(direction);
+
+                // update attack indicator
+                if (_attackIndicator)
+                {
+                    _target.y = 1f;
+                    _attackIndicator.SetEndPosition(_target);
+                }
             }
         }
     }

@@ -20,8 +20,22 @@ public class LaserIndicator : MonoBehaviour
 
     private static readonly int BlinkProgress = Shader.PropertyToID("_BlinkProgress");
 
-    void Start()
+    //void Start()
+    //{
+    //    lineRenderer.SetPosition(0, start.position);
+    //    lineRenderer.SetPosition(1, end.position);
+    //    _timer = 0f;
+    //    _isBlinking = true;
+    //    _startMesh = start.GetComponent<MeshRenderer>();
+    //    _endMesh = end.GetComponent<MeshRenderer>();
+    //    _mpb = new MaterialPropertyBlock();
+    //}
+
+    public void Initialize(Vector3 startPos, Vector3 endPos)
     {
+        start.position = startPos;
+        end.position = endPos;
+
         lineRenderer.SetPosition(0, start.position);
         lineRenderer.SetPosition(1, end.position);
 

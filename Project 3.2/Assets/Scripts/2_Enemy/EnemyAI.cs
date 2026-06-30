@@ -33,6 +33,7 @@ public class EnemyAI : MonoBehaviour
     private float _cooldownTimer;
 
     [Header("Attacks")]
+    [SerializeField] private LayerMask playerLayer;
     [SerializeField] private LayerMask targetLayer;
     [SerializeField] private Transform projectileSpawn;
     [SerializeField] private float playerDetectionRange;
@@ -273,7 +274,7 @@ public class EnemyAI : MonoBehaviour
             transform.position,
             playerDetectionRange,
             _detectionHits,
-            targetLayer
+            playerLayer
         );
 
         if (hits > 0)
