@@ -44,7 +44,7 @@ public class FocusShot : EnemyRangedAttack
             _attackIndicator = atkInd.GetComponent<LaserIndicator>();
             var indicatorSpawn = context.Enemy.transform.position;
             indicatorSpawn.y = 1.25f;
-            _attackIndicator.Initialize(indicatorSpawn, context.PlayerPosition, chargeTime);
+            _attackIndicator.Initialize(indicatorSpawn, context.PlayerPosition, chargeTime, context.Enemy.transform.position);
 
             context.AnimationController.SetAttackActive(true);
 

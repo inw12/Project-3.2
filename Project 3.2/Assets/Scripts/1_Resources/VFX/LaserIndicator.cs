@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class LaserIndicator : MonoBehaviour
 {
+    [Header("Attack Indicator")]
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private Transform start;
     [SerializeField] private Transform end;
@@ -10,15 +11,21 @@ public class LaserIndicator : MonoBehaviour
     private float _timer;
     private bool _isBlinking;
 
+    [Header("VFX | Charge Up")]
+    [SerializeField] private ParticleSystem auraParticles;
+    [SerializeField] private ParticleSystem energyParticles;
+    private ParticleSystem.MainModule auraMain;
+    private ParticleSystem.MainModule energyMain;
+
     private MeshRenderer _startMesh;
     private MeshRenderer _endMesh;
     private MaterialPropertyBlock _mpb;
     private static readonly int BlinkProgress = Shader.PropertyToID("_BlinkProgress");
 
-    private float _timeToDestroy;
+    private float _duration;
     private float _deathTimer;
 
-    public void Initialize(Vector3 startPos, Vector3 endPos, float duration)
+    public void Initialize(Vector3 startPos, Vector3 endPos, float duration, Vector3 vfxSpawn)
     {
         start.position = startPos;
         end.position = endPos;
@@ -33,7 +40,16 @@ public class LaserIndicator : MonoBehaviour
         _endMesh = end.GetComponent<MeshRenderer>();
         _mpb = new MaterialPropertyBlock();
 
-        _timeToDestroy = duration;
+        _duration = duration;
+
+        // Particle System Stuff
+        auraMain    = auraParticles.main;
+        energyMain  = energyParticles.main;
+        auraMain.duration = energyMain.duration = _duration;
+
+        vfxSpawn.y = 0.25f;
+        auraParticles.transform.position = vfxSpawn;
+        auraParticles.Play();
     }
 
     void Update()
@@ -68,7 +84,7 @@ public class LaserIndicator : MonoBehaviour
 
     private void TryToDestroy()
     {
-        if (_deathTimer >= _timeToDestroy)
+        if (_deathTimer >= _duration)
         {
             Destroy(gameObject);
         }
