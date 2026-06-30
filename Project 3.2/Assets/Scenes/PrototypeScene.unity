@@ -856,13 +856,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::CombatCamera
   mainCamera: {fileID: 330585545}
   enemyPosition: {fileID: 4707600413473519261}
-  cameraRotation: {x: 38, y: 0, z: 0}
-  minDistance: 12.5
-  maxDistance: 25
-  padding: 2.5
-  pitchAngle: 38
+  cameraRotation: {x: 30, y: 0, z: 0}
+  minDistance: 15
+  maxDistance: 30
+  padding: 5
+  pitchAngle: 30
   yawAngle: 0
-  heightOffset: 0
+  heightOffset: 0.5
 --- !u!1 &1385405018
 GameObject:
   m_ObjectHideFlags: 0
@@ -1263,22 +1263,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TrainingDummy
       objectReference: {fileID: 0}
-    - target: {fileID: 2267873816034923315, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: m_Weight
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3060464918924867118, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: animationSpeed
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 3189738783838732195, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: m_Data.m_MaxLimit
-      value: 180
-      objectReference: {fileID: 0}
-    - target: {fileID: 3189738783838732195, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: m_Data.m_ConstrainedAxes.x
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5448100723142779783, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1320,53 +1304,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: isActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: meteorPool
       value: 
       objectReference: {fileID: 290245633}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: attackChance
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: shockwavePool
       value: 
       objectReference: {fileID: 1881086221}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: attacks.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: playerLayer.m_Bits
-      value: 64
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: stateChangeCooldown
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: 'attacks.Array.data[0]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 4c3543a9d4e3f994185e6e2cea9516ba, type: 2}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: 'attacks.Array.data[1]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 6d95bb58fa24c9b41916db508bdff92c, type: 2}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: 'attacks.Array.data[2]'
-      value: 
-      objectReference: {fileID: 11400000, guid: 8b46fb41b671240c0bcfb3e8049900ac, type: 2}
-    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: 'attacks.Array.data[3]'
-      value: 
-      objectReference: {fileID: 11400000, guid: efdf059b643730f41a4a7d2e5fd69734, type: 2}
-    - target: {fileID: 8175766089702369009, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: m_Data.m_TargetRotationWeight
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
