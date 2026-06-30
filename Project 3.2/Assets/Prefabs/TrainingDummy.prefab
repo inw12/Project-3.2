@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70b342d8ce5c2fd48b8fa3147d48d1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Animation.Rigging::UnityEngine.Animations.Rigging.Rig
-  m_Weight: 0
+  m_Weight: 1
   m_Effectors: []
 --- !u!114 &3060464918924867118
 MonoBehaviour:
@@ -148,7 +148,7 @@ MonoBehaviour:
   target: {fileID: 5723087327984466061}
   hint: {fileID: 5343663848833389037}
   targetWeight: 0.5
-  animationSpeed: 18
+  animationSpeed: 20
   elbowOffset: {x: 0, y: 0, z: 0}
   handBone: {fileID: 1557692526481242841}
   handRotationOffset: {x: 0, y: 0, z: 0}
@@ -403,15 +403,21 @@ MonoBehaviour:
   isActive: 1
   ShowDebug: 1
   animationController: {fileID: 2172641294016679017}
-  stateChangeCooldown: 1
-  attackChance: 100
+  stateChangeCooldown: 2
+  attackChance: 90
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
   targetLayer:
     serializedVersion: 2
     m_Bits: 384
   projectileSpawn: {fileID: 4707431086118746279}
   playerDetectionRange: 100
   attacks:
+  - {fileID: 11400000, guid: 4c3543a9d4e3f994185e6e2cea9516ba, type: 2}
   - {fileID: 11400000, guid: 6d95bb58fa24c9b41916db508bdff92c, type: 2}
+  - {fileID: 11400000, guid: 8b46fb41b671240c0bcfb3e8049900ac, type: 2}
+  - {fileID: 11400000, guid: efdf059b643730f41a4a7d2e5fd69734, type: 2}
   projectilePoolA: {fileID: 3597682941306077593}
   projectilePoolB: {fileID: 6723746909189752625}
   shockwavePool: {fileID: 0}
@@ -961,7 +967,7 @@ MonoBehaviour:
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
     m_MinLimit: 0
-    m_MaxLimit: 80
+    m_MaxLimit: 85
     m_AimAxis: 4
     m_UpAxis: 2
     m_WorldUpType: 0
@@ -969,7 +975,7 @@ MonoBehaviour:
     m_WorldUpAxis: 2
     m_MaintainOffset: 0
     m_ConstrainedAxes:
-      x: 0
+      x: 1
       y: 1
       z: 1
 --- !u!1 &2711199466843390386
@@ -1566,7 +1572,7 @@ MonoBehaviour:
     m_Target: {fileID: 5723087327984466061}
     m_Hint: {fileID: 5343663848833389037}
     m_TargetPositionWeight: 1
-    m_TargetRotationWeight: 0
+    m_TargetRotationWeight: 1
     m_HintWeight: 1
     m_MaintainTargetPositionOffset: 0
     m_MaintainTargetRotationOffset: 0
