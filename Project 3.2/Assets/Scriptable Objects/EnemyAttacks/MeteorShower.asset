@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Enemy::MeteorShower
   attackName: MeteorShower
   attackID: 4
-  attackStarted: 1
-  attackComplete: 1
+  attackStarted: 0
+  attackComplete: 0
   requiresMovement: 0
   damage: 5
   meteorSpawner: {fileID: 8865642840806148965, guid: cc63df66ae146d040aa125be8034c56d, type: 3}
   timeToIdle: 1.25
-  radius: 10
+  radius: 9
   chargeTime: 1.25
   targetMask:
     serializedVersion: 2

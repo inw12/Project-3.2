@@ -1306,12 +1306,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 290245633}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
+      propertyPath: attackChance
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: shockwavePool
       value: 
       objectReference: {fileID: 1881086221}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: attacks.Array.size
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: playerLayer.m_Bits
@@ -1319,12 +1323,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: stateChangeCooldown
-      value: 1.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: 'attacks.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: efdf059b643730f41a4a7d2e5fd69734, type: 2}
+      objectReference: {fileID: 11400000, guid: 4c3543a9d4e3f994185e6e2cea9516ba, type: 2}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: 'attacks.Array.data[1]'
       value: 
@@ -1332,7 +1336,7 @@ PrefabInstance:
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: 'attacks.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: efdf059b643730f41a4a7d2e5fd69734, type: 2}
+      objectReference: {fileID: 11400000, guid: 8b46fb41b671240c0bcfb3e8049900ac, type: 2}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: 'attacks.Array.data[3]'
       value: 
