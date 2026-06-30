@@ -49,23 +49,20 @@ public class CombatManager : MonoBehaviour
     {
         if (!_triggered) _triggered = true;
 
-        // Player
+        // Reset Player
         Player.Instance.EnterParryPhase();
 
-        // Enemy
-        enemy.SetToIdle();
-        enemy.EnemyActive(false);
-        enemy.transform.SetPositionAndRotation(
-            enemyPosition.position,
-            enemyPosition.rotation
-        );
+        // Reset Enemy
+        enemy.EnterParryPhase();
 
-        cameraManager.SwitchTo<FocusCamera>();
-
+        // Start sequence
         StartCoroutine(ParryPhaseRoutine());
     }
     private IEnumerator ParryPhaseRoutine()
     {
+        enemy.EnableShield(false);
+        
+        cameraManager.SwitchTo<FocusCamera>();
         yield return new WaitForSeconds(1f);
         enemy.SetTrigger("ComboTrigger");
     }
@@ -83,7 +80,7 @@ public class CombatManager : MonoBehaviour
             e.IncreaseHealth(float.MaxValue);
         }
 
-        enemy.EnemyActive(true);
+        enemy.ExitParryPhase();
     }
 
     public void PlayPlayerFinisher()

@@ -13,6 +13,8 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     [SerializeField] private EnemyAnimationController animationController;
     [SerializeField] private Animator animator;
     [SerializeField] private EnemyArmRig armRig;
+    [Space]
+    [SerializeField] private GameObject shield;
 
     [Header("Stats")]
     [SerializeField] private float maxHealth = 100f;
@@ -45,6 +47,8 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
         _currentHealth = new HealthContext(maxHealth);
         _timeScale = 1f;
         _inHitstun = false;
+
+        shield.SetActive(false);
     }
     #endregion
 
@@ -205,6 +209,23 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
 
     // Player Position Getter
     public Vector3 GetPlayerPosition() => enemyAI.GetPlayerPosition();
+
+    // Shield
+    public void EnableShield(bool b) => shield.SetActive(b);
+
+    // Parry Phase
+    public void EnterParryPhase()
+    {
+        SetToIdle();
+        EnemyActive(false);
+        EnableShield(true);
+    }
+    public void ExitParryPhase()
+    {
+        SetToIdle();
+        EnemyActive(true);
+        EnableShield(false);
+    }
 
     // Arm Rig Toggle
     public void ArmRigEnabled(bool b) => armRig.ArmRigEnabled(b);
