@@ -8,7 +8,7 @@ public class LaserIndicator : MonoBehaviour
     [SerializeField] private Transform end;
     [Space]
     [SerializeField] private float blinkDuration;
-    private float _timer;
+    private float _blinkTimer;
     private bool _isBlinking;
 
     [Header("VFX | Charge Up")]
@@ -17,13 +17,16 @@ public class LaserIndicator : MonoBehaviour
     private ParticleSystem.MainModule auraMain;
     private ParticleSystem.MainModule energyMain;
 
+    [Header("VFX | Fire")]
+    [SerializeField] private ParticleSystem shootParticles;
+
     private MeshRenderer _startMesh;
     private MeshRenderer _endMesh;
     private MaterialPropertyBlock _mpb;
     private static readonly int BlinkProgress = Shader.PropertyToID("_BlinkProgress");
 
     private float _duration;
-    private float _deathTimer;
+    private float _timer;
 
     public void Initialize(Vector3 startPos, Vector3 endPos, float duration, Vector3 vfxSpawn)
     {
@@ -33,7 +36,7 @@ public class LaserIndicator : MonoBehaviour
         lineRenderer.SetPosition(0, start.position);
         lineRenderer.SetPosition(1, end.position);
 
-        _timer = _deathTimer = 0f;
+        _blinkTimer = _timer = 0f;
         _isBlinking = true;
 
         _startMesh = start.GetComponent<MeshRenderer>();
@@ -45,7 +48,7 @@ public class LaserIndicator : MonoBehaviour
         // Particle System Stuff
         auraMain    = auraParticles.main;
         energyMain  = energyParticles.main;
-        auraMain.duration = energyMain.duration = _duration;
+        auraMain.startLifetime = energyMain.duration = _duration;
 
         vfxSpawn.y = 0.25f;
         auraParticles.transform.position = vfxSpawn;
@@ -54,14 +57,14 @@ public class LaserIndicator : MonoBehaviour
 
     void Update()
     {
-        _deathTimer += Time.deltaTime;
+        _timer += Time.deltaTime;
 
         lineRenderer.SetPosition(0, start.position);
         lineRenderer.SetPosition(1, end.position);
 
         // "Blinking" Logic
-        _timer = _isBlinking ? _timer += Time.deltaTime : _timer -= Time.deltaTime;
-        var p = Mathf.Clamp01(_timer / blinkDuration);
+        _blinkTimer = _isBlinking ? _blinkTimer += Time.deltaTime : _blinkTimer -= Time.deltaTime;
+        var p = Mathf.Clamp01(_blinkTimer / blinkDuration);
         if (p >= 1f) _isBlinking = false;
         if (p <= 0f) _isBlinking = true;   
 
@@ -81,12 +84,24 @@ public class LaserIndicator : MonoBehaviour
 
     public void SetStartPosition(Vector3 position)  => start.position = position;
     public void SetEndPosition(Vector3 position)    => end.position = position;
+    public void PlayShootEffects(Vector3 origin) 
+    {
+        shootParticles.transform.position = origin;
+        shootParticles.Play();
+    }
 
     private void TryToDestroy()
     {
-        if (_deathTimer >= _duration)
+        if (_timer >= _duration)
         {
-            Destroy(gameObject);
+            lineRenderer.enabled = false;
+            start.gameObject.SetActive(false);
+            end.gameObject.SetActive(false);
+
+            if (!auraParticles.isPlaying || !energyParticles.isPlaying || !shootParticles.isPlaying)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

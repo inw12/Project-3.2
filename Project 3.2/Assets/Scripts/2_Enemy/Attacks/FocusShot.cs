@@ -67,6 +67,10 @@ public class FocusShot : EnemyRangedAttack
             // Charged Up!
             if (_chargeTimer >= chargeTime)
             {
+                var origin = context.Enemy.transform.position;
+                origin.y = 1f;
+                if (_attackIndicator) _attackIndicator.PlayShootEffects(origin);
+
                 // Fire!
                 if (_delayTimer >= fireDelay)
                 {
