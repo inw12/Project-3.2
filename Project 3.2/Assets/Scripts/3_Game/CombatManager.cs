@@ -13,24 +13,44 @@ public class CombatManager : MonoBehaviour
     [Header("Camera")]
     [SerializeField] private CameraManager cameraManager;
 
+    private bool _triggered;
+
     void Awake()
     {
-        if (enemy) enemy.OnDeath += EnterParryPhase;
-        if (enemyCombo) enemyCombo.OnComboEnd += ExitParryPhase;
+        if (enemy)      enemy.OnDeath           += EnterParryPhase;
+        if (enemyCombo) enemyCombo.OnComboEnd   += ExitParryPhase;
+    
+        _triggered = false;
+    }
+
+    void OnDestroy()
+    {
+        if (enemy)      enemy.OnDeath           -= EnterParryPhase;
+        if (enemyCombo) enemyCombo.OnComboEnd   -= ExitParryPhase;
+    }
+
+    void Update()
+    {
+        if (_triggered)
+        {
+            // LOCK THESE MFERS IN PLACE!!!
+            Player.Instance.transform.SetPositionAndRotation(
+                playerPosition.position,
+                playerPosition.rotation
+            );
+            enemy.transform.SetPositionAndRotation(
+                enemyPosition.position,
+                enemyPosition.rotation
+            );
+        }
     }
 
     public void EnterParryPhase()
     {
+        if (!_triggered) _triggered = true;
+
         // Player
-        Player.Instance.SetToIdle();
-        Player.Instance.InputEnabled(false);
-        Player.Instance.CharacterControllerEnabled(false);
-        Player.Instance.ParryInputEnabled(true);
-        Player.Instance.SetBoolean("InParryPhase", true);
-        Player.Instance.transform.SetPositionAndRotation(
-            playerPosition.position,
-            playerPosition.rotation
-        );
+        Player.Instance.EnterParryPhase();
 
         // Enemy
         enemy.SetToIdle();
@@ -52,10 +72,11 @@ public class CombatManager : MonoBehaviour
 
     public void ExitParryPhase()
     {
-        Player.Instance.InputEnabled(true);
-        Player.Instance.CharacterControllerEnabled(true);
-        Player.Instance.SetBoolean("InParryPhase", false);
-        cameraManager.SwitchTo<DefaultCamera>();
+        if (_triggered) _triggered = false;
+
+        Player.Instance.ExitParryPhase();
+
+        cameraManager.SwitchTo<CombatCamera>();
 
         if (enemy.TryGetComponent(out IDamageable e))
         {
@@ -68,11 +89,5 @@ public class CombatManager : MonoBehaviour
     public void PlayPlayerFinisher()
     {
         
-    }
-
-    void OnDestroy()
-    {
-        if (enemy) enemy.OnDeath -= EnterParryPhase;
-        if (enemyCombo) enemyCombo.OnComboEnd -= ExitParryPhase;
     }
 }

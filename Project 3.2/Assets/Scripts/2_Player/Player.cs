@@ -215,4 +215,22 @@ public class Player : MonoBehaviour
         animationController.UpdateAnimator();
         animationController.SetToIdle();
     }
+
+    public void EnterParryPhase()
+    {
+        SetToIdle();
+        CharacterControllerEnabled(false);
+        InputEnabled(false);
+        ParryInputEnabled(true);
+        SetBoolean("InParryPhase", true);
+        animationController.ApplyRootMotion(false);
+    }
+    public void ExitParryPhase()
+    {
+        SetToIdle();
+        CharacterControllerEnabled(true);
+        InputEnabled(true);
+        SetBoolean("InParryPhase", false);
+        animationController.ApplyRootMotion(true);
+    }
 }
