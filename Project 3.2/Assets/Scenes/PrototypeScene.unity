@@ -819,6 +819,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1263603140}
+  - component: {fileID: 1263603141}
   m_Layer: 0
   m_Name: Combat Camera
   m_TagString: Untagged
@@ -841,6 +842,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 895460604}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1263603141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1263603139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0811cff121e042848e8e1f7ef83523e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Game::CombatCamera
+  mainCamera: {fileID: 330585545}
+  enemyPosition: {fileID: 4707600413473519261}
+  cameraRotation: {x: 38, y: 0, z: 0}
+  minDistance: 12.5
+  maxDistance: 25
+  padding: 2.5
+  pitchAngle: 38
+  yawAngle: 0
+  heightOffset: 0
 --- !u!1 &1385405018
 GameObject:
   m_ObjectHideFlags: 0
@@ -1299,7 +1321,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: isActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: meteorPool
@@ -1350,6 +1372,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
+--- !u!4 &4707600413473519261 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5448100723142779783, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
+  m_PrefabInstance: {fileID: 4707600413473519260}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7589204453462019191 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4481789441953731918, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}

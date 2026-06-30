@@ -10,7 +10,7 @@ public class CameraManager : MonoBehaviour
 
     void Start()
     {
-        SwitchTo<DefaultCamera>();
+        SwitchTo<CombatCamera>();
     }
 
     void LateUpdate()
