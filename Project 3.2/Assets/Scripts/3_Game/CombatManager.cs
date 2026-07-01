@@ -45,6 +45,7 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+    // ... more of a "TriggerParryPhase" behavior...
     public void EnterParryPhase()
     {
         if (!_triggered) _triggered = true;
@@ -58,12 +59,36 @@ public class CombatManager : MonoBehaviour
         // Start sequence
         StartCoroutine(ParryPhaseRoutine());
     }
+
+    /// * Desired sequence:
+    ///     1. Enemy shield activates
+    ///     2. Enemy animation sequence:
+    ///         a. Hurt
+    ///         b. Idle
+    ///         c. "Power Yell"
+    ///     3. Screen Shake + Player input disabled
+    ///     4. Enemy "Pull" animation
+    ///     5. Enter Parry Phase
     private IEnumerator ParryPhaseRoutine()
     {
+        // 1.
+        enemy.EnableShield(true);
+
+        // 2a.
+        enemy.SetTrigger("KnockbackTrigger");
+
+        // 2b.
+        yield return new WaitForSeconds(2f);
+
+        // 2c.
+        
+
         enemy.EnableShield(false);
         
         cameraManager.SwitchTo<FocusCamera>();
+
         yield return new WaitForSeconds(1f);
+
         enemy.SetTrigger("ComboTrigger");
     }
 

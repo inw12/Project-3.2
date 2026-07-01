@@ -231,12 +231,12 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     public void ArmRigEnabled(bool b) => armRig.ArmRigEnabled(b);
 
     // Animator Access
-    public void SetInteger(string s, int i) => animationController.SetInteger(s, i);
-    public int GetInteger(string s)         => animationController.GetInteger(s);
-    public void SetFloat(string s, int i)   => animationController.SetFloat(s, i);
-    public float GetFloat(string s)         => animationController.GetFloat(s);
-    public void SetBool(string s, bool b)   => animationController.SetBool(s, b);
-    public bool GetBool(string s)           => animationController.GetBool(s);
-    public void SetTrigger(string s)        => animationController.SetTrigger(s);
+    public void     SetInteger(string s, int i)     => animationController.SetInteger(s, i);
+    public int      GetInteger(string s)            => animationController.GetInteger(s);
+    public void     SetFloat(string s, int i)       => animationController.SetFloat(s, i);
+    public float    GetFloat(string s)              => animationController.GetFloat(s);
+    public void     SetBool(string s, bool b)       => animationController.SetBool(s, b);
+    public bool     GetBool(string s)               => animationController.GetBool(s);
+    public void     SetTrigger(string s)            => animationController.SetTrigger(s);
     #endregion
 }
