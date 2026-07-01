@@ -1269,22 +1269,6 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 330585545}
-    - target: {fileID: 2172641294016679017, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: shakeDuration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2172641294016679017, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: shakeStrength
-      value: 0.02
-      objectReference: {fileID: 0}
-    - target: {fileID: 2172641294016679017, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: decreaseFactor
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4481789441953731918, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: maxHealth
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 5448100723142779783, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1324,10 +1308,6 @@ PrefabInstance:
     - target: {fileID: 5448100723142779783, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6867951403096359160, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: m_WarningMessage
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: meteorPool
