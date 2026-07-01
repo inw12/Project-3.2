@@ -565,6 +565,8 @@ MonoBehaviour:
   enemyCombo: {fileID: 8037206068912205258}
   enemyPosition: {fileID: 1385405019}
   playerPosition: {fileID: 928788602}
+  playerPullSpeed: 5
+  playerPullSmooth: 10
   cameraManager: {fileID: 228990512}
 --- !u!320 &503498373
 PlayableDirector:
