@@ -82,7 +82,7 @@ Material:
     - _Opacity_Global: 1
     - _Opacity_On_Centre: 0.03
     - _Opacity_On_Side: 1
-    - _Power: 3.5
+    - _Power: 2.5
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Speed: 1
@@ -96,14 +96,14 @@ Material:
     m_Colors:
     - _Color: {r: 0, g: 0.46740404, b: 2.670157, a: 0}
     - _Color_1: {r: 2.811218, g: 0, b: 2.9960785, a: 0}
-    - _Color_A: {r: 3.1612997, g: 0.7642356, b: 0.28332394, a: 0}
+    - _Color_A: {r: 7.3207545, g: 1.6708189, b: 0.65610516, a: 0}
     - _Color_B: {r: 2.2728195, g: 2.523612, b: 2.821064, a: 0}
     - _Distort_Tile_XY: {r: 20, g: 20, b: 0, a: 0}
     - _Distortion_X_Y: {r: 0, g: 0, b: 0, a: 0}
     - _Emission_Color: {r: 0, g: 0, b: 0, a: 0}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Offset_Tex_2: {r: 1, g: 1, b: 0, a: 0}
-    - _Texture_1_Color: {r: 5.992157, g: 4.014195, b: 0.76315206, a: 0}
+    - _Texture_1_Color: {r: 3.5471697, g: 1.4519836, b: 0.35137057, a: 0}
     - _Texture_2D_Color: {r: 0, g: 11.984314, b: 8.282353, a: 0}
     - _Texture_2_Color: {r: 11.984314, g: 4.1273217, b: 0, a: 0}
     - _Tile_X_Y: {r: 15.14, g: 33.7, b: 0, a: 0}
