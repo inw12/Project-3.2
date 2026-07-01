@@ -12,6 +12,15 @@ public struct EnemyAnimatorContext
 [RequireComponent(typeof(Animator))]
 public class EnemyAnimationController : MonoBehaviour
 {
+    [Header("Camera Shake Settings")]
+    [SerializeField] private float shakeStrength;
+    [SerializeField] private float shakeDuration;
+    [Space]
+    [SerializeField] private Camera cam;
+    private Vector3 _origin;
+    private bool _shakeTriggered;
+    private float _shakeTimer;
+
     #region * Animator Parameters 
     //
     // * "High Level" Parameters
@@ -37,6 +46,12 @@ public class EnemyAnimationController : MonoBehaviour
     public void Initialize()
     {
         _animator = GetComponent<Animator>();
+
+        if (cam) 
+        {
+            //_origin = cam.transform.localPosition;
+            _shakeTimer = 0f;
+        }
     }
 
     public void UpdateAnimator(EnemyAnimatorContext context)
@@ -54,6 +69,24 @@ public class EnemyAnimationController : MonoBehaviour
         _animator.SetInteger(AttackID, context.AttackID);
         // Hitstun
         _animator.SetBool(InHitstun, context.InHitstun);
+    }
+
+    void Update()
+    {
+        // Camera Shake ON
+        if (_shakeTriggered && _shakeTimer < shakeDuration)
+        {
+            cam.transform.localPosition += UnityEngine.Random.insideUnitSphere * shakeStrength;
+            _shakeTimer += Time.deltaTime;
+        }
+
+        // Camera Shake OFF
+        if (_shakeTriggered && _shakeTimer >= shakeDuration)
+        {
+            _shakeTriggered = false;
+            _shakeTimer = 0f;
+            //cam.transform.localPosition = _origin;
+        }
     }
 
     #region * Public Access
@@ -81,10 +114,16 @@ public class EnemyAnimationController : MonoBehaviour
         _animator.SetBool(InHitstun, false);
         _animator.Play("Idle");
     }
+    
+    public void Play(string s) => _animator.Play(s);
+    public AnimatorStateInfo GetCurrentAnimationStateInfo(int i) => _animator.GetCurrentAnimatorStateInfo(i);
     #endregion
 
 
     #region * Animation Events
     public void AttackActiveOn() => _animator.SetBool(AttackActive, true);
     #endregion
+
+    // Camera shake
+    public void CameraShake() => _shakeTriggered = true;
 }

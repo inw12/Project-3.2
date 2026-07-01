@@ -238,5 +238,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     public void     SetBool(string s, bool b)       => animationController.SetBool(s, b);
     public bool     GetBool(string s)               => animationController.GetBool(s);
     public void     SetTrigger(string s)            => animationController.SetTrigger(s);
+    public void     Play(string s)                  => animationController.Play(s);
+    public AnimatorStateInfo GetCurrentAnimationStateInfo(int i) => animationController.GetCurrentAnimationStateInfo(i);
     #endregion
 }

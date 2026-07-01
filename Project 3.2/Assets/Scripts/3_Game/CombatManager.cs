@@ -15,6 +15,8 @@ public class CombatManager : MonoBehaviour
 
     private bool _triggered;
 
+    private static readonly int Knockback_END    = Animator.StringToHash("Knockback_END");
+
     void Awake()
     {
         if (enemy)      enemy.OnDeath           += EnterParryPhase;
@@ -31,9 +33,9 @@ public class CombatManager : MonoBehaviour
 
     void Update()
     {
+        // LOCK THESE MFERS IN PLACE!!!
         if (_triggered)
         {
-            // LOCK THESE MFERS IN PLACE!!!
             Player.Instance.transform.SetPositionAndRotation(
                 playerPosition.position,
                 playerPosition.rotation
@@ -48,14 +50,6 @@ public class CombatManager : MonoBehaviour
     // ... more of a "TriggerParryPhase" behavior...
     public void EnterParryPhase()
     {
-        if (!_triggered) _triggered = true;
-
-        // Reset Player
-        Player.Instance.EnterParryPhase();
-
-        // Reset Enemy
-        enemy.EnterParryPhase();
-
         // Start sequence
         StartCoroutine(ParryPhaseRoutine());
     }
@@ -64,31 +58,55 @@ public class CombatManager : MonoBehaviour
     ///     1. Enemy shield activates
     ///     2. Enemy animation sequence:
     ///         a. Hurt
-    ///         b. Idle
-    ///         c. "Power Yell"
+    ///         b. "Power Yell"
     ///     3. Screen Shake + Player input disabled
     ///     4. Enemy "Pull" animation
     ///     5. Enter Parry Phase
     private IEnumerator ParryPhaseRoutine()
     {
         // 1.
+        enemy.EnterParryPhase();
         enemy.EnableShield(true);
 
         // 2a.
         enemy.SetTrigger("KnockbackTrigger");
-
-        // 2b.
-        yield return new WaitForSeconds(2f);
-
-        // 2c.
-        
-
-        enemy.EnableShield(false);
-        
-        cameraManager.SwitchTo<FocusCamera>();
-
+        yield return null;
+        var stateInfo = enemy.GetCurrentAnimationStateInfo(0);
+        while (stateInfo.IsName("Knockback_END") && stateInfo.normalizedTime < 1.0f)
+        {
+            stateInfo = enemy.GetCurrentAnimationStateInfo(0);
+            yield return null;
+        }
         yield return new WaitForSeconds(1f);
 
+        // 2b.
+        enemy.Play("Roar");
+        yield return null;
+        stateInfo = enemy.GetCurrentAnimationStateInfo(0);
+        while (stateInfo.IsName("Roar") && stateInfo.normalizedTime < 1.0f)
+        {
+            // 3.
+            if (stateInfo.normalizedTime > (112f / 196f)) Player.Instance.EnterParryPhase();
+
+            stateInfo = enemy.GetCurrentAnimationStateInfo(0);
+            yield return null;
+        }
+
+        // 4.
+        enemy.Play("Pull");
+         yield return null;
+        stateInfo = enemy.GetCurrentAnimationStateInfo(0);
+        while (stateInfo.IsName("Pull") && stateInfo.normalizedTime < 1.0f)
+        {
+            stateInfo = enemy.GetCurrentAnimationStateInfo(0);
+            yield return null;
+        }
+
+        // 5.
+        if (!_triggered) _triggered = true;
+        cameraManager.SwitchTo<FocusCamera>();
+        enemy.EnableShield(false);
+        yield return new WaitForSeconds(1f);
         enemy.SetTrigger("ComboTrigger");
     }
 
