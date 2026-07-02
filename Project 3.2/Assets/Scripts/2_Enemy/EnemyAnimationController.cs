@@ -12,12 +12,14 @@ public struct EnemyAnimatorContext
 [RequireComponent(typeof(Animator))]
 public class EnemyAnimationController : MonoBehaviour
 {
+    [Header("Particle Systems")]
+    [SerializeField] private ParticleSystem[] roarParticles;
+
     [Header("Camera Shake Settings")]
     [SerializeField] private float shakeStrength;
     [SerializeField] private float shakeDuration;
     [Space]
     [SerializeField] private Camera cam;
-    private Vector3 _origin;
     private bool _shakeTriggered;
     private float _shakeTimer;
 
