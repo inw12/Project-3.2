@@ -128,4 +128,7 @@ public class EnemyAnimationController : MonoBehaviour
 
     // Camera shake
     public void CameraShake() => _shakeTriggered = true;
+
+    public void PlayRoarParticlesA() => roarParticles[0].Play();
+    public void PlayRoarParticlesB() => roarParticles[1].Play();
 }
