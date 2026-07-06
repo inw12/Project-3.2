@@ -111,4 +111,6 @@ public class PlayerAnimationController : MonoBehaviour
     }
 
     public void SetSpeed(float f) => _animator.speed = f;
+
+    public void ApplyRootMotion(bool b) => _animator.applyRootMotion = b;
 }

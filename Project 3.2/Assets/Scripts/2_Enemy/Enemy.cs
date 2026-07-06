@@ -13,6 +13,8 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     [SerializeField] private EnemyAnimationController animationController;
     [SerializeField] private Animator animator;
     [SerializeField] private EnemyArmRig armRig;
+    [Space]
+    [SerializeField] private GameObject shield;
 
     [Header("Stats")]
     [SerializeField] private float maxHealth = 100f;
@@ -45,6 +47,8 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
         _currentHealth = new HealthContext(maxHealth);
         _timeScale = 1f;
         _inHitstun = false;
+
+        shield.SetActive(false);
     }
     #endregion
 
@@ -206,16 +210,35 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     // Player Position Getter
     public Vector3 GetPlayerPosition() => enemyAI.GetPlayerPosition();
 
+    // Shield
+    public void EnableShield(bool b) => shield.SetActive(b);
+
+    // Parry Phase
+    public void EnterParryPhase()
+    {
+        SetToIdle();
+        EnemyActive(false);
+        EnableShield(true);
+    }
+    public void ExitParryPhase()
+    {
+        SetToIdle();
+        EnemyActive(true);
+        EnableShield(false);
+    }
+
     // Arm Rig Toggle
     public void ArmRigEnabled(bool b) => armRig.ArmRigEnabled(b);
 
     // Animator Access
-    public void SetInteger(string s, int i) => animationController.SetInteger(s, i);
-    public int GetInteger(string s)         => animationController.GetInteger(s);
-    public void SetFloat(string s, int i)   => animationController.SetFloat(s, i);
-    public float GetFloat(string s)         => animationController.GetFloat(s);
-    public void SetBool(string s, bool b)   => animationController.SetBool(s, b);
-    public bool GetBool(string s)           => animationController.GetBool(s);
-    public void SetTrigger(string s)        => animationController.SetTrigger(s);
+    public void     SetInteger(string s, int i)     => animationController.SetInteger(s, i);
+    public int      GetInteger(string s)            => animationController.GetInteger(s);
+    public void     SetFloat(string s, int i)       => animationController.SetFloat(s, i);
+    public float    GetFloat(string s)              => animationController.GetFloat(s);
+    public void     SetBool(string s, bool b)       => animationController.SetBool(s, b);
+    public bool     GetBool(string s)               => animationController.GetBool(s);
+    public void     SetTrigger(string s)            => animationController.SetTrigger(s);
+    public void     Play(string s)                  => animationController.Play(s);
+    public AnimatorStateInfo GetCurrentAnimationStateInfo(int i) => animationController.GetCurrentAnimationStateInfo(i);
     #endregion
 }

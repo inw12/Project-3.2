@@ -1,11 +1,11 @@
 ﻿<Solution>
   <Project Path="CFXRRuntime.csproj" />
+  <Project Path="Resources.csproj" />
   <Project Path="Player.csproj" />
   <Project Path="CFXRDemo.csproj" />
   <Project Path="CFXREditor.csproj" />
   <Project Path="Core.csproj" />
   <Project Path="Assembly-CSharp-Editor.csproj" />
-  <Project Path="Resources.csproj" />
   <Project Path="Enemy.csproj" />
   <Project Path="Game.csproj" />
   <Project Path="KinoBloom.Runtime.csproj" />
