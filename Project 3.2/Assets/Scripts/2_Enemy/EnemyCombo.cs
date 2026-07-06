@@ -13,6 +13,9 @@ public class EnemyCombo : MonoBehaviour
     [SerializeField] private LayerMask targetLayer;
     private int _hurtboxLayer;  // player hurtbox
     private int _parryboxLayer; // player parrybox
+    [Space]
+    [SerializeField] private float windSpeed;
+    [SerializeField] private float attackSpeed;
 
     private bool _hitboxEnabled;
     private readonly Collider[] _hits   = new Collider[10];   
@@ -20,6 +23,8 @@ public class EnemyCombo : MonoBehaviour
 
     private int _comboCount;
     private int _parryCount;
+
+    private Animator _anim;
 
     public event Action OnComboEnd;
 
@@ -46,6 +51,8 @@ public class EnemyCombo : MonoBehaviour
     {
         _hurtboxLayer = LayerMask.NameToLayer("PlayerHurtbox");
         _parryboxLayer = LayerMask.NameToLayer("PlayerParrybox");
+
+        _anim = GetComponent<Animator>();
 
         _comboCount = _parryCount = 0;
     }
@@ -114,4 +121,7 @@ public class EnemyCombo : MonoBehaviour
     {
         OnComboEnd?.Invoke();
     }
+    public void SetNormalSpeed()    => _anim.speed = 1f;
+    public void SetWindSpeed()      => _anim.speed = windSpeed;
+    public void SetAttackSpeed()    => _anim.speed = attackSpeed;
 }

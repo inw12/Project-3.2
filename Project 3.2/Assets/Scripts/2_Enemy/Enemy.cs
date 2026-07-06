@@ -222,7 +222,7 @@ public class Enemy : MonoBehaviour, IDamageable, IKnockable, IHitstunnable
     }
     public void ExitParryPhase()
     {
-        SetToIdle();
+        //SetToIdle();
         EnemyActive(true);
         EnableShield(false);
     }

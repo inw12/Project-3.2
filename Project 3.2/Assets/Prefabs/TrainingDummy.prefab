@@ -754,7 +754,7 @@ MonoBehaviour:
   - {fileID: 6825546417168900749}
   - {fileID: 6756118588938689228}
   shakeStrength: 0.04
-  shakeDuration: 1
+  shakeDuration: 1.25
   cam: {fileID: 0}
 --- !u!114 &3403632369631423611
 MonoBehaviour:
@@ -775,6 +775,8 @@ MonoBehaviour:
   targetLayer:
     serializedVersion: 2
     m_Bits: 384
+  windSpeed: 0.76
+  attackSpeed: 1.25
 --- !u!114 &1356055628117062005
 MonoBehaviour:
   m_ObjectHideFlags: 0
