@@ -525,6 +525,7 @@ GameObject:
   - component: {fileID: 503498371}
   - component: {fileID: 503498373}
   - component: {fileID: 503498372}
+  - component: {fileID: 503498374}
   m_Layer: 0
   m_Name: Combat Manager
   m_TagString: Untagged
@@ -568,6 +569,13 @@ MonoBehaviour:
   playerPullSpeed: 4
   playerPullSmooth: 10
   cameraManager: {fileID: 228990512}
+  director: {fileID: 503498373}
+  enemyComboPlayable: {fileID: 11400000, guid: 166fea4e71efdea47a3bea1761cbb981, type: 2}
+  slowest: 0.7
+  slow: 0.75
+  normal: 1
+  fast: 1.15
+  fastest: 1.3
 --- !u!320 &503498373
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -578,7 +586,7 @@ PlayableDirector:
   m_Enabled: 1
   serializedVersion: 3
   m_PlayableAsset: {fileID: 11400000, guid: 166fea4e71efdea47a3bea1761cbb981, type: 2}
-  m_InitialState: 1
+  m_InitialState: 0
   m_WrapMode: 2
   m_DirectorUpdateMode: 1
   m_InitialTime: 0
@@ -589,8 +597,100 @@ PlayableDirector:
     value: {fileID: 7589204453462019192}
   - key: {fileID: 654427832652175493, guid: 166fea4e71efdea47a3bea1761cbb981, type: 2}
     value: {fileID: 8037206068912205259}
+  - key: {fileID: -2508662112159596362, guid: 166fea4e71efdea47a3bea1761cbb981, type: 2}
+    value: {fileID: 503498374}
   m_ExposedReferences:
     m_References: []
+--- !u!114 &503498374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 503498370}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.SignalReceiver
+  m_Events:
+    m_Signals:
+    - {fileID: 11400000, guid: a1ee5ec9c26d0cd46a5db3ff67b24971, type: 2}
+    - {fileID: 11400000, guid: 49cfd6b657044584b84f58093c1a569e, type: 2}
+    - {fileID: 11400000, guid: eae34fd94c5beca4aa4abc46faa11e0c, type: 2}
+    - {fileID: 11400000, guid: aed9747b04a82b941ac30b1f40a79cf7, type: 2}
+    - {fileID: 11400000, guid: a1de21ca49de7654c84753a365713723, type: 2}
+    m_Events:
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 503498372}
+          m_TargetAssemblyTypeName: CombatManager, Game
+          m_MethodName: SpeedSlowest
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 503498372}
+          m_TargetAssemblyTypeName: CombatManager, Game
+          m_MethodName: SpeedSlow
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 503498372}
+          m_TargetAssemblyTypeName: CombatManager, Game
+          m_MethodName: SpeedNormal
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 503498372}
+          m_TargetAssemblyTypeName: CombatManager, Game
+          m_MethodName: SpeedFast
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    - m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 503498372}
+          m_TargetAssemblyTypeName: CombatManager, Game
+          m_MethodName: SpeedFastest
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -896,7 +996,7 @@ Transform:
   m_GameObject: {fileID: 1385405018}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 2.25}
+  m_LocalPosition: {x: 0, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1216,7 +1316,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8119258989677715140, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: parryDuration
-      value: 0.2
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 9183493435168247240, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1325,12 +1425,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6867951403096359160, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: m_WarningMessage
-      value: "\nBinding warning: Some generic clip(s) animate transforms that are
-        already bound by a Humanoid avatar. These transforms can only be changed
-        by Humanoid clips.\n\tTransform 'B-upperArm.R'\n\tTransform 'B-shoulder.R'\n\tTransform
-        'B-chest'\n\tTransform 'B-forearm.R'\n\tTransform 'B-hand.R'\n\tTransform
-        'B-upperArm.R'\n\tTransform 'B-shoulder.R'\n\tTransform 'B-chest'\n\tTransform
-        'B-forearm.R'\n\tTransform 'B-hand.R'\n\tand more ..."
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: meteorPool

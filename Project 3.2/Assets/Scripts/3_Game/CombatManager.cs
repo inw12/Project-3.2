@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Playables;
 public class CombatManager : MonoBehaviour
 {
     [Header("Main Enemy")]
@@ -15,6 +16,18 @@ public class CombatManager : MonoBehaviour
 
     [Header("Camera")]
     [SerializeField] private CameraManager cameraManager;
+
+    [Header("Parry Phase Cutscene")]
+    [SerializeField] private PlayableDirector director;
+    [Space]
+    [SerializeField] private PlayableAsset enemyComboPlayable;
+
+    [Header("Speed Settings")]
+    [SerializeField] [Range(0f, 2f)] private float slowest;
+    [SerializeField] [Range(0f, 2f)] private float slow;
+    [SerializeField] [Range(0f, 2f)] private float normal;
+    [SerializeField] [Range(0f, 2f)] private float fast;
+    [SerializeField] [Range(0f, 2f)] private float fastest;
 
     private bool _triggered;
     private bool _playerPulled;
@@ -41,10 +54,6 @@ public class CombatManager : MonoBehaviour
             Player.Instance.transform.SetPositionAndRotation(
                 playerPosition.position,
                 playerPosition.rotation
-            );
-            enemy.transform.SetPositionAndRotation(
-                enemyPosition.position,
-                enemyPosition.rotation
             );
         }
 
@@ -122,15 +131,20 @@ public class CombatManager : MonoBehaviour
             _triggered = true;
             _playerPulled = false;
         }
+        Player.Instance.EnterParryPhase();
+        enemy.transform.SetPositionAndRotation(enemyPosition.position, enemyPosition.rotation);
         cameraManager.SwitchTo<FocusCamera>();
+        director.playableAsset = enemyComboPlayable;
         enemy.EnableShield(false);
-        yield return new WaitForSeconds(1.5f);
-        enemy.SetTrigger("ComboTrigger");
+        yield return new WaitForSeconds(0.33f);
+        director.Play();
     }
 
     public void ExitParryPhase()
     {
         if (_triggered) _triggered = _playerPulled = false;
+
+        director.Stop();
 
         Player.Instance.ExitParryPhase();
 
@@ -148,4 +162,11 @@ public class CombatManager : MonoBehaviour
     {
         
     }
+
+    // playback speed functions
+    public void SpeedSlowest()  => director.playableGraph.GetRootPlayable(0).SetSpeed(slowest);
+    public void SpeedSlow()     => director.playableGraph.GetRootPlayable(0).SetSpeed(slow);
+    public void SpeedNormal()   => director.playableGraph.GetRootPlayable(0).SetSpeed(normal);
+    public void SpeedFast()     => director.playableGraph.GetRootPlayable(0).SetSpeed(fast);
+    public void SpeedFastest()  => director.playableGraph.GetRootPlayable(0).SetSpeed(fastest);
 }
