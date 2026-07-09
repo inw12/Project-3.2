@@ -8,6 +8,9 @@ public class PlayerParrybox : MonoBehaviour, IParrybox
     private float _parryTimer;
     private float _cooldownTimer;
 
+    [Header("VFX")]
+    [SerializeField] private ParticleSystem parrySpark;
+
     private CapsuleCollider _parrybox;
     private CapsuleCollider _hurtbox;
     private PlayerAnimationController _animationController;
@@ -61,6 +64,9 @@ public class PlayerParrybox : MonoBehaviour, IParrybox
 
         // Update Animator
         _animationController.TriggerParry();
+
+        // VFX
+        parrySpark.Play();
 
         // * parry effect implementation here *
     }
