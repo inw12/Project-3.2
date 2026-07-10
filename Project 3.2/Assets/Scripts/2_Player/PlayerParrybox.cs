@@ -49,7 +49,7 @@ public class PlayerParrybox : MonoBehaviour, IParrybox
             if (_parryTimer > parryDuration && parryStarted)
             {
                 _parryTimer = 0f;
-                ParryboxEnabled(false); // * PROBLEM HERE *
+                ParryboxEnabled(false);
                 parryStarted = false;
             }
         }
@@ -76,6 +76,8 @@ public class PlayerParrybox : MonoBehaviour, IParrybox
     #region * Public Access
     // Returns true/false if another parry can be inputted
     public bool CanParry() => _cooldownTimer > parryCooldown;
+
+    public void ResetParryCooldown() => _cooldownTimer = parryCooldown;
 
     // Toggles parrybox on/off
     public void ParryboxEnabled(bool active)

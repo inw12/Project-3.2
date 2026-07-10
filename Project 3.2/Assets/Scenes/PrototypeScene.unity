@@ -595,6 +595,7 @@ MonoBehaviour:
   cameraManager: {fileID: 228990512}
   director: {fileID: 503498373}
   enemyComboPlayable: {fileID: 11400000, guid: 166fea4e71efdea47a3bea1761cbb981, type: 2}
+  transitionDelay: 0.15
   slowest: 0.7
   slow: 0.75
   normal: 1
@@ -1202,6 +1203,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 330585546}
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
+--- !u!114 &1868768558 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8119258989677715140, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
+  m_PrefabInstance: {fileID: 1526657071655407713}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6dc518e81a2f4c269778aab7e467b78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Player::PlayerParrybox
 --- !u!1 &1881086220
 GameObject:
   m_ObjectHideFlags: 0
@@ -1371,6 +1383,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 927854338295527521, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
+      propertyPath: parrybox
+      value: 
+      objectReference: {fileID: 1868768558}
     - target: {fileID: 9183493435168247240, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

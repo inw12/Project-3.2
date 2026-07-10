@@ -21,6 +21,7 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private PlayableDirector director;
     [Space]
     [SerializeField] private PlayableAsset enemyComboPlayable;
+    [SerializeField] private float transitionDelay;
 
     [Header("Speed Settings")]
     [SerializeField] [Range(0f, 2f)] private float slowest;
@@ -76,6 +77,8 @@ public class CombatManager : MonoBehaviour
         }
     }
 
+
+    #region * Enter
     // ... more of a "TriggerParryPhase" behavior...
     public void EnterParryPhase()
     {
@@ -136,10 +139,15 @@ public class CombatManager : MonoBehaviour
         cameraManager.SwitchTo<FocusCamera>();
         director.playableAsset = enemyComboPlayable;
         enemy.EnableShield(false);
-        yield return new WaitForSeconds(0.33f);
+
+        yield return new WaitForSeconds(transitionDelay);
+
         director.Play();
     }
+    #endregion
 
+
+    #region * Exit
     public void ExitParryPhase()
     {
         if (_triggered) _triggered = _playerPulled = false;
@@ -157,6 +165,7 @@ public class CombatManager : MonoBehaviour
 
         enemy.ExitParryPhase();
     }
+    #endregion
 
     public void PlayPlayerFinisher()
     {

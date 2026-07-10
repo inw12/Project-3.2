@@ -4,6 +4,7 @@ public class PlayerHurtbox : MonoBehaviour, IDamageable, IKnockable
 {
     #region * Variables --------------------------------------------------
     [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private PlayerParrybox parrybox;
 
     private HealthContext _currentHealth;
     private PlayerAnimationController _animationController;
@@ -28,6 +29,9 @@ public class PlayerHurtbox : MonoBehaviour, IDamageable, IKnockable
     {
         _currentHealth.CurrentHealth -= amount;
         _currentHealth.CurrentHealth = Mathf.Clamp(_currentHealth.CurrentHealth, 0f, maxHealth);
+
+        // Reset parry cooldown
+        parrybox.ResetParryCooldown();
     }
     public void IncreaseHealth(float amount)
     {
