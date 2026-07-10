@@ -626,6 +626,8 @@ PlayableDirector:
     value: {fileID: 503498374}
   - key: {fileID: 8897183570019430346, guid: 166fea4e71efdea47a3bea1761cbb981, type: 2}
     value: {fileID: 330585548}
+  - key: {fileID: -8379129805038130988, guid: 166fea4e71efdea47a3bea1761cbb981, type: 2}
+    value: {fileID: 1081664310577219995}
   m_ExposedReferences:
     m_References: []
 --- !u!114 &503498374
@@ -1203,17 +1205,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 330585546}
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
---- !u!114 &1868768558 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8119258989677715140, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-  m_PrefabInstance: {fileID: 1526657071655407713}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6dc518e81a2f4c269778aab7e467b78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Player::PlayerParrybox
 --- !u!1 &1881086220
 GameObject:
   m_ObjectHideFlags: 0
@@ -1371,6 +1362,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Game::BehindPlayerCamera
   cameraPosition: {x: 2, y: 1, z: -4}
   cameraRotation: {x: -5, y: -15, z: 0}
+--- !u!1 &1081664310577219995 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8738749001227657619, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
+  m_PrefabInstance: {fileID: 4707600413473519260}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1526657071655407713
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1383,10 +1379,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 927854338295527521, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
-      propertyPath: parrybox
-      value: 
-      objectReference: {fileID: 1868768558}
     - target: {fileID: 9183493435168247240, guid: a7fdeabc3bb6442ae8d55d8cccfc135c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1448,10 +1440,6 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 330585545}
-    - target: {fileID: 2267873816034923315, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: m_Weight
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5448100723142779783, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1492,10 +1480,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6867951403096359160, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      propertyPath: m_WarningMessage
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 7452434067175923134, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
       propertyPath: meteorPool
       value: 
@@ -1507,27 +1491,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1354778989664995145, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7589204453462019192}
-    - targetCorrespondingSourceObject: {fileID: 1892890549939078670, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8037206068912205259}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
 --- !u!4 &4707600413473519261 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5448100723142779783, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-  m_PrefabInstance: {fileID: 4707600413473519260}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4707600413473519262 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1354778989664995145, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
-  m_PrefabInstance: {fileID: 4707600413473519260}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &4707600413473519263 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1892890549939078670, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
   m_PrefabInstance: {fileID: 4707600413473519260}
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &4707600413473519264 stripped
@@ -1540,150 +1508,39 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4481789441953731918, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
   m_PrefabInstance: {fileID: 4707600413473519260}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4707600413473519262}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cbc77e21c74de49cbb49eefbaaf4fdd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Enemy::Enemy
---- !u!95 &7589204453462019192
+--- !u!95 &7589204453462019192 stripped
 Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 5121176334537415315, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
+  m_PrefabInstance: {fileID: 4707600413473519260}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4707600413473519262}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &8037206068912205258 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3403632369631423611, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
   m_PrefabInstance: {fileID: 4707600413473519260}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4707600413473519263}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b371238ad03b140adb8e54fe03e4d8c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Enemy::EnemyCombo
---- !u!114 &8037206068912205259
+--- !u!114 &8037206068912205259 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 3906197824338277748, guid: a07bff53b83c24ffeae678c804dd4127, type: 3}
+  m_PrefabInstance: {fileID: 4707600413473519260}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4707600413473519263}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.SignalReceiver
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: 26fbb42e1f3aa7a4e8a62255a7e011c5, type: 2}
-    - {fileID: 11400000, guid: 2c40c63927c8a594e80839d5a5edb3a8, type: 2}
-    - {fileID: 11400000, guid: 8deb748dc9444984fb95371c7289413f, type: 2}
-    - {fileID: 11400000, guid: 7e4298a2eae355345a1de88e8aacd719, type: 2}
-    - {fileID: 11400000, guid: 6f22fce01f08c8a4abf0cc70e695397a, type: 2}
-    - {fileID: 11400000, guid: e192aead130253144997be4ff46f56df, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8037206068912205258}
-          m_TargetAssemblyTypeName: EnemyCombo, Enemy
-          m_MethodName: SetNormalSpeed
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8037206068912205258}
-          m_TargetAssemblyTypeName: EnemyCombo, Enemy
-          m_MethodName: SetWindSpeed
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8037206068912205258}
-          m_TargetAssemblyTypeName: EnemyCombo, Enemy
-          m_MethodName: SetAttackSpeed
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8037206068912205258}
-          m_TargetAssemblyTypeName: EnemyCombo, Enemy
-          m_MethodName: EnableHitbox
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8037206068912205258}
-          m_TargetAssemblyTypeName: EnemyCombo, Enemy
-          m_MethodName: DisableHitbox
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 8037206068912205258}
-          m_TargetAssemblyTypeName: EnemyCombo, Enemy
-          m_MethodName: CheckForExit
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

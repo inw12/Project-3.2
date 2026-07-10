@@ -6428,6 +6428,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Player::PlayerHurtbox
   maxHealth: 100
+  parrybox: {fileID: 8119258989677715140}
 --- !u!1 &3364621209944536219
 GameObject:
   m_ObjectHideFlags: 0
